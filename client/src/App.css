@@ -1,0 +1,40 @@
+@import "tailwindcss";
+
+#root {
+    /*this lives inside the body*/
+    min-height: 100vh;
+    /* border: 2px solid white; */
+    max-width: 1280px;
+    margin: 0 auto;
+    /* padding: 2rem; */
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    /* place-items: center; */
+}
+
+nav {
+    /*this lives inside the #root*/
+    margin: 20px 0;
+    height: 10vh;
+    border: 2px solid #1c398e;
+    background-color: #242424;
+    border-radius: 10px;
+}
+
+main {
+    /*this lives inside the #root*/
+    margin: 20px 0;
+    flex: 1;
+    border-radius: 10px;
+}
+
+.form {
+    border: 2px solid lightcoral;
+    min-height: 400px;
+    min-width: 400px;
+}
+
+.input-field {
+    @apply w-2xs text-base caret-cyan-300 focus:outline-none focus:border-cyan-300 h-6 border-white transition duration-200 hover:border-cyan-300 border mb-4 rounded p-4;
+}
