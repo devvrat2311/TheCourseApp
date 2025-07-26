@@ -1,5 +1,6 @@
 import Navbar from "../../components/Navbar";
 import { useState } from "react";
+import api from "../../utils/api";
 
 function CourseOngoing({ course }) {
     const [selectedIndex, setSelectedIndex] = useState(0);
@@ -13,8 +14,8 @@ function CourseOngoing({ course }) {
 
     const handleMarkComplete = async () => {
         try {
-            const response = await fetch(
-                `/api/courses/${course.id}/section/${selectedIndex}/complete`,
+            const response = await api.post(
+                `/courses/${course.id}/section/${selectedIndex}/complete`,
                 {
                     method: "POST",
                     headers: {
@@ -51,15 +52,15 @@ function CourseOngoing({ course }) {
         const answersArray = Object.values(quizAnswers); // ["A", "C", "D", ...]
 
         try {
-            const response = await fetch(
-                `/api/courses/${course.id}/section/${selectedIndex}/quiz`,
+            const response = await api.post(
+                `/courses/${course.id}/section/${selectedIndex}/quiz`,
+                { answers: answersArray },
                 {
-                    method: "POST",
                     headers: {
                         "Content-Type": "application/json",
                         Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
                     },
-                    body: JSON.stringify({ answers: answersArray }),
+                    // body: JSON.stringify({ answers: answersArray }),
                 },
             );
 

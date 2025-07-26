@@ -8,13 +8,9 @@ export default function Navbar() {
             <div className="text-center font-extrabold text-2xl text-white p-2 rounded-2xl">
                 TheCourseApp
             </div>
-            <div className="space-x-4">
-                <Link to="/explore" className="hover:underline">
-                    Explore Courses
-                </Link>
-                <Link to="/dashboard" className="hover:underline">
-                    My Courses
-                </Link>
+            <div className="space-x-7">
+                <Link to="/explore">Explore Courses</Link>
+                <Link to="/">My Courses</Link>
             </div>
             <div>
                 <LogoutBtn />

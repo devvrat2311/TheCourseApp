@@ -24,8 +24,8 @@ app.get("/api/ping", (req, res) => {
 app.use("/api", userRoutes);
 
 //call api routes
-app.use("/api/auth", authRoutes);
-app.use("/api/courses", courseRoutes);
+app.use("/baseURI/auth", authRoutes);
+app.use("/baseURI/courses", courseRoutes);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {

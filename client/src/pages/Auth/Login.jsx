@@ -20,7 +20,7 @@ function Login() {
             localStorage.setItem("refreshToken", result.refreshToken);
 
             //redirect to dashboard
-            navigate("/dashboard");
+            navigate("/");
         } catch (err) {
             setError(err.message);
         }
@@ -29,16 +29,13 @@ function Login() {
     return (
         <div className="flex flex-col justify-center items-center rounded-2xl p-7">
             <h2 className="text-3xl font-bold ">Sign In</h2>
-            <div className="p-10 border-2 border-cyan-300 rounded-2xl mt-3">
-                <form
-                    className="flex flex-col"
-                    onSubmit={handleSubmit}
-                    autoComplete="off"
-                >
+            <div className="p-10 border-2 border-mainblue-400 rounded-2xl mt-3">
+                <form className="flex flex-col" onSubmit={handleSubmit}>
                     <label className="text-xs text-left mb-1" for="username">
                         email
                     </label>
                     <input
+                        id="username"
                         className="input-field"
                         name="email"
                         type="email"
@@ -51,6 +48,7 @@ function Login() {
                         password
                     </label>
                     <input
+                        id="password"
                         className="input-field"
                         name="password"
                         type="password"

@@ -23,7 +23,7 @@ function SignUp() {
         e.preventDefault(); //prevent page reload
 
         try {
-            const res = await fetch("/api/auth/signup", {
+            const res = await fetch("/baseURI/auth/signup", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

@@ -1,5 +1,6 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
+import api from "../../utils/api";
 
 import CoursePreview from "../../components/CourseViews/CoursePreview";
 import CourseOngoing from "../../components/CourseViews/CourseOngoing";
@@ -14,7 +15,7 @@ function CoursePage() {
     useEffect(() => {
         const fetchCourse = async () => {
             try {
-                const response = await fetch(`/api/courses/${id}`, {
+                const response = await api.get(`/courses/${id}`, {
                     headers: {
                         Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
                     },

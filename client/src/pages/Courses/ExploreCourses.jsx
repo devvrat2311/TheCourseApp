@@ -2,20 +2,38 @@
 import { useEffect, useState } from "react";
 import Navbar from "../../components/Navbar";
 import { Link } from "react-router-dom";
+import api from "../../utils/api";
 
 function ExploreCourses() {
     const [courses, setCourses] = useState([]);
 
     useEffect(() => {
-        fetch("/api/courses", {
-            headers: {
-                Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-            },
-        })
-            .then((res) => res.json())
-            .then((data) => setCourses(data))
-            .catch((err) => console.error("Error fetching courses:", err));
+        const fetchCourses = async () => {
+            try {
+                const response = await api.get("/courses", {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+                    },
+                });
+                const data = await response.json();
+                setCourses(data);
+            } catch (err) {
+                console.error("Error fetching courses:", err);
+            }
+        };
+
+        fetchCourses();
     }, []);
+    // useEffect(() => {
+    //     fetch("/api/courses", {
+    //         headers: {
+    //             Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+    //         },
+    //     })
+    //         .then((res) => res.json())
+    //         .then((data) => setCourses(data))
+    //         .catch((err) => console.error("Error fetching courses:", err));
+    // }, []);
 
     return (
         <>

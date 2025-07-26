@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Navbar from "../../components/Navbar";
+import api from "../../utils/api";
 
 function StudentDashboard() {
     const [ongoingCourses, setOngoingCourses] = useState([]);
@@ -9,7 +10,7 @@ function StudentDashboard() {
     useEffect(() => {
         const fetchCourses = async () => {
             try {
-                const response = await fetch("/api/courses/my-courses", {
+                const response = await api.get("/courses/my-courses", {
                     headers: {
                         Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
                     },

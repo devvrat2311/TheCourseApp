@@ -9,6 +9,7 @@ const verifyToken = (req, res, next) => {
         return res.status(401).json({ message: "Access token missing" });
     }
 
+    //have to refresh token here, before this
     jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
         if (err) {
             return res

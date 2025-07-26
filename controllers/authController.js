@@ -7,6 +7,82 @@ require("dotenv").config();
 const JWT_SECRET = process.env.JWT_SECRET;
 const JWT_REFRESH_SECRET = process.env.JWT_REFRESH_SECRET;
 
+const refreshToken = async (req, res) => {
+    try {
+        const { refreshToken } = req.body;
+
+        const authDoc = await Auth.findOne({
+            "refreshTokens.token": refreshToken,
+        });
+        if (!authDoc) {
+            return res.status(401).json({ message: "Invalid refresh Token" });
+        }
+
+        if (!refreshToken) {
+            return res.status(401).json({ error: "Refresh Token Expired" });
+        }
+
+        //verify refresh token
+        const decoded = jwt.verify(refreshToken, JWT_REFRESH_SECRET);
+
+        const auth = await Auth.findOne({ userId: decoded.userId });
+        if (!auth) {
+            return res.status(401).json({ error: "Invalid refresh token" });
+        }
+
+        const tokenRecord = auth.refreshTokens.find(
+            (t) => t.token === refreshToken,
+        );
+        if (!tokenRecord || tokenRecord.expiredAt < new Date()) {
+            return res
+                .status(401)
+                .json({ error: "Invalid or expired refresh token" });
+        }
+
+        //Generate new access token
+        const user = await User.findById(decoded.userId);
+        const newAccessToken = jwt.sign(
+            {
+                userId: user._id,
+                role: user.role,
+            },
+            JWT_SECRET,
+            { expiresIn: "15m" },
+        );
+        const newRefreshToken = jwt.sign(
+            {
+                userId: user._id,
+            },
+            JWT_REFRESH_SECRET,
+            { expiresIn: "7d" },
+        );
+        //remove old refreshToken from Auths, add new refreshToken to Auths
+
+        authDoc.refreshTokens = authDoc.refreshTokens.filter(
+            (rt) => rt.token !== refreshToken,
+        );
+
+        authDoc.refreshTokens.push({
+            token: newRefreshToken,
+            deviceInfo: {
+                userAgent: req.get("User-Agent"),
+                ip: req.ip,
+                device: "browser",
+            },
+            expiredAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+        });
+
+        await authDoc.save();
+
+        res.json({
+            accessToken: newAccessToken,
+            refreshToken: newRefreshToken,
+        });
+    } catch (err) {
+        res.status(401).json({ error: "Invalid refresh token" });
+    }
+};
+
 const logout = async (req, res) => {
     const refreshToken = req.body.refreshToken;
 
@@ -18,7 +94,6 @@ const logout = async (req, res) => {
         const authDoc = await Auth.findOne({
             "refreshTokens.token": refreshToken,
         });
-        console.log(authDoc);
 
         if (!authDoc) {
             return res.status(404).json({ message: "Token not found" });
@@ -67,8 +142,7 @@ const login = async (req, res) => {
     try {
         const { email, password } = req.body;
         const user = await User.findOne({ email });
-        console.log("logging user \n");
-        console.log(user);
+        // console.log("logging user", user.firstName, "\n");
         if (!user)
             return res.status(401).json({ error: "Invalid Credentials" });
 
@@ -84,7 +158,7 @@ const login = async (req, res) => {
         const isMatch = await bcrypt.compare(password, auth.passwordHash);
         if (!isMatch) {
             await auth.incLoginAttempts();
-            return res.status(401).json({ error: "Invaild Credentias" });
+            return res.status(401).json({ error: "Invaild Credentials" });
         }
 
         await auth.resetLoginAttempts();
@@ -117,9 +191,8 @@ const login = async (req, res) => {
 
         res.json({ accessToken, refreshToken });
     } catch (err) {
-        console.log("I am responsible");
         res.status(500).json({ error: err.message });
     }
 };
 
-module.exports = { signUp, login, logout };
+module.exports = { refreshToken, signUp, login, logout };

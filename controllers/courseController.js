@@ -51,45 +51,6 @@ const getMyCourses = async (req, res) => {
     }
 };
 
-const getMyCourses2 = async (req, res) => {
-    const userId = req.user.userId;
-
-    try {
-        const user = await User.findById(userId)
-            .populate("studentProfile.enrolledCourses.courseId")
-            .populate("studentProfile.completedCourses.courseId");
-
-        if (!user) {
-            return res.status(404).json({ message: "User not found" });
-        }
-
-        const enrolledCourses = user.studentProfile.enrolledCourses
-            .filter((c) => c.status !== "completed")
-            .map((entry) => ({
-                ...entry.toObject(),
-                course: entry.courseId,
-            }));
-
-        const completedCourses = user.studentProfile.completedCourses.map(
-            (entry) => ({
-                ...entry.toObject(),
-                course: entry.courseId,
-            }),
-        );
-
-        res.status(200).json({
-            ongoingCourses: enrolledCourses,
-            completedCourses: completedCourses,
-        });
-    } catch (err) {
-        console.error("Error fetching my courses:", err.message);
-        res.status(500).json({
-            message: "Failed to fetch user's courses",
-            error: err.message,
-        });
-    }
-};
-
 const markSectionComplete = async (req, res) => {
     const { courseId, sectionIndex } = req.params;
     const userId = req.user.userId;
@@ -154,6 +115,7 @@ const submitQuiz = async (req, res) => {
     const { courseId, sectionIndex } = req.params;
     const userId = req.user.userId;
     const { answers } = req.body; // e.g., ["B", "C", "D"]
+    console.log(answers);
 
     try {
         const course = await Course.findById(courseId);
@@ -299,10 +261,6 @@ const getCourseById = async (req, res) => {
         const isCompleted = user.studentProfile.completedCourses.some(
             (entry) => entry._id.toString() === courseId,
         );
-        console.log("is this completed, from courseController line 213");
-        console.log(courseId, " ?== ", user.studentProfile.completedCourses);
-        console.log(isCompleted);
-
         if (!isEnrolled && !isCompleted) {
             //Not enrolled: preview preview
             return res.status(200).json({

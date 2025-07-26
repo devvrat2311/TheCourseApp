@@ -1,9 +1,10 @@
 import Navbar from "../../components/Navbar";
+import api from "../../utils/api";
 
 function CoursePreview({ course }) {
     const handleEnroll = async () => {
         try {
-            const res = await fetch(`/api/courses/${course.id}/enroll`, {
+            const res = await api.post(`/courses/${course.id}/enroll`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

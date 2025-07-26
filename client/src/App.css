@@ -1,5 +1,9 @@
 @import "tailwindcss";
 
+@theme {
+    --color-mainblue-400: #646cff;
+}
+
 #root {
     /*this lives inside the body*/
     min-height: 100vh;
@@ -36,5 +40,5 @@ main {
 }
 
 .input-field {
-    @apply w-2xs text-base caret-cyan-300 focus:outline-none focus:border-cyan-300 h-6 border-white transition duration-200 hover:border-cyan-300 border mb-4 rounded p-4;
+    @apply w-2xs text-base caret-cyan-300 focus:outline-none focus:border-mainblue-400 h-6 border-white transition duration-200 hover:border-mainblue-400 border mb-4 rounded p-4;
 }

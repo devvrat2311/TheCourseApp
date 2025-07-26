@@ -1,4 +1,5 @@
 import { useNavigate } from "react-router-dom";
+import api from "../utils/api";
 
 function LogoutBtn() {
     const navigate = useNavigate();
@@ -13,13 +14,15 @@ function LogoutBtn() {
         }
 
         try {
-            const res = await fetch("/api/auth/logout", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
+            const res = await api.post(
+                "/auth/logout",
+                { refreshToken },
+                {
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
                 },
-                body: JSON.stringify({ refreshToken }),
-            });
+            );
 
             const data = await res.json();
             console.log(data.message || "Logged out");
