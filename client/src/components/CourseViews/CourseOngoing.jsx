@@ -120,26 +120,26 @@ function CourseOngoing({ course }) {
                     </aside>
 
                     {/* Main content */}
-                    <div className="flex flex-col flex-1 justify-center place-items-center">
-                        <h2 className="text-2xl font-bold mb-4">
+                    <div className="flex flex-col flex-1">
+                        <h2 className="text-2xl font-bold mt-4 mb-4 text-left p-4 ">
                             {currentSection.title}
                         </h2>
-                        <p className="mb-4">{currentSection.content}</p>
+                        <p className="mb-4 text-left p-4">{currentSection.content}</p>
 
                         {currentSection.quiz?.length > 0 ? (
-                            <form className="mb-4" onSubmit={handleSubmitQuiz}>
-                                <h3 className="font-semibold text-lg mb-2">
+                            <form className="mb-4 text-left p-4" onSubmit={handleSubmitQuiz}>
+                                {/* <h3 className="font-bold text-2xl mb-2 text-sky-300/40">
                                     Quiz
-                                </h3>
+                                </h3>*/}
                                 {currentSection.quiz.map((q, i) => (
-                                    <div key={i} className="mb-3">
+                                    <div key={i} className="mb-5 p-4 border-2 border-dashed rounded border-sky-300/30 ">
                                         <p className="font-medium">
                                             {q.question}
                                         </p>
                                         {q.options.map((opt, j) => (
                                             <label
                                                 key={j}
-                                                className="block ml-4"
+                                                className="block ml-4 mt-2"
                                             >
                                                 <input
                                                     type="radio"
