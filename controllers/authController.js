@@ -14,10 +14,10 @@ const refreshToken = async (req, res) => {
         const authDoc = await Auth.findOne({
             "refreshTokens.token": refreshToken,
         });
+
         if (!authDoc) {
             return res.status(401).json({ message: "Invalid refresh Token" });
         }
-
         if (!refreshToken) {
             return res.status(401).json({ error: "Refresh Token Expired" });
         }
@@ -44,10 +44,11 @@ const refreshToken = async (req, res) => {
         const newAccessToken = jwt.sign(
             {
                 userId: user._id,
+                userFullName: user.fullName,
                 role: user.role,
             },
             JWT_SECRET,
-            { expiresIn: "15m" },
+            { expiresIn: "1h" },
         );
         const newRefreshToken = jwt.sign(
             {
@@ -56,8 +57,8 @@ const refreshToken = async (req, res) => {
             JWT_REFRESH_SECRET,
             { expiresIn: "7d" },
         );
-        //remove old refreshToken from Auths, add new refreshToken to Auths
 
+        //remove old token -> "refreshToken" from Auths, add "newRefreshToken" to Auths
         authDoc.refreshTokens = authDoc.refreshTokens.filter(
             (rt) => rt.token !== refreshToken,
         );
@@ -128,12 +129,26 @@ const signUp = async (req, res) => {
             role,
         }).save();
         const passwordHash = await bcrypt.hash(password, 10);
+        console.log(
+            "signUp",
+            firstName,
+            lastName,
+            email,
+            passwordHash,
+            `(${password})`,
+            mobile,
+        );
 
-        const authRecord = new Auth({ userId: newUser._id, passwordHash });
+        const authRecord = new Auth({
+            userId: newUser._id,
+            passwordHash,
+            userEmail: newUser.email,
+        });
         await authRecord.save();
 
         res.status(201).json({ message: "User registered successfully" });
     } catch (err) {
+        console.error(err);
         res.status(500).json({ error: err.message });
     }
 };
@@ -166,10 +181,11 @@ const login = async (req, res) => {
         const accessToken = jwt.sign(
             {
                 userId: user._id,
+                userFullName: user.fullName,
                 role: user.role,
             },
             JWT_SECRET,
-            { expiresIn: "15m" },
+            { expiresIn: "1h" },
         );
         const refreshToken = jwt.sign(
             { userId: user._id },

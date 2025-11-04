@@ -24,7 +24,7 @@ theCourseApp/
 │   ├─vite.config.js    # vite configuration
 │   ├─package.json
 │   ├─package-lock.json
-│   ├─eslint.config.js  # ESLint config  
+│   ├─eslint.config.js  # ESLint config
 │   └─README.md
 ├─config/
 │   └─db.js

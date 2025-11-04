@@ -25,14 +25,13 @@ const deleteUser = async (req, res) => {
 
         const deletedUser = await User.findByIdAndDelete(id);
 
-        if( !deletedUser ) {
-            return res.status(404).json({error: "User not found"});
+        if (!deletedUser) {
+            return res.status(404).json({ error: "User not found" });
         }
 
         res.json({ message: "User deleted successfully", deletedUser });
-        
     } catch (err) {
-        res.status(400).json({error: err.message});
+        res.status(400).json({ error: err.message });
     }
 };
 

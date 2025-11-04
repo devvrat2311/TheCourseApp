@@ -10,12 +10,13 @@ function ExploreCourses() {
     useEffect(() => {
         const fetchCourses = async () => {
             try {
-                const response = await api.get("/courses", {
+                const response = await api.get("/api/v1/courses", {
                     headers: {
                         Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
                     },
                 });
                 const data = await response.json();
+                console.log(data);
                 setCourses(data);
             } catch (err) {
                 console.error("Error fetching courses:", err);
@@ -24,23 +25,15 @@ function ExploreCourses() {
 
         fetchCourses();
     }, []);
-    // useEffect(() => {
-    //     fetch("/api/courses", {
-    //         headers: {
-    //             Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-    //         },
-    //     })
-    //         .then((res) => res.json())
-    //         .then((data) => setCourses(data))
-    //         .catch((err) => console.error("Error fetching courses:", err));
-    // }, []);
 
     return (
         <>
             <Navbar />
-            <main className="p-6 border-2 border-blue-900">
-                <div className="p-6">
-                    <h1 className="text-2xl font-bold mb-4">Explore Courses</h1>
+            <main className="">
+                <div className="main-content p-6">
+                    <h2 className="text-2xl font-bold mb-4 text-left">
+                        Explore Courses
+                    </h2>
                     <ul className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         {courses.map((course) => (
                             <li

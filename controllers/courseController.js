@@ -1,5 +1,6 @@
 const Course = require("../models/Course");
 const User = require("../models/User");
+const mongoose = require("mongoose");
 
 const getMyCourses = async (req, res) => {
     try {
@@ -52,7 +53,7 @@ const getMyCourses = async (req, res) => {
 };
 
 const markSectionComplete = async (req, res) => {
-    const { courseId, sectionIndex } = req.params;
+    const { courseId, moduleId, sectionId } = req.params;
     const userId = req.user.userId;
 
     try {
@@ -63,7 +64,6 @@ const markSectionComplete = async (req, res) => {
                 .status(404)
                 .json({ message: "User or Course not found" });
         }
-
         const enrolledCourse = user.studentProfile.enrolledCourses.find(
             (c) => c.courseId.toString() === courseId,
         );
@@ -74,34 +74,68 @@ const markSectionComplete = async (req, res) => {
                 .json({ message: "User not enrolled in course" });
         }
 
-        const sectionIdx = Number(sectionIndex);
+        let moduleEntry = enrolledCourse.completedSections.find(
+            (item) => item.moduleId.toString() === moduleId,
+        );
 
-        if (!enrolledCourse.completedSections.includes(sectionIdx)) {
-            enrolledCourse.completedSections.push(sectionIdx);
-            // await user.save();
+        if (moduleEntry) {
+            if (moduleEntry.sectionIds.includes(sectionId)) {
+                console.log(sectionId);
+                console.log(moduleEntry.sectionIds.includes(sectionId));
+                moduleEntry.sectionIds.map((sectionId) => {
+                    console.log(sectionId);
+                });
+                // console.log(moduleEntry);
+                return res
+                    .status(200)
+                    .json({ message: "Section already completed" });
+            }
+            moduleEntry.sectionIds.push(sectionId);
+        } else {
+            enrolledCourse.completedSections.push({
+                moduleId,
+                sectionIds: [sectionId],
+                isCompleted: false,
+            });
+            moduleEntry =
+                enrolledCourse.completedSections[
+                    enrolledCourse.completedSections.length - 1
+                ];
         }
+        console.log(moduleEntry);
 
-        const totalSections = course.sections.length;
-        const completedCount = enrolledCourse.completedSections.length;
+        module = course.modules.find(
+            (module) => module._id.toString() === moduleId,
+        );
+        const isModuleComplete =
+            moduleEntry.sectionIds.length === module.sections.length;
 
-        let courseJustCompleted = false;
-        if (completedCount === totalSections) {
-            //move to completedCourses in User.studentProfile
-            user.studentProfile.completedCourses.push(courseId);
-
-            //remove from enrolledCourses
-            user.studentProfile.enrolledCourses =
-                user.studentProfile.enrolledCourses.filter(
-                    (c) => c.courseId.toString() !== courseId,
-                );
-            courseJustCompleted = true;
+        if (isModuleComplete) {
+            moduleEntry.isCompleted = true;
         }
 
         await user.save();
 
+        const totalModules = course.modules.length;
+        const allModulesCompleted = course.modules.every((module) => {
+            const entry = enrolledCourse.completedSections.find(
+                (item) => item.moduleId.toString() === module._id.toString(),
+            );
+            return entry && entry.isCompleted;
+        });
+
+        if (
+            allModulesCompleted &&
+            !user.studentProfile.completedCourses.includes(courseId)
+        ) {
+            user.studentProfile.completedCourses.push(courseId);
+            await user.save();
+        }
+
         return res.status(200).json({
             message: "Section marked as completed",
-            completed: courseJustCompleted,
+            isModuleComplete,
+            isCourseComplete: allModulesCompleted,
         });
     } catch (err) {
         console.error(err);
@@ -244,12 +278,124 @@ const enrollInCourse = async (req, res) => {
     }
 };
 
+/*
+the function getCourseById needs only to return the course being queried along with
+all its modules array, in its modules array the sections themselves shouldn't be there
+instead only metadata for these sections need to be present.
+ */
+
+const getSectionById = async (req, res) => {
+    const courseId = req.params.courseId;
+    const moduleId = req.params.moduleId;
+    const sectionId = req.params.sectionId;
+    console.log(sectionId);
+    const userId = req.user.userId;
+    let isSectionCompleted;
+
+    try {
+        const userInfo = await User.findById(userId);
+        // console.log(userInfo.studentProfile);
+        const userCourseInfo = userInfo.studentProfile.enrolledCourses.find(
+            (course) => course.courseId.toString() === courseId,
+        );
+        // console.log("Hello this courseInfo", userCourseInfo);
+        if (userCourseInfo) {
+            const moduleInfo = userCourseInfo.completedSections.find(
+                (module) => module.moduleId.toString() === moduleId,
+            );
+            // console.log("Module Info", moduleInfo);
+            if (moduleInfo) {
+                const sectionComplete = moduleInfo.sectionIds.find(
+                    (sectId) => sectId.toString() === sectionId,
+                );
+                if (sectionComplete) {
+                    isSectionCompleted =
+                        sectionComplete.toString() === sectionId;
+                }
+            }
+        }
+        // console.log("section is complete", isSectionCompleted);
+
+        const section = await Course.findById(courseId, {
+            modules: {
+                $elemMatch: {
+                    _id: moduleId,
+                },
+            },
+        });
+
+        const module = section.modules;
+        // console.log("In da backend");
+        // console.log(module[0]);
+        var sectionIndex = 0;
+        module[0].sections.map((section, index) => {
+            if (section._id == sectionId) {
+                sectionIndex = index;
+            }
+            console.log(section._id == sectionId);
+        });
+
+        if (!section)
+            return res.status(404).json({ message: "Section Not Found" });
+
+        const sectionData = section.modules[0].sections[sectionIndex];
+        return res.status(200).json({ sectionData, isSectionCompleted });
+    } catch (err) {
+        console.error(err);
+        return res
+            .status(500)
+            .json({ message: "Server error", error: err.message });
+    }
+};
+
+const getAllSections = async (req, res) => {
+    const courseId = req.params.courseId;
+    console.log(typeof courseId);
+    const moduleId = req.params.moduleId;
+    console.log(typeof moduleId);
+
+    try {
+        const result = await Course.aggregate([
+            { $match: { _id: new mongoose.Types.ObjectId(courseId) } },
+            { $unwind: "$modules" },
+            {
+                $match: {
+                    "modules._id": new mongoose.Types.ObjectId(moduleId),
+                },
+            },
+            {
+                $project: {
+                    "modules.sections.content": 0,
+                    "modules.sections.quiz": 0,
+                },
+            },
+        ]);
+
+        const sections = result[0]?.modules;
+        // console.log("Logging sections where content is not to be sent");
+        // console.log(sections);
+        if (!sections)
+            return res.status(404).json({ message: "Sections Data Not Found" });
+
+        // const realSections = sections.modules[0].sections;
+        return res.status(200).json(sections);
+    } catch (err) {
+        console.error(err);
+        return res
+            .status(500)
+            .json({ message: "Server error", error: err.message });
+    }
+};
+
 const getCourseById = async (req, res) => {
     const courseId = req.params.id;
     const userId = req.user.userId;
 
     try {
-        const course = await Course.findById(courseId);
+        const course = await Course.findById(courseId)
+            .select("-modules.sections.content -modules.sections.quiz")
+            .lean();
+
         if (!course)
             return res.status(404).json({ message: "Course Not Found" });
 
@@ -283,7 +429,7 @@ const getCourseById = async (req, res) => {
                 id: courseId,
                 view: "ongoing",
                 title: course.title,
-                sections: course.sections,
+                modules: course.modules,
                 completedSections: enrolledCourseEntry.completedSections || [],
                 quizScores: enrolledCourseEntry.quizScores || [],
             });
@@ -315,4 +461,6 @@ module.exports = {
     markSectionComplete,
     submitQuiz,
     getMyCourses,
+    getSectionById,
+    getAllSections,
 };

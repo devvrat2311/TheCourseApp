@@ -1,181 +1,164 @@
 import Navbar from "../../components/Navbar";
 import { useState } from "react";
 import api from "../../utils/api";
+import { ChevronRight } from "lucide-react";
+import BackButton from "../BackBtn";
+import { Link } from "react-router-dom";
 
 function CourseOngoing({ course }) {
+    console.log("logging course");
+    console.log(course);
     const [selectedIndex, setSelectedIndex] = useState(0);
     const [completedSections, setCompletedSections] = useState(
         course.completedSections || [],
     ); // array of section indexes
     const [quizAnswers, setQuizAnswers] = useState({}); // { [questionIndex]: selectedOption }
 
-    const sections = course.sections || [];
-    const currentSection = sections[selectedIndex];
+    // const sections = course.sections || [];
+    const modules = course.modules || [];
+    console.log(modules[selectedIndex]._id);
+    // const totalSections = sections.length;
+    // console.log(`totalSections: ${totalSections}`);
+    // const currentSection = sections[selectedIndex];
+    // console.log(`course.completedSections: ${course.completedSections}`);
 
-    const handleMarkComplete = async () => {
-        try {
-            const response = await api.post(
-                `/courses/${course.id}/section/${selectedIndex}/complete`,
-                {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-                    },
-                },
-            );
+    // const handleNextSection = () => {
+    //     console.log(`current section ${selectedIndex + 1}`);
+    //     if (selectedIndex < totalSections - 1) {
+    //         setSelectedIndex(selectedIndex + 1);
+    //         console.log(selectedIndex);
+    //     }
+    // };
+    // const handleMarkComplete = async () => {
+    //     try {
+    //         const response = await api.post(
+    //             `/courses/${course.id}/section/${selectedIndex}/complete`,
+    //             {
+    //                 method: "POST",
+    //                 headers: {
+    //                     "Content-Type": "application/json",
+    //                     Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+    //                 },
+    //             },
+    //         );
 
-            const data = await response.json();
-            if (!response.ok)
-                throw new Error(
-                    data.message || "Failed to mark section complete",
-                );
+    //         const data = await response.json();
+    //         if (!response.ok)
+    //             throw new Error(
+    //                 data.message || "Failed to mark section complete",
+    //             );
 
-            if (data.completed) {
-                alert("You've completed the entire course");
-            }
+    //         if (data.completed) {
+    //             alert("You've completed the entire course");
+    //         }
 
-            // Update completedSections state manually (or refetch if needed)
-            setCompletedSections([...completedSections, selectedIndex]);
-        } catch (err) {
-            console.error("Error:", err.message);
-        }
-    };
+    //         // Update completedSections state manually (or refetch if needed)
+    //         setCompletedSections([...completedSections, selectedIndex]);
+    //     } catch (err) {
+    //         console.error("Error:", err.message);
+    //     }
+    // };
 
-    const handleQuizAnswer = (questionIndex, selected) => {
-        setQuizAnswers({ ...quizAnswers, [questionIndex]: selected });
-    };
+    // const handleQuizAnswer = (questionIndex, selected) => {
+    //     setQuizAnswers({ ...quizAnswers, [questionIndex]: selected });
+    // };
 
-    const handleSubmitQuiz = async (e) => {
-        e.preventDefault();
+    // const handleSubmitQuiz = async (e) => {
+    //     e.preventDefault();
 
-        const answersArray = Object.values(quizAnswers); // ["A", "C", "D", ...]
+    //     const answersArray = Object.values(quizAnswers); // ["A", "C", "D", ...]
 
-        try {
-            const response = await api.post(
-                `/courses/${course.id}/section/${selectedIndex}/quiz`,
-                { answers: answersArray },
-                {
-                    headers: {
-                        "Content-Type": "application/json",
-                        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-                    },
-                    // body: JSON.stringify({ answers: answersArray }),
-                },
-            );
+    //     try {
+    //         const response = await api.post(
+    //             `/courses/${course.id}/section/${selectedIndex}/quiz`,
+    //             { answers: answersArray },
+    //             {
+    //                 headers: {
+    //                     "Content-Type": "application/json",
+    //                     Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+    //                 },
+    //                 // body: JSON.stringify({ answers: answersArray }),
+    //             },
+    //         );
 
-            const data = await response.json();
+    //         const data = await response.json();
 
-            if (!response.ok)
-                throw new Error(data.message || "Quiz submission failed");
+    //         if (!response.ok)
+    //             throw new Error(data.message || "Quiz submission failed");
 
-            if (data.message === "Quiz passed") {
-                alert(`✅ Quiz passed! Score: ${data.score}`);
-                // setCompletedSections([...completedSections, selectedIndex]); // update state
-                handleMarkComplete();
-            } else {
-                alert(`❌ Quiz failed. Score: ${data.score}`);
-            }
-        } catch (err) {
-            console.error("Error submitting quiz:", err.message);
-            alert("An error occurred while submitting the quiz.");
-        }
-    };
+    //         if (data.message === "Quiz passed") {
+    //             alert(`✅ Quiz passed! Score: ${data.score}`);
+    //             // setCompletedSections([...completedSections, selectedIndex]); // update state
+    //             handleMarkComplete();
+    //         } else {
+    //             alert(`❌ Quiz failed. Score: ${data.score}`);
+    //         }
+    //     } catch (err) {
+    //         console.error("Error submitting quiz:", err.message);
+    //         alert("An error occurred while submitting the quiz.");
+    //     }
+    // };
 
     return (
         <>
             <Navbar />
-            <main className="pr-0 border-2">
-                <div className="flex min-h-screen">
-                    {/* Sidebar */}
-                    <aside className="w-1/4 p-4 border-r">
-                        <h2 className="text-xl font-semibold mb-4">
-                            {course.title}
+            <main>
+                <div className="main-content flex border border-[var(--shadow)]">
+                    <div className="flex flex-col h-full w-[20vw] border-r-2 border-[var(--shadow)] p-6">
+                        <BackButton />
+                        <h2 className="text-left text-2xl font-semibold mb-[2rem]">
+                            Modules
                         </h2>
-                        <ul>
-                            {sections.map((section, index) => (
+                        <ul className="text-left">
+                            {modules.map((module, index) => (
                                 <li
                                     key={index}
-                                    className={`cursor-pointer p-2 rounded mb-2 ${
+                                    className={`transition duration-150 ease-in-out cursor-pointer p-2 mb-3 ${
                                         selectedIndex === index
-                                            ? "bg-blue-900 text-white"
-                                            : "hover:bg-gray-200 hover:text-black"
+                                            ? "selected-index"
+                                            : "unselected-index"
                                     }`}
                                     onClick={() => setSelectedIndex(index)}
                                 >
-                                    <div className="flex justify-between items-center">
-                                        <span>{section.title}</span>
-                                        <span>
-                                            {section.quiz?.length > 0
-                                                ? "📝"
-                                                : ""}
-                                            {completedSections.includes(index)
-                                                ? "✅"
-                                                : ""}
-                                        </span>
-                                    </div>
+                                    <p className="text-[0.9rem]">
+                                        Module {index + 1}
+                                    </p>
                                 </li>
                             ))}
                         </ul>
-                    </aside>
-
-                    {/* Main content */}
-                    <div className="flex flex-col flex-1">
-                        <h2 className="text-2xl font-bold mt-4 mb-4 text-left p-4 ">
-                            {currentSection.title}
+                    </div>
+                    <div className="flex-1 text-left">
+                        <h2 className="font-bold text-3xl ml-6 mt-5">
+                            {modules[selectedIndex].title}
                         </h2>
-                        <p className="mb-4 text-left p-4">{currentSection.content}</p>
-
-                        {currentSection.quiz?.length > 0 ? (
-                            <form className="mb-4 text-left p-4" onSubmit={handleSubmitQuiz}>
-                                {/* <h3 className="font-bold text-2xl mb-2 text-sky-300/40">
-                                    Quiz
-                                </h3>*/}
-                                {currentSection.quiz.map((q, i) => (
-                                    <div key={i} className="mb-5 p-4 border-2 border-dashed rounded border-sky-300/30 ">
-                                        <p className="font-medium">
-                                            {q.question}
-                                        </p>
-                                        {q.options.map((opt, j) => (
-                                            <label
-                                                key={j}
-                                                className="block ml-4 mt-2"
-                                            >
-                                                <input
-                                                    type="radio"
-                                                    name={`question-${i}`}
-                                                    value={opt}
-                                                    checked={
-                                                        quizAnswers[i] === opt
-                                                    }
-                                                    onChange={() =>
-                                                        handleQuizAnswer(i, opt)
-                                                    }
-                                                />
-                                                <span className="ml-2">
-                                                    {opt}
+                        <p className=" ml-6 mt-5">
+                            {modules[selectedIndex].description}
+                        </p>
+                        <ul className="ml-6 mt-6 mr-6">
+                            {modules[selectedIndex].sections.map(
+                                (section, index) => (
+                                    <li
+                                        key={index}
+                                        className="text-xs  first:rounded-t-2xl last:rounded-b-2xl hover:bg-[var(--highlighted)] border border-b-0 last:border-b-1 hover:cursor-pointer transition duration-200 ease-in-out border-[var(--highlighted)]"
+                                    >
+                                        <Link
+                                            to={`/courses/${course.id}/${modules[selectedIndex]._id}/sections/${section._id}`}
+                                            className="p-[14px] flex h-full w-full"
+                                        >
+                                            <div className="flex-1">
+                                                <span className="mr-[6px]">
+                                                    {index + 1}.
                                                 </span>
-                                            </label>
-                                        ))}
-                                    </div>
-                                ))}
-                                <button
-                                    type="submit"
-                                    className="bg-green-600 text-white px-4 py-2 rounded mt-4"
-                                >
-                                    Submit Quiz
-                                </button>
-                            </form>
-                        ) : (
-                            !completedSections.includes(selectedIndex) && (
-                                <button
-                                    onClick={handleMarkComplete}
-                                    className="bg-blue-600 text-white px-4 py-2 rounded"
-                                >
-                                    Mark as Completed
-                                </button>
-                            )
-                        )}
+                                                {section.title}
+                                            </div>
+                                            <div className="w-[20px]">
+                                                <ChevronRight size={16} />
+                                            </div>
+                                        </Link>
+                                    </li>
+                                ),
+                            )}
+                        </ul>
                     </div>
                 </div>
             </main>

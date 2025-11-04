@@ -1,5 +1,5 @@
 export async function signInUser({ email, password }) {
-    const response = await fetch("/baseURI/auth/login", {
+    const response = await fetch("/api/v1/auth/login", {
         method: "POST",
         headers: {
             "Content-Type": "application/json",

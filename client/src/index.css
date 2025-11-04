@@ -1,11 +1,23 @@
 :root {
-    font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+    /*font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;*/
+    font-family: "Fira Code", monospace;
     line-height: 1.5;
     font-weight: 400;
 
-    color-scheme: light dark;
-    color: rgba(255, 255, 255, 0.87);
-    background-color: #242424;
+    color-scheme: dark;
+    /*color: rgba(255, 255, 255, 0.87);*/
+    /*background-color: #242424;*/
+
+    --bg: #1f1f1f;
+    --fg: #f8f8f8;
+    --fg-faded: #f8f8f860;
+    --highlighted: #5757576e;
+    --shadow: #bcddfc;
+    /*--accent-blue: #0083cf;*/
+    --accent-blue: #557899;
+    --accent-blue-faded: #0083cf90;
+    --accent-red: #ff8e18;
+    --accent-red-faded: #ce6900;
 
     font-synthesis: none;
     text-rendering: optimizeLegibility;
@@ -13,31 +25,24 @@
     -moz-osx-font-smoothing: grayscale;
 }
 
-a {
-    font-size: 1.2rem;
-    font-weight: 600;
-    color: #646cff;
-    text-decoration: inherit;
-    /* border: 2px solid transparent; */
-    /* border-radius: 5px; */
-    background-color: transparent;
-    padding: 5px;
-    transition: 0.2s ease-in;
-}
-a:hover {
-    text-decoration: underline;
-    background-color: #1c398e;
-    color: #f9f9f9;
+:root[data-theme="light"] {
+    --bg: #f5f5f5;
+    --fg: #0a0a0a;
+    --fg-faded: #0a0a0a60;
+    --highlighted: #cfcfcf8f;
+    --shadow: #1f1f1f;
+    --accent-blue: #a1c6ea;
+    --accent-blue-faded: #73c0fc90;
+    --accent-red: #d66;
+    --accent-red-faded: #dd666690;
+
+    color-scheme: light;
 }
 
 body {
     margin: 0;
     min-height: 100vh;
-    /* padding: 10px; */
-    /* display: flex; */
-    /* place-items: center; */
-    /* min-width: 320px; */
-    /* border: 2px solid white; */
+    background-color: var(--bg);
 }
 
 h1 {
@@ -47,24 +52,12 @@ h1 {
 
 /*button {
     border-radius: 3px;
-    border: 2px dashed transparent;
+    border: 2px solid #00c0ff;
     padding: 0.6em 1.2em;
-    font-size: 1em;
-    font-weight: 500;
-    font-family: inherit;
-    background-color: #1a1a1a;
     cursor: pointer;
-    transition: border-color 0.25s;
-}
-button:hover {
-    border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-    outline: 4px auto -webkit-focus-ring-color;
 }*/
 
-@media (prefers-color-scheme: light) {
+/*@media (prefers-color-scheme: light) {
     :root {
         color: #213547;
         background-color: #ffffff;
@@ -75,4 +68,4 @@ button:focus-visible {
     button {
         background-color: #f9f9f9;
     }
-}
+}*/

@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 
+const opts = { toJSON: { virtuals: true }, timestamps: true };
 const UserSchema = new mongoose.Schema(
     {
         firstName: {
@@ -84,13 +85,27 @@ const UserSchema = new mongoose.Schema(
                         type: Date,
                         default: Date.now,
                     },
+                    completedModules: {
+                        type: [mongoose.Schema.Types.ObjectId],
+                        default: [],
+                    },
                     completedSections: {
-                        type: [Number],
+                        type: [
+                            {
+                                moduleId: mongoose.Schema.Types.ObjectId,
+                                sectionIds: [mongoose.Schema.Types.ObjectId],
+                                isCompleted: {
+                                    type: Boolean,
+                                    default: false,
+                                },
+                            },
+                        ],
                         default: [],
                     },
                     quizScores: {
                         type: [
                             {
+                                moduleIndex: Number,
                                 sectionIndex: Number,
                                 score: Number,
                                 passed: Boolean,
@@ -121,9 +136,7 @@ const UserSchema = new mongoose.Schema(
             ],
         },
     },
-    {
-        timestamps: true, // adds createdAt and updatedAt fields
-    },
+    opts,
 );
 
 UserSchema.virtual("fullName").get(function () {

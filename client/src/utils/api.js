@@ -21,7 +21,7 @@ class ApiClient {
             throw new Error("No refresh token available");
         }
 
-        const response = await fetch(`${this.baseURL}/auth/refresh`, {
+        const response = await fetch(`/api/v1/auth/refresh`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -53,8 +53,8 @@ class ApiClient {
 
     async fetch(url, options = {}) {
         // Ensure URL is properly formatted
-        const fullUrl = url.startsWith("http") ? url : `${this.baseURL}${url}`;
-        console.log("from api/fetch function", fullUrl);
+        // const fullUrl = url.startsWith("http") ? url : `${this.baseURL}${url}`;
+        const fullUrl = url;
 
         // Add authorization header if token exists
         const token = localStorage.getItem("accessToken");

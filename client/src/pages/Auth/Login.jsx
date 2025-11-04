@@ -1,12 +1,14 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { signInUser } from "../../utils/auth";
+import { useFlash } from "../../contexts/FlashContext";
 
 function Login() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
     const navigate = useNavigate();
+    const { showFlash } = useFlash();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -19,60 +21,73 @@ function Login() {
             localStorage.setItem("accessToken", result.accessToken);
             localStorage.setItem("refreshToken", result.refreshToken);
 
+            showFlash("Welcome to your account", "info");
             //redirect to dashboard
             navigate("/");
         } catch (err) {
-            setError(err.message);
+            showFlash(`Error: ${err.message}`, "info");
         }
     };
 
     return (
-        <div className="flex flex-col justify-center items-center rounded-2xl p-7">
-            <h2 className="text-3xl font-bold ">Sign In</h2>
-            <div className="p-10 border-2 border-mainblue-400 rounded-2xl mt-3">
-                <form className="flex flex-col" onSubmit={handleSubmit}>
-                    <label className="text-xs text-left mb-1" for="username">
-                        email
-                    </label>
-                    <input
-                        id="username"
-                        className="input-field"
-                        name="email"
-                        type="email"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        required
-                    />
+        <div className="login-container bg-[var(--bg-dark)] border-2 border-[var(--shadow-dark)] flex flex-col">
+            <h2 className="text-3xl font-bold text-left mb-2">Login</h2>
+            <form
+                className="flex flex-col"
+                onSubmit={handleSubmit}
+                autoComplete="off"
+            >
+                <label className="text-xs text-left mb-1 mt-3" htmlFor="email">
+                    EMAIL
+                </label>
+                <input
+                    id="email"
+                    className="input-class p-2 border-2 border-gray-400"
+                    name="email"
+                    type="email"
+                    placeholder="your@email.com"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    required
+                />
 
-                    <label className="text-xs text-left mb-1" for="password">
-                        password
-                    </label>
-                    <input
-                        id="password"
-                        className="input-field"
-                        name="password"
-                        type="password"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        required
-                    />
+                <label
+                    className="text-xs text-left mb-1 mt-3"
+                    htmlFor="password"
+                >
+                    PASSWORD
+                </label>
+                <input
+                    id="password"
+                    className="input-class p-2 border-2 border-gray-400"
+                    placeholder="password"
+                    name="password"
+                    type="password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    required
+                />
 
-                    <button className="mt-3" type="submit">
-                        Login
-                    </button>
-                    {error && <p className="text-red-500 mt-2">{error}</p>}
+                <button
+                    className="login-btn mt-[3rem] cursor-pointer"
+                    type="submit"
+                >
+                    <span className="font-bold">LOGIN</span>
+                </button>
+                {error && <p className="text-red-500 mt-2">{error}</p>}
 
-                    <button
-                        className="mt-3"
-                        onClick={() => {
-                            navigate("/signup");
-                        }}
-                        type="button"
+                <hr className="border-t border-gray-300 my-6"></hr>
+
+                <div>
+                    <p className="inline">Don't have an account? </p>
+                    <Link
+                        className="inline decoration-1 underline"
+                        to="/signup"
                     >
                         Sign Up
-                    </button>
-                </form>
-            </div>
+                    </Link>
+                </div>
+            </form>
         </div>
     );
 }

@@ -9,7 +9,7 @@
 client/    # during development phase (react/vite)
 ├─src/
 │  ├─assets/
-│  │ └─react.svg 
+│  │ └─react.svg
 │  ├─components/
 │  ├─pages/
 │  ├─utils/
@@ -31,6 +31,8 @@ client/    # during development phase (react/vite)
 
 ## How the frontend talks to the backend
 
-- The frontend is connected to the backend via CORS (cross-origin resource sharing). 
+- The frontend makes calls to the backend's (cross-origin resource sharing).
 
 - In development the **frontend runs on the PORT:5173**, the usual port Vite uses and the backend runs on its different port, which is PORT:5000 or as defined in the .env file.
+
+- CORS allows the frontend to make API calls to PORT:5000 and the backend to recieve calls from outside of its own PORT.
