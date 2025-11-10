@@ -10,6 +10,8 @@ const {
     getMyCourses,
     getSectionById,
     getAllSections,
+    getCompletedQuizDetails,
+    getMyCompletedModules,
 } = require("../controllers/courseController");
 
 router.get("/my-courses", verifyToken, getMyCourses);
@@ -27,6 +29,16 @@ router.post(
     verifyToken,
     markSectionComplete,
 );
-// router.post("/:courseId/section/:sectionIndex/quiz", verifyToken, submitQuiz);
+router.post(
+    "/:courseId/:moduleId/sections/:sectionId/submit-quiz",
+    verifyToken,
+    submitQuiz,
+);
+router.get(
+    "/:courseId/:moduleId/sections/:sectionId/completed-quiz",
+    verifyToken,
+    getCompletedQuizDetails,
+);
+router.get("/:courseId/completed-modules", verifyToken, getMyCompletedModules);
 
 module.exports = router;

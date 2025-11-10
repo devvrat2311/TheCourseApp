@@ -1,6 +1,6 @@
 import Navbar from "../../components/Navbar";
-import { useState } from "react";
-import api from "../../utils/api";
+import { useState, useEffect } from "react";
+// import api from "../../utils/api";
 import { ChevronRight } from "lucide-react";
 import BackButton from "../BackBtn";
 import { Link } from "react-router-dom";
@@ -9,95 +9,33 @@ function CourseOngoing({ course }) {
     console.log("logging course");
     console.log(course);
     const [selectedIndex, setSelectedIndex] = useState(0);
-    const [completedSections, setCompletedSections] = useState(
-        course.completedSections || [],
-    ); // array of section indexes
-    const [quizAnswers, setQuizAnswers] = useState({}); // { [questionIndex]: selectedOption }
+    // const [error, setError] = useState(null);
+    // const [loading, setLoading] = useState(true);
+    // const [completedModules, setCompletedModules] = useState([]);
 
-    // const sections = course.sections || [];
     const modules = course.modules || [];
-    console.log(modules[selectedIndex]._id);
-    // const totalSections = sections.length;
-    // console.log(`totalSections: ${totalSections}`);
-    // const currentSection = sections[selectedIndex];
-    // console.log(`course.completedSections: ${course.completedSections}`);
 
-    // const handleNextSection = () => {
-    //     console.log(`current section ${selectedIndex + 1}`);
-    //     if (selectedIndex < totalSections - 1) {
-    //         setSelectedIndex(selectedIndex + 1);
-    //         console.log(selectedIndex);
-    //     }
-    // };
-    // const handleMarkComplete = async () => {
-    //     try {
-    //         const response = await api.post(
-    //             `/courses/${course.id}/section/${selectedIndex}/complete`,
-    //             {
-    //                 method: "POST",
-    //                 headers: {
-    //                     "Content-Type": "application/json",
-    //                     Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-    //                 },
-    //             },
-    //         );
-
-    //         const data = await response.json();
-    //         if (!response.ok)
-    //             throw new Error(
-    //                 data.message || "Failed to mark section complete",
+    // useEffect(() => {
+    //     const getCompletedModuleIds = async () => {
+    //         try {
+    //             const response = await api.get(
+    //                 `/api/v1/courses/${course.id.toString()}/completed-modules`,
     //             );
-
-    //         if (data.completed) {
-    //             alert("You've completed the entire course");
+    //             const data = await response.json();
+    //             console.log(data);
+    //             setCompletedModules(data);
+    //         } catch (err) {
+    //             setError(err);
+    //         } finally {
+    //             setLoading(false);
     //         }
+    //     };
+    //     getCompletedModuleIds();
+    // }, [course.id]);
 
-    //         // Update completedSections state manually (or refetch if needed)
-    //         setCompletedSections([...completedSections, selectedIndex]);
-    //     } catch (err) {
-    //         console.error("Error:", err.message);
-    //     }
-    // };
-
-    // const handleQuizAnswer = (questionIndex, selected) => {
-    //     setQuizAnswers({ ...quizAnswers, [questionIndex]: selected });
-    // };
-
-    // const handleSubmitQuiz = async (e) => {
-    //     e.preventDefault();
-
-    //     const answersArray = Object.values(quizAnswers); // ["A", "C", "D", ...]
-
-    //     try {
-    //         const response = await api.post(
-    //             `/courses/${course.id}/section/${selectedIndex}/quiz`,
-    //             { answers: answersArray },
-    //             {
-    //                 headers: {
-    //                     "Content-Type": "application/json",
-    //                     Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-    //                 },
-    //                 // body: JSON.stringify({ answers: answersArray }),
-    //             },
-    //         );
-
-    //         const data = await response.json();
-
-    //         if (!response.ok)
-    //             throw new Error(data.message || "Quiz submission failed");
-
-    //         if (data.message === "Quiz passed") {
-    //             alert(`✅ Quiz passed! Score: ${data.score}`);
-    //             // setCompletedSections([...completedSections, selectedIndex]); // update state
-    //             handleMarkComplete();
-    //         } else {
-    //             alert(`❌ Quiz failed. Score: ${data.score}`);
-    //         }
-    //     } catch (err) {
-    //         console.error("Error submitting quiz:", err.message);
-    //         alert("An error occurred while submitting the quiz.");
-    //     }
-    // };
+    // if (loading) return <p>Loading data. . .</p>;
+    // if (error) return <p className="text-red-500">Error: {error.message}</p>;
+    // console.log("completed modules", completedModules);
 
     return (
         <>
@@ -105,7 +43,7 @@ function CourseOngoing({ course }) {
             <main>
                 <div className="main-content flex border border-[var(--shadow)]">
                     <div className="flex flex-col h-full w-[20vw] border-r-2 border-[var(--shadow)] p-6">
-                        <BackButton />
+                        <BackButton locationURL={"/"} />
                         <h2 className="text-left text-2xl font-semibold mb-[2rem]">
                             Modules
                         </h2>

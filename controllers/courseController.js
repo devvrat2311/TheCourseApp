@@ -52,17 +52,50 @@ const getMyCourses = async (req, res) => {
     }
 };
 
+const getMyCompletedModules = async (req, res) => {
+    const { courseId } = req.params;
+    const userId = req.user.userId;
+
+    try {
+        const user = await User.findById(userId);
+        //please do implement that storing in the req via auth middleware by making enrolledCourses into a map
+        const currentCourse = user.studentProfile.enrolledCourses.find(
+            (item) => item.courseId.toString() === courseId,
+        );
+        const completedModuleIds = currentCourse.completedSections
+            .filter((section) => section.isCompleted)
+            .map((section) => section.moduleId.toString());
+
+        res.status(200).json({
+            courseId,
+            completedModules: completedModuleIds,
+        });
+    } catch (err) {
+        console.log(err);
+        return res.status(500).json({
+            message: "Failed to get Completed Modules",
+            error: err.message,
+        });
+    }
+};
+
 const markSectionComplete = async (req, res) => {
     const { courseId, moduleId, sectionId } = req.params;
     const userId = req.user.userId;
 
     try {
         const user = await User.findById(userId);
-        const course = await Course.findById(courseId);
+        const course = await Course.findById(courseId, {
+            modules: {
+                $elemMatch: {
+                    _id: moduleId,
+                },
+            },
+        });
         if (!user || !course) {
             return res
                 .status(404)
-                .json({ message: "User or Course not found" });
+                .json({ message: "User or Course/Module not found" });
         }
         const enrolledCourse = user.studentProfile.enrolledCourses.find(
             (c) => c.courseId.toString() === courseId,
@@ -104,7 +137,7 @@ const markSectionComplete = async (req, res) => {
         }
         console.log(moduleEntry);
 
-        module = course.modules.find(
+        const module = course.modules.find(
             (module) => module._id.toString() === moduleId,
         );
         const isModuleComplete =
@@ -116,7 +149,7 @@ const markSectionComplete = async (req, res) => {
 
         await user.save();
 
-        const totalModules = course.modules.length;
+        // const totalModules = course.modules.length;
         const allModulesCompleted = course.modules.every((module) => {
             const entry = enrolledCourse.completedSections.find(
                 (item) => item.moduleId.toString() === module._id.toString(),
@@ -134,8 +167,12 @@ const markSectionComplete = async (req, res) => {
 
         return res.status(200).json({
             message: "Section marked as completed",
-            isModuleComplete,
-            isCourseComplete: allModulesCompleted,
+            messageModule: isModuleComplete
+                ? "Module Complete"
+                : "Module not complete",
+            messageCourse: allModulesCompleted
+                ? "Course Complete"
+                : "Course not complete",
         });
     } catch (err) {
         console.error(err);
@@ -145,14 +182,39 @@ const markSectionComplete = async (req, res) => {
     }
 };
 
+function answersMatch(correctAnswers, answers) {
+    if (correctAnswers.length !== answers.length) return false;
+
+    return correctAnswers.every((correct, index) => {
+        return (
+            correct.question === answers[index].question &&
+            correct.answer === answers[index].answer
+        );
+    });
+}
+
+function checkAnswers(correctAnswers, answers) {
+    if (correctAnswers.length !== answers.length) return -1;
+
+    let score = 0;
+    for (let i = 0; i < correctAnswers.length; ++i) {
+        if (correctAnswers[i].answer === answers[i].answer) {
+            score++;
+        }
+    }
+    console.log("score: ", score, "/", correctAnswers.length);
+    return score;
+}
+
 const submitQuiz = async (req, res) => {
-    const { courseId, sectionIndex } = req.params;
+    const { courseId, moduleId, sectionId } = req.params;
     const userId = req.user.userId;
-    const { answers } = req.body; // e.g., ["B", "C", "D"]
+    const { answers } = req.body;
     console.log(answers);
 
     try {
         const course = await Course.findById(courseId);
+        // console.log(course);
         const user = await User.findById(userId);
 
         if (!course || !user) {
@@ -160,21 +222,34 @@ const submitQuiz = async (req, res) => {
                 .status(404)
                 .json({ message: "Course or User not found" });
         }
-
-        const section = course.sections[sectionIndex];
+        const currentModule = course.modules.find(
+            (module) => module._id.toString() === moduleId,
+        );
+        // console.log("Current Module", currentModule);
+        const section = currentModule.sections.find(
+            (section) => section._id.toString() === sectionId,
+        );
+        console.log("section is: ", section);
         if (!section || !section.quiz || section.quiz.length === 0) {
             return res
                 .status(400)
                 .json({ message: "No quiz found for this section" });
         }
 
-        const correctAnswers = section.quiz.map((q) => q.correctAnswer);
-        const score = answers.reduce(
-            (acc, ans, i) => (ans === correctAnswers[i] ? acc + 1 : acc),
-            0,
-        );
+        const correctAnswers = section.quiz.map((q) => ({
+            question: q.question,
+            answer: q.correctAnswer,
+        }));
+        console.log("Correct Answers", correctAnswers);
+        console.log("Answers Match?", answersMatch(correctAnswers, answers));
+        console.log("Check Answers", checkAnswers(correctAnswers, answers));
 
-        const passed = score === correctAnswers.length;
+        const score = checkAnswers(correctAnswers, answers);
+        const passingPercentage = 80;
+        const passingMarks = (passingPercentage * correctAnswers.length) / 100;
+        console.log("passing marks", passingMarks);
+        const passed = score >= correctAnswers.length;
+        console.log("passed ? ", passed ? "yes" : "no");
 
         const enrolledCourse = user.studentProfile.enrolledCourses.find(
             (c) => c.courseId.toString() === courseId,
@@ -186,39 +261,136 @@ const submitQuiz = async (req, res) => {
                 .json({ message: "User not enrolled in this course" });
         }
 
-        // Only push quiz score if not already submitted
-        const existingScore = enrolledCourse.quizScores.find(
-            (qs) => qs.sectionIndex === Number(sectionIndex),
+        let moduleEntry = enrolledCourse.completedSections.find(
+            (item) => item.moduleId.toString() === moduleId,
         );
 
-        if (!existingScore) {
+        // Only push quiz score if not already submitted
+        const existingScore = enrolledCourse.quizScores.find(
+            (qs) => qs.sectionId.toString() === sectionId,
+        );
+
+        let isModuleComplete = false;
+        //only push score if not already submitted and quiz is passed, no need to save failed attempts
+        if (!existingScore && passed) {
             enrolledCourse.quizScores.push({
-                sectionIndex: Number(sectionIndex),
+                moduleId: moduleId,
+                sectionId: sectionId,
                 score,
+                maxMarks: correctAnswers.length,
+            });
+            if (moduleEntry) {
+                if (moduleEntry.sectionIds.includes(sectionId)) {
+                    return res
+                        .status(200)
+                        .json({ message: "Section already completed" });
+                }
+                moduleEntry.sectionIds.push(sectionId);
+            } else {
+                enrolledCourse.completedSections.push({
+                    moduleId,
+                    sectionIds: [sectionId],
+                    isCompleted: false,
+                });
+                moduleEntry =
+                    enrolledCourse.completedSections[
+                        enrolledCourse.completedSections.length - 1
+                    ];
+            }
+            isModuleComplete =
+                moduleEntry.sectionIds.length === currentModule.sections.length;
+
+            if (isModuleComplete) {
+                moduleEntry.isCompleted = true;
+            }
+        } else if (!passed) {
+            return res.status(200).json({
+                message: passed ? "Quiz passed" : "Quiz failed",
+                score,
+                total: correctAnswers.length,
                 passed,
             });
         }
 
-        if (
-            passed &&
-            !enrolledCourse.completedSections.includes(Number(sectionIndex))
-        ) {
-            enrolledCourse.completedSections.push(Number(sectionIndex));
-        }
-
         await user.save();
 
+        const allModulesCompleted = course.modules.every((module) => {
+            const entry = enrolledCourse.completedSections.find(
+                (item) => item.moduleId.toString() === module._id.toString(),
+            );
+            return entry && entry.isCompleted;
+        });
+
+        if (
+            allModulesCompleted &&
+            !user.studentProfile.completedCourses.includes(courseId)
+        ) {
+            user.studentProfile.completedCourses.push(courseId);
+            await user.save();
+        }
+
         return res.status(200).json({
-            message: passed ? "Quiz passed" : "Quiz failed",
+            messagePassed: passed ? "Quiz passed" : "Quiz failed",
+            messageSection: "Section Marked as completed",
             score,
             total: correctAnswers.length,
             passed,
+            messageModule: isModuleComplete
+                ? "Module Complete"
+                : "Module not complete",
+            messageCourse: allModulesCompleted
+                ? "Course Complete"
+                : "Course not complete",
         });
     } catch (err) {
         console.error("Error submitting quiz:", err);
         return res.status(500).json({
             message: "Server error while submitting quiz",
             error: err.message,
+        });
+    }
+};
+
+const getCompletedQuizDetails = async (req, res) => {
+    const userId = req.user.userId;
+    const { courseId, moduleId, sectionId } = req.params;
+
+    try {
+        const user = await User.findById(userId);
+        const enrolledCourseUser = user.studentProfile.enrolledCourses.find(
+            (c) => c.courseId.toString() === courseId,
+        );
+        const course = await Course.findById(courseId, {
+            modules: {
+                $elemMatch: {
+                    _id: moduleId,
+                },
+            },
+        });
+        const module = course.modules[0];
+        const quizSection = module.sections.find(
+            (section) => section._id.toString() === sectionId,
+        );
+        console.log(
+            "from getCompletedQuizDetails, quizSection is: ",
+            quizSection,
+        );
+        const quizScore = enrolledCourseUser.quizScores.find(
+            (score) => score.sectionId.toString() === sectionId,
+        );
+        console.log(
+            "from getCompletedQuizDetails, userData about quizMarks is: ",
+            quizScore,
+        );
+
+        return res.status(200).json({
+            quizSection,
+            quizScore,
+        });
+    } catch (err) {
+        console.log(err);
+        return res.status(500).json({
+            message: err,
         });
     }
 };
@@ -339,6 +511,27 @@ const getSectionById = async (req, res) => {
             return res.status(404).json({ message: "Section Not Found" });
 
         const sectionData = section.modules[0].sections[sectionIndex];
+        console.log(sectionData);
+        console.log(typeof sectionData);
+
+        if (sectionData.sectionType === "quiz") {
+            console.log("hello from inside");
+            const sanitizedSection = {
+                sectionId: sectionData._id,
+                title: sectionData.title,
+                sectionType: sectionData.sectionType,
+                quiz: sectionData.quiz.map((q) => ({
+                    question: q.question,
+                    options: q.options,
+                    _id: q._id,
+                })),
+            };
+
+            return res
+                .status(200)
+                .json({ sanitizedSection, isSectionCompleted });
+        }
+
         return res.status(200).json({ sectionData, isSectionCompleted });
     } catch (err) {
         console.error(err);
@@ -463,4 +656,6 @@ module.exports = {
     getMyCourses,
     getSectionById,
     getAllSections,
+    getCompletedQuizDetails,
+    getMyCompletedModules,
 };

@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ChevronLeft } from "lucide-react";
 
-function BackButton() {
+function BackButton({ locationURL }) {
     const navigate = useNavigate();
     const [isAnimating, setIsAnimating] = useState(false);
 
@@ -12,7 +12,7 @@ function BackButton() {
         // Remove animation class after it completes
         setTimeout(() => {
             setIsAnimating(false);
-            navigate(-1);
+            navigate(locationURL);
         }, 200);
     };
 

@@ -105,10 +105,10 @@ const UserSchema = new mongoose.Schema(
                     quizScores: {
                         type: [
                             {
-                                moduleIndex: Number,
-                                sectionIndex: Number,
+                                moduleId: mongoose.Schema.Types.ObjectId,
+                                sectionId: mongoose.Schema.Types.ObjectId,
                                 score: Number,
-                                passed: Boolean,
+                                maxMarks: Number,
                             },
                         ],
                         default: [],

@@ -1,10 +1,11 @@
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import api from "../../utils/api";
+import api from "../../utils/api"; //methods of this api class apply the Authorization header automatically
 import Navbar from "../../components/Navbar";
 import BackButton from "../../components/BackBtn";
 import SectionContent from "../../components/SectionContent";
 import QuizContent from "../../components/QuizContent";
+import CompletedQuizContent from "../../components/CompletedQuizContent";
 
 function CourseSectionPage() {
     const { courseId, moduleId, sectionId } = useParams();
@@ -17,6 +18,7 @@ function CourseSectionPage() {
         useState(false);
     const [error, setError] = useState(null);
     const [isAnimating, setIsAnimating] = useState(false);
+    const navigate = useNavigate();
 
     const handleNextSection = async () => {
         setIsAnimating(true);
@@ -34,11 +36,6 @@ function CourseSectionPage() {
         try {
             const response = await api.post(
                 `/api/v1/courses/${courseId}/${moduleId}/sections/${selectedSectionId}/complete`,
-                {
-                    headers: {
-                        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-                    },
-                },
             );
             console.log("Marked Complete successful: ", response);
         } catch (err) {
@@ -55,11 +52,6 @@ function CourseSectionPage() {
             try {
                 const response = await api.get(
                     `/api/v1/courses/${courseId}/${moduleId}/sections/${selectedSectionId}`,
-                    {
-                        headers: {
-                            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-                        },
-                    },
                 );
 
                 const data = await response.json();
@@ -71,7 +63,11 @@ function CourseSectionPage() {
                 console.log(`Single Section data for ${selectedSectionId}`);
                 console.log(data);
 
-                setSectionData(data.sectionData);
+                if (data.sectionData) {
+                    setSectionData(data.sectionData);
+                } else {
+                    setSectionData(data.sanitizedSection);
+                }
                 setIsSelectedSectionComplete(data.isSectionCompleted);
             } catch (err) {
                 setError(err.message);
@@ -87,9 +83,6 @@ function CourseSectionPage() {
             try {
                 const response = await api.get(
                     `/api/v1/courses/${courseId}/${moduleId}`,
-                    {
-                        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-                    },
                 );
 
                 const data = await response.json();
@@ -122,7 +115,7 @@ function CourseSectionPage() {
             <main>
                 <div className="main-content flex border border-[var(--shadow)]">
                     <div className="flex flex-col h-full w-[20vw] border-r-2 border-[var(--shadow)] p-6">
-                        <BackButton />
+                        <BackButton locationURL={`/courses/${courseId}`} />
                         <h2 className="text-left text-2xl font-semibold mb-[2rem]">
                             Sections
                         </h2>
@@ -135,9 +128,12 @@ function CourseSectionPage() {
                                             ? "selected-index"
                                             : "unselected-index"
                                     }`}
-                                    onClick={() =>
-                                        setSelectedSectionId(section._id)
-                                    }
+                                    onClick={() => {
+                                        setSelectedSectionId(section._id);
+                                        navigate(
+                                            `/courses/${courseId}/${moduleId}/sections/${section._id}`,
+                                        );
+                                    }}
                                 >
                                     <p className="text-[0.9rem]">
                                         Section {index + 1}
@@ -168,22 +164,15 @@ function CourseSectionPage() {
                                             : "Mark as Complete"}
                                     </button>
                                 </>
+                            ) : isSelectedSectionComplete ? (
+                                <CompletedQuizContent />
                             ) : (
-                                <>
-                                    <QuizContent sectionData={sectionData} />
-                                    <button
-                                        className={`back-btn w-auto absolute bottom-0 left-6 ${isAnimating ? "active" : ""}`}
-                                        onClick={
-                                            isSelectedSectionComplete
-                                                ? handleNextSection
-                                                : handleMarkComplete
-                                        }
-                                    >
-                                        {isSelectedSectionComplete
-                                            ? "Next"
-                                            : "Mark as Complete"}
-                                    </button>
-                                </>
+                                <QuizContent
+                                    sectionData={sectionData}
+                                    onQuizComplete={() =>
+                                        setIsSelectedSectionComplete(true)
+                                    }
+                                />
                             )}
                         </div>
                     </div>

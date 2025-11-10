@@ -75,8 +75,7 @@ function StudentDashboard() {
                                             {item.completedSections?.length ||
                                                 0}{" "}
                                             /{" "}
-                                            {item.courseId.sections?.length ||
-                                                0}
+                                            {item.courseId.modules.length || 0}
                                         </p>
                                         <Link
                                             to={`/courses/${item.courseId._id}`}
