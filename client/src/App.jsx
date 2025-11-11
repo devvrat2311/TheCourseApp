@@ -39,7 +39,7 @@ function App() {
                             }
                         />
                         <Route
-                            path="/courses/:id"
+                            path="/courses/:courseId"
                             element={
                                 <PrivateRoute>
                                     <CoursePage />
@@ -51,6 +51,14 @@ function App() {
                             element={
                                 <PrivateRoute>
                                     <CourseSectionPage />
+                                </PrivateRoute>
+                            }
+                        />
+                        <Route
+                            path="/navbar"
+                            element={
+                                <PrivateRoute>
+                                    <Navbar />
                                 </PrivateRoute>
                             }
                         />

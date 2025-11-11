@@ -11,7 +11,6 @@ const {
     getSectionById,
     getAllSections,
     getCompletedQuizDetails,
-    getMyCompletedModules,
 } = require("../controllers/courseController");
 
 router.get("/my-courses", verifyToken, getMyCourses);
@@ -39,6 +38,5 @@ router.get(
     verifyToken,
     getCompletedQuizDetails,
 );
-router.get("/:courseId/completed-modules", verifyToken, getMyCompletedModules);
 
 module.exports = router;

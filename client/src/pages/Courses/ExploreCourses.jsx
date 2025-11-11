@@ -6,6 +6,7 @@ import api from "../../utils/api";
 
 function ExploreCourses() {
     const [courses, setCourses] = useState([]);
+    console.log("rendering explore page", courses);
 
     useEffect(() => {
         const fetchCourses = async () => {
@@ -16,7 +17,6 @@ function ExploreCourses() {
                     },
                 });
                 const data = await response.json();
-                console.log(data);
                 setCourses(data);
             } catch (err) {
                 console.error("Error fetching courses:", err);

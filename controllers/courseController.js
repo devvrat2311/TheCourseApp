@@ -52,33 +52,6 @@ const getMyCourses = async (req, res) => {
     }
 };
 
-const getMyCompletedModules = async (req, res) => {
-    const { courseId } = req.params;
-    const userId = req.user.userId;
-
-    try {
-        const user = await User.findById(userId);
-        //please do implement that storing in the req via auth middleware by making enrolledCourses into a map
-        const currentCourse = user.studentProfile.enrolledCourses.find(
-            (item) => item.courseId.toString() === courseId,
-        );
-        const completedModuleIds = currentCourse.completedSections
-            .filter((section) => section.isCompleted)
-            .map((section) => section.moduleId.toString());
-
-        res.status(200).json({
-            courseId,
-            completedModules: completedModuleIds,
-        });
-    } catch (err) {
-        console.log(err);
-        return res.status(500).json({
-            message: "Failed to get Completed Modules",
-            error: err.message,
-        });
-    }
-};
-
 const markSectionComplete = async (req, res) => {
     const { courseId, moduleId, sectionId } = req.params;
     const userId = req.user.userId;
@@ -460,7 +433,7 @@ const getSectionById = async (req, res) => {
     const courseId = req.params.courseId;
     const moduleId = req.params.moduleId;
     const sectionId = req.params.sectionId;
-    console.log(sectionId);
+    console.log("sectionId from getSectionById", sectionId);
     const userId = req.user.userId;
     let isSectionCompleted;
 
@@ -511,11 +484,10 @@ const getSectionById = async (req, res) => {
             return res.status(404).json({ message: "Section Not Found" });
 
         const sectionData = section.modules[0].sections[sectionIndex];
-        console.log(sectionData);
-        console.log(typeof sectionData);
+        // console.log("sectiondata from getSectionById", sectionData);
+        // console.log(typeof sectionData);
 
         if (sectionData.sectionType === "quiz") {
-            console.log("hello from inside");
             const sanitizedSection = {
                 sectionId: sectionData._id,
                 title: sectionData.title,
@@ -543,11 +515,23 @@ const getSectionById = async (req, res) => {
 
 const getAllSections = async (req, res) => {
     const courseId = req.params.courseId;
-    console.log(typeof courseId);
     const moduleId = req.params.moduleId;
-    console.log(typeof moduleId);
+    const userId = req.user.userId;
+    console.log("userid from getAllSections", userId);
 
     try {
+        const user = await User.findById(userId);
+        console.log("user from getAllSections", user._id);
+        const enrolledCourse = user.studentProfile.enrolledCourses.find(
+            (course) => course.courseId.toString() === courseId,
+        );
+        console.log("enrolledCourse from getAllSections", enrolledCourse);
+        const currentModule = enrolledCourse.completedSections.find(
+            (item) => item.moduleId.toString() === moduleId,
+        );
+        console.log("currentModule from getAllSections", currentModule);
+        const sectionsCompleted = currentModule?.sectionIds || [];
+        console.log("sectionsCompleted from getAllSections", sectionsCompleted);
         const result = await Course.aggregate([
             { $match: { _id: new mongoose.Types.ObjectId(courseId) } },
             { $unwind: "$modules" },
@@ -565,13 +549,12 @@ const getAllSections = async (req, res) => {
         ]);
 
         const sections = result[0]?.modules;
-        // console.log("Logging sections where content is not to be sent");
-        // console.log(sections);
         if (!sections)
             return res.status(404).json({ message: "Sections Data Not Found" });
 
-        // const realSections = sections.modules[0].sections;
-        return res.status(200).json(sections);
+        return res
+            .status(200)
+            .json({ allSections: sections, sectionsCompleted });
     } catch (err) {
         console.error(err);
         return res
@@ -618,12 +601,15 @@ const getCourseById = async (req, res) => {
                 certificate: `Congratulations, you completed the course ${course.title}`,
             });
         } else {
+            const completedModuleIds = enrolledCourseEntry.completedSections
+                .filter((section) => section.isCompleted)
+                .map((section) => section.moduleId.toString());
             return res.status(200).json({
                 id: courseId,
                 view: "ongoing",
                 title: course.title,
                 modules: course.modules,
-                completedSections: enrolledCourseEntry.completedSections || [],
+                completedModules: completedModuleIds,
                 quizScores: enrolledCourseEntry.quizScores || [],
             });
         }
@@ -657,5 +643,4 @@ module.exports = {
     getSectionById,
     getAllSections,
     getCompletedQuizDetails,
-    getMyCompletedModules,
 };

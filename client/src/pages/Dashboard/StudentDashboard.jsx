@@ -9,7 +9,9 @@ function StudentDashboard() {
     const [completedCourses, setCompletedCourses] = useState([]);
     const accessToken = localStorage.getItem("accessToken");
     const decoded = jwtDecode(accessToken);
-    console.log(decoded.userFullName);
+    // console.log("rendering this page", decoded.userFullName);
+    console.log("ongoingCourses", ongoingCourses);
+    console.log("completedCourses", completedCourses);
 
     useEffect(() => {
         const fetchCourses = async () => {
@@ -111,17 +113,6 @@ function StudentDashboard() {
                                         <p className="text-sm mb-2">
                                             {item.courseId.description}
                                         </p>
-                                        {/* <p className="text-sm text-green-700 mb-2">
-                                        Completed on:{" "}
-                                        {new Date(
-                                            item.completedAt,
-                                        ).toLocaleDateString()}
-                                    </p> */}
-                                        {/* {item.grade && (
-                                        <p className="text-sm font-semibold">
-                                            Grade: {item.grade}
-                                        </p>
-                                    )} */}
                                         <Link
                                             to={`/courses/${item.courseId._id}`}
                                             className="text-green-600 font-medium"

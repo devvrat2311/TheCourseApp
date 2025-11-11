@@ -1,7 +1,7 @@
 import Navbar from "../../components/Navbar";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 // import api from "../../utils/api";
-import { ChevronRight } from "lucide-react";
+import { ChevronRight, CircleDashed, CheckCircle2 } from "lucide-react";
 import BackButton from "../BackBtn";
 import { Link } from "react-router-dom";
 
@@ -9,33 +9,14 @@ function CourseOngoing({ course }) {
     console.log("logging course");
     console.log(course);
     const [selectedIndex, setSelectedIndex] = useState(0);
-    // const [error, setError] = useState(null);
-    // const [loading, setLoading] = useState(true);
-    // const [completedModules, setCompletedModules] = useState([]);
 
     const modules = course.modules || [];
+    console.log(course.modules);
+    console.log(course.completedModules);
 
-    // useEffect(() => {
-    //     const getCompletedModuleIds = async () => {
-    //         try {
-    //             const response = await api.get(
-    //                 `/api/v1/courses/${course.id.toString()}/completed-modules`,
-    //             );
-    //             const data = await response.json();
-    //             console.log(data);
-    //             setCompletedModules(data);
-    //         } catch (err) {
-    //             setError(err);
-    //         } finally {
-    //             setLoading(false);
-    //         }
-    //     };
-    //     getCompletedModuleIds();
-    // }, [course.id]);
-
-    // if (loading) return <p>Loading data. . .</p>;
-    // if (error) return <p className="text-red-500">Error: {error.message}</p>;
-    // console.log("completed modules", completedModules);
+    const isModuleComplete = (moduleId) => {
+        return course.completedModules.includes(moduleId);
+    };
 
     return (
         <>
@@ -51,7 +32,7 @@ function CourseOngoing({ course }) {
                             {modules.map((module, index) => (
                                 <li
                                     key={index}
-                                    className={`transition duration-150 ease-in-out cursor-pointer p-2 mb-3 ${
+                                    className={`transition duration-150 ease-in-out cursor-pointer p-2 mb-3 flex justify-between ${
                                         selectedIndex === index
                                             ? "selected-index"
                                             : "unselected-index"
@@ -61,6 +42,11 @@ function CourseOngoing({ course }) {
                                     <p className="text-[0.9rem]">
                                         Module {index + 1}
                                     </p>
+                                    {isModuleComplete(module._id) ? (
+                                        <CheckCircle2 />
+                                    ) : (
+                                        <CircleDashed />
+                                    )}
                                 </li>
                             ))}
                         </ul>

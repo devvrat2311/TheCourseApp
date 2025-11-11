@@ -1,13 +1,14 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import api from "../../utils/api";
+import { Outlet } from "react-router-dom";
 
 import CoursePreview from "../../components/CourseViews/CoursePreview";
 import CourseOngoing from "../../components/CourseViews/CourseOngoing";
 import CourseComplete from "../../components/CourseViews/CourseComplete";
 
 function CoursePage() {
-    const { id } = useParams();
+    const { courseId } = useParams();
     const [loading, setLoading] = useState(true);
     const [courseData, setCourseData] = useState(null);
     const [error, setError] = useState(null);
@@ -15,7 +16,7 @@ function CoursePage() {
     useEffect(() => {
         const fetchCourse = async () => {
             try {
-                const response = await api.get(`/api/v1/courses/${id}`, {
+                const response = await api.get(`/api/v1/courses/${courseId}`, {
                     headers: {
                         Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
                     },
@@ -33,7 +34,7 @@ function CoursePage() {
             }
         };
         fetchCourse();
-    }, [id]);
+    }, [courseId]);
 
     if (loading) return <p>Loading course...</p>;
     if (error) return <p className="text-red-500">Error: {error}</p>;
@@ -43,7 +44,11 @@ function CoursePage() {
         case "preview":
             return <CoursePreview course={courseData} />;
         case "ongoing":
-            return <CourseOngoing course={courseData} />;
+            return (
+                <>
+                    <CourseOngoing course={courseData} />
+                </>
+            );
         case "completed":
             return <CourseComplete course={courseData} />;
         default:

@@ -13,6 +13,7 @@ function CourseSectionPage() {
     const [allSectionsLoading, setAllSectionsLoading] = useState(true);
     const [sectionData, setSectionData] = useState(null);
     const [allSections, setAllSections] = useState(null);
+    const [sectionsCompleted, setSectionsCompleted] = useState(null);
     const [selectedSectionId, setSelectedSectionId] = useState(sectionId);
     const [isSelectedSectionComplete, setIsSelectedSectionComplete] =
         useState(false);
@@ -37,7 +38,10 @@ function CourseSectionPage() {
             const response = await api.post(
                 `/api/v1/courses/${courseId}/${moduleId}/sections/${selectedSectionId}/complete`,
             );
-            console.log("Marked Complete successful: ", response);
+            if (response.ok) {
+                const data = await response.json();
+                console.log("Marked Complete successful: ", data);
+            }
         } catch (err) {
             console.log(err);
         }
@@ -92,8 +96,10 @@ function CourseSectionPage() {
                     );
                 }
                 console.log("All Sections array");
-                console.log(data.sections);
-                setAllSections(data.sections);
+                console.log(data);
+                console.log(data.sectionsCompleted);
+                setAllSections(data.allSections.sections);
+                setSectionsCompleted(data.sectionsCompleted);
             } catch (err) {
                 console.log("error here");
                 setError(err.message);
@@ -108,6 +114,10 @@ function CourseSectionPage() {
         return <p>Loading Section. . .</p>;
     if (error) return <p className="text-red-500">Error: {error}</p>;
     if (!sectionData) return <p>No Section Data found</p>;
+
+    const isSectionComplete = (sectionId) => {
+        return sectionsCompleted.includes(sectionId);
+    };
 
     return (
         <>
@@ -138,6 +148,9 @@ function CourseSectionPage() {
                                     <p className="text-[0.9rem]">
                                         Section {index + 1}
                                     </p>
+                                    {isSectionComplete(section._id)
+                                        ? "yes"
+                                        : "no"}
                                 </li>
                             ))}
                         </ul>
