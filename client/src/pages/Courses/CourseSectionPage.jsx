@@ -41,6 +41,7 @@ function CourseSectionPage() {
             if (response.ok) {
                 const data = await response.json();
                 console.log("Marked Complete successful: ", data);
+                setSectionsCompleted(data.completedSections);
             }
         } catch (err) {
             console.log(err);
@@ -182,9 +183,10 @@ function CourseSectionPage() {
                             ) : (
                                 <QuizContent
                                     sectionData={sectionData}
-                                    onQuizComplete={() =>
-                                        setIsSelectedSectionComplete(true)
-                                    }
+                                    onQuizComplete={(completedSections) => {
+                                        setSectionsCompleted(completedSections);
+                                        setIsSelectedSectionComplete(true);
+                                    }}
                                 />
                             )}
                         </div>

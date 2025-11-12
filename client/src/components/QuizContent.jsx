@@ -40,7 +40,7 @@ export default function QuizContent({ sectionData, onQuizComplete }) {
                 resetQuiz();
                 showFlash("Quiz Failed, please try again", "info");
             } else {
-                onQuizComplete();
+                onQuizComplete(data.completedSections);
                 showFlash("Quiz Passed, Congrax!", "info");
             }
         } catch (err) {
