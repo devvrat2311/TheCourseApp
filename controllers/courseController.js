@@ -119,6 +119,7 @@ const markSectionComplete = async (req, res) => {
         if (isModuleComplete) {
             moduleEntry.isCompleted = true;
         }
+        const completedSections = moduleEntry.sectionIds;
 
         await user.save();
 
@@ -139,6 +140,7 @@ const markSectionComplete = async (req, res) => {
         }
 
         return res.status(200).json({
+            completedSections,
             message: "Section marked as completed",
             messageModule: isModuleComplete
                 ? "Module Complete"
@@ -238,6 +240,8 @@ const submitQuiz = async (req, res) => {
             (item) => item.moduleId.toString() === moduleId,
         );
 
+        const completedSections = moduleEntry.sectionIds;
+
         // Only push quiz score if not already submitted
         const existingScore = enrolledCourse.quizScores.find(
             (qs) => qs.sectionId.toString() === sectionId,
@@ -303,6 +307,7 @@ const submitQuiz = async (req, res) => {
         }
 
         return res.status(200).json({
+            completedSections,
             messagePassed: passed ? "Quiz passed" : "Quiz failed",
             messageSection: "Section Marked as completed",
             score,
