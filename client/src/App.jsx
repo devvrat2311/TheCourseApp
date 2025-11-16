@@ -11,60 +11,55 @@ import FlashMessage from "./components/FlashMessage";
 import ThemeToggle from "./components/ThemeToggle";
 import CourseSectionPage from "./pages/Courses/CourseSectionPage";
 import Navbar from "./components/Navbar";
+import { ThemeProvider } from "./contexts/ThemeContext";
 
 function App() {
     return (
         <>
-            <FlashProvider>
-                <ThemeToggle />
-                <FlashMessage />
-                <Router>
-                    <Routes>
-                        <Route path="/login" element={<Login />} />
-                        <Route path="/signup" element={<SignUp />} />
-                        <Route
-                            path="/"
-                            element={
-                                <PrivateRoute>
-                                    <StudentDashboard />
-                                </PrivateRoute>
-                            }
-                        />
-                        <Route
-                            path="/explore"
-                            element={
-                                <PrivateRoute>
-                                    <ExploreCourses />
-                                </PrivateRoute>
-                            }
-                        />
-                        <Route
-                            path="/courses/:courseId"
-                            element={
-                                <PrivateRoute>
-                                    <CoursePage />
-                                </PrivateRoute>
-                            }
-                        />
-                        <Route
-                            path="/courses/:courseId/:moduleId/sections/:sectionId"
-                            element={
-                                <PrivateRoute>
-                                    <CourseSectionPage />
-                                </PrivateRoute>
-                            }
-                        />
-                        <Route
-                            path="/navbar"
-                            element={
-                                <PrivateRoute>
-                                    <Navbar />
-                                </PrivateRoute>
-                            }
-                        />
-                    </Routes>
-                </Router>
-            </FlashProvider>
+            <ThemeProvider>
+                <FlashProvider>
+                    <ThemeToggle />
+                    <FlashMessage />
+                    <Router>
+                        <Routes>
+                            <Route path="/login" element={<Login />} />
+                            <Route path="/signup" element={<SignUp />} />
+                            <Route
+                                path="/"
+                                element={
+                                    <PrivateRoute>
+                                        <StudentDashboard />
+                                    </PrivateRoute>
+                                }
+                            />
+                            <Route
+                                path="/explore"
+                                element={
+                                    <PrivateRoute>
+                                        <ExploreCourses />
+                                    </PrivateRoute>
+                                }
+                            />
+                            <Route
+                                path="/courses/:courseId"
+                                element={
+                                    <PrivateRoute>
+                                        <CoursePage />
+                                    </PrivateRoute>
+                                }
+                            />
+                            <Route
+                                path="/courses/:courseId/:moduleId/sections/:sectionId"
+                                element={
+                                    <PrivateRoute>
+                                        <CourseSectionPage />
+                                    </PrivateRoute>
+                                }
+                            />
+                        </Routes>
+                    </Router>
+                </FlashProvider>
+            </ThemeProvider>
         </>
     );
 }
