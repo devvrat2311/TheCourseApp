@@ -11,7 +11,10 @@ const {
     getSectionById,
     getAllSections,
     getCompletedQuizDetails,
+    returnNextSection,
 } = require("../controllers/courseController");
+
+// router.get("/:courseId/:moduleId/sections/:sectionId/next", returnNextSection);
 
 router.get("/my-courses", verifyToken, getMyCourses);
 router.get("/", verifyToken, getAllCourses);
@@ -37,6 +40,11 @@ router.get(
     "/:courseId/:moduleId/sections/:sectionId/completed-quiz",
     verifyToken,
     getCompletedQuizDetails,
+);
+router.get(
+    "/:courseId/:moduleId/sections/:sectionId/next",
+    verifyToken,
+    returnNextSection,
 );
 
 module.exports = router;

@@ -33,7 +33,7 @@ function CoursePreview({ course }) {
             <Navbar />
             <main>
                 <div className="main-content flex flex-col">
-                    <BackButton />
+                    <BackButton locationURL={"/explore"} />
                     <div className="flex flex-col h-full w-full m-3 p-2">
                         <h2 className="text-3xl font-bold text-left mt-2 mb-2">
                             {course.title}

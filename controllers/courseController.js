@@ -51,6 +51,91 @@ const getMyCourses = async (req, res) => {
         });
     }
 };
+const returnNextSection = async (req, res) => {
+    const { courseId, moduleId, sectionId } = req.params;
+
+    try {
+        const course = await Course.findById(courseId);
+
+        //all modules in this course
+        const modules = course.modules;
+
+        //total modules in course
+        const totalModules = modules.length;
+
+        //current module object
+        const currentModule = modules.find(
+            (module) => module._id.toString() === moduleId,
+        );
+        //current module index
+        const currentModuleIndex = modules.findIndex(
+            (module) => module._id.toString() === moduleId,
+        );
+
+        //sections in current module ( array )
+        const sectionsInThisModule = currentModule.sections;
+        //total sections in current module
+        const totalSections = sectionsInThisModule.length;
+        //current sections index
+        const currentSectionIndex = sectionsInThisModule.findIndex(
+            (section) => section._id.toString() === sectionId,
+        );
+
+        let nextSectionId;
+        let prevSectionId;
+
+        let nextModuleId;
+        let prevModuleId;
+
+        const isLastSection = currentSectionIndex + 1 === totalSections;
+        const isLastModule = currentModuleIndex + 1 === totalModules;
+
+        if (isLastSection && isLastModule) {
+            nextSectionId = null;
+            nextModuleId = null;
+        } else if (isLastSection && !isLastModule) {
+            const nextModule = modules[currentModuleIndex + 1];
+            // console.log("nextModule from second block", nextModule);
+            const nextSection = nextModule.sections[0];
+            nextSectionId = nextSection._id;
+            nextModuleId = nextModule._id;
+        } else {
+            const nextSection = sectionsInThisModule[currentSectionIndex + 1];
+            nextSectionId = nextSection._id;
+            nextModuleId = currentModule._id;
+        }
+
+        //pretty confident about this piece of code, that its not going to be leaking anywhere
+        const isFirstSection = currentSectionIndex === 0;
+        const isFirstModule = currentModuleIndex === 0;
+        if (isFirstSection && isFirstModule) {
+            prevSectionId = null;
+            prevModuleId = null;
+        } else if (isFirstSection && !isFirstModule) {
+            //get the previous module first
+            const prevModule = modules[currentModuleIndex - 1];
+            const prevModuleLen = prevModule.sections.length;
+            const lastSection = prevModule.sections[prevModuleLen - 1];
+            prevSectionId = lastSection._id;
+            prevModuleId = prevModule._id;
+        } else {
+            const prevSection = sectionsInThisModule[currentSectionIndex - 1];
+            prevSectionId = prevSection._id;
+            prevModuleId = currentModule._id;
+        }
+
+        console.log(currentModuleIndex);
+        res.status(200).json({
+            prevModuleId,
+            prevSectionId,
+            nextModuleId,
+            nextSectionId,
+        });
+    } catch (err) {
+        console.log(err);
+        res.status(500).json({ message: err });
+    }
+};
 
 const markSectionComplete = async (req, res) => {
     const { courseId, moduleId, sectionId } = req.params;
@@ -58,13 +143,7 @@ const markSectionComplete = async (req, res) => {
 
     try {
         const user = await User.findById(userId);
-        const course = await Course.findById(courseId, {
-            modules: {
-                $elemMatch: {
-                    _id: moduleId,
-                },
-            },
-        });
+        const course = await Course.findById(courseId);
         if (!user || !course) {
             return res
                 .status(404)
@@ -86,12 +165,6 @@ const markSectionComplete = async (req, res) => {
 
         if (moduleEntry) {
             if (moduleEntry.sectionIds.includes(sectionId)) {
-                console.log(sectionId);
-                console.log(moduleEntry.sectionIds.includes(sectionId));
-                moduleEntry.sectionIds.map((sectionId) => {
-                    console.log(sectionId);
-                });
-                // console.log(moduleEntry);
                 return res
                     .status(200)
                     .json({ message: "Section already completed" });
@@ -108,7 +181,7 @@ const markSectionComplete = async (req, res) => {
                     enrolledCourse.completedSections.length - 1
                 ];
         }
-        console.log(moduleEntry);
+        console.log("from markSectionComplete, moduleEntry is", moduleEntry);
 
         const module = course.modules.find(
             (module) => module._id.toString() === moduleId,
@@ -135,6 +208,7 @@ const markSectionComplete = async (req, res) => {
             allModulesCompleted &&
             !user.studentProfile.completedCourses.includes(courseId)
         ) {
+            console.log("all modules is completed now from markSection");
             user.studentProfile.completedCourses.push(courseId);
             await user.save();
         }
@@ -240,8 +314,6 @@ const submitQuiz = async (req, res) => {
             (item) => item.moduleId.toString() === moduleId,
         );
 
-        const completedSections = moduleEntry.sectionIds;
-
         // Only push quiz score if not already submitted
         const existingScore = enrolledCourse.quizScores.find(
             (qs) => qs.sectionId.toString() === sectionId,
@@ -291,6 +363,8 @@ const submitQuiz = async (req, res) => {
 
         await user.save();
 
+        const completedSections = moduleEntry?.sectionIds || [];
+
         const allModulesCompleted = course.modules.every((module) => {
             const entry = enrolledCourse.completedSections.find(
                 (item) => item.moduleId.toString() === module._id.toString(),
@@ -302,6 +376,7 @@ const submitQuiz = async (req, res) => {
             allModulesCompleted &&
             !user.studentProfile.completedCourses.includes(courseId)
         ) {
+            console.log("all modules completed from quizzes");
             user.studentProfile.completedCourses.push(courseId);
             await user.save();
         }
@@ -349,17 +424,20 @@ const getCompletedQuizDetails = async (req, res) => {
         const quizSection = module.sections.find(
             (section) => section._id.toString() === sectionId,
         );
-        console.log(
-            "from getCompletedQuizDetails, quizSection is: ",
-            quizSection,
-        );
+        if (quizSection.sectionType != "quiz") {
+            return res.status(200).json({ message: "not a quiz Section" });
+        }
+        // console.log(
+        //     "from getCompletedQuizDetails, quizSection is: ",
+        //     quizSection,
+        // );
         const quizScore = enrolledCourseUser.quizScores.find(
             (score) => score.sectionId.toString() === sectionId,
         );
-        console.log(
-            "from getCompletedQuizDetails, userData about quizMarks is: ",
-            quizScore,
-        );
+        // console.log(
+        //     "from getCompletedQuizDetails, userData about quizMarks is: ",
+        //     quizScore,
+        // );
 
         return res.status(200).json({
             quizSection,
@@ -482,7 +560,7 @@ const getSectionById = async (req, res) => {
             if (section._id == sectionId) {
                 sectionIndex = index;
             }
-            console.log(section._id == sectionId);
+            // console.log(section._id == sectionId);
         });
 
         if (!section)
@@ -522,21 +600,21 @@ const getAllSections = async (req, res) => {
     const courseId = req.params.courseId;
     const moduleId = req.params.moduleId;
     const userId = req.user.userId;
-    console.log("userid from getAllSections", userId);
+    // console.log("userid from getAllSections", userId);
 
     try {
         const user = await User.findById(userId);
-        console.log("user from getAllSections", user._id);
+        // console.log("user from getAllSections", user._id);
         const enrolledCourse = user.studentProfile.enrolledCourses.find(
             (course) => course.courseId.toString() === courseId,
         );
-        console.log("enrolledCourse from getAllSections", enrolledCourse);
+        // console.log("enrolledCourse from getAllSections", enrolledCourse);
         const currentModule = enrolledCourse.completedSections.find(
             (item) => item.moduleId.toString() === moduleId,
         );
-        console.log("currentModule from getAllSections", currentModule);
+        // console.log("currentModule from getAllSections", currentModule);
         const sectionsCompleted = currentModule?.sectionIds || [];
-        console.log("sectionsCompleted from getAllSections", sectionsCompleted);
+        // console.log("sectionsCompleted from getAllSections", sectionsCompleted);
         const result = await Course.aggregate([
             { $match: { _id: new mongoose.Types.ObjectId(courseId) } },
             { $unwind: "$modules" },
@@ -648,4 +726,5 @@ module.exports = {
     getSectionById,
     getAllSections,
     getCompletedQuizDetails,
+    returnNextSection,
 };

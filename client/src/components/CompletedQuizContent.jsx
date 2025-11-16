@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import api from "../utils/api";
+import { useFlash } from "../contexts/FlashContext";
 
 export default function CompletedQuizContent() {
     const { courseId, moduleId, sectionId } = useParams();
@@ -9,6 +10,40 @@ export default function CompletedQuizContent() {
     const [totalMarks, setTotalMarks] = useState(0);
     const [error, setError] = useState(null);
     const [dataLoading, setDataLoading] = useState(true);
+    const [isAnimating, setIsAnimating] = useState(false);
+    // const [selectedSectionId, setSelectedSectionId] = useState(sectionId);
+    const { showFlash } = useFlash();
+    const navigate = useNavigate();
+
+    const handleNextSection = async () => {
+        setIsAnimating(true);
+        let nextSectionId;
+        let nextModuleId;
+        try {
+            const response = await api.get(
+                `/api/v1/courses/${courseId}/${moduleId}/sections/${sectionId}/next`,
+            );
+            const data = await response.json();
+            console.log("data is", data);
+            nextSectionId = data.nextSectionId?.toString();
+            nextModuleId = data.nextModuleId?.toString();
+            // console.log("these are the next ids", nextSectionId, nextModuleId);
+        } catch (err) {
+            console.error("error error error", err.message);
+        }
+
+        setTimeout(() => {
+            setIsAnimating(false);
+            console.log("Next Next Next");
+            if (nextModuleId && nextSectionId) {
+                navigate(
+                    `/courses/${courseId}/${nextModuleId}/sections/${nextSectionId}`,
+                );
+            } else {
+                showFlash("this is the last section in this course", "info");
+            }
+        }, 200);
+    };
 
     useEffect(() => {
         const getCompletedQuizData = async () => {
@@ -32,7 +67,7 @@ export default function CompletedQuizContent() {
 
     if (dataLoading) return <p>Loading Quiz Section. . .</p>;
     if (error) {
-        return <p className="text-blue-500">Error: {error}</p>;
+        return <p className="text-blue-500">Error: {error.message}</p>;
     }
     if (!quizSectionData) return <p>No Quiz Section Data found</p>;
 
@@ -55,6 +90,12 @@ export default function CompletedQuizContent() {
             <p className=" ml-6 mt-5 bg-green-400 rounded border-2 border-[var(--shadow)] p-2 inline-block">
                 Your Score: {userMarks}/{totalMarks}
             </p>
+            <button
+                className={`back-btn w-auto absolute bottom-0 left-6 ${isAnimating ? "active" : ""}`}
+                onClick={handleNextSection}
+            >
+                Next
+            </button>
         </>
     );
 }

@@ -6,6 +6,7 @@ import BackButton from "../../components/BackBtn";
 import SectionContent from "../../components/SectionContent";
 import QuizContent from "../../components/QuizContent";
 import CompletedQuizContent from "../../components/CompletedQuizContent";
+import { useFlash } from "../../contexts/FlashContext";
 
 function CourseSectionPage() {
     const { courseId, moduleId, sectionId } = useParams();
@@ -20,13 +21,41 @@ function CourseSectionPage() {
     const [error, setError] = useState(null);
     const [isAnimating, setIsAnimating] = useState(false);
     const navigate = useNavigate();
+    const { showFlash } = useFlash();
+
+    useEffect(() => {
+        setSelectedSectionId(sectionId);
+    }, [sectionId]);
 
     const handleNextSection = async () => {
         setIsAnimating(true);
+        let nextSectionId;
+        let nextModuleId;
+        try {
+            const response = await api.get(
+                `/api/v1/courses/${courseId}/${moduleId}/sections/${selectedSectionId}/next`,
+            );
+            const data = await response.json();
+            console.log("data is", data);
+            nextSectionId = data.nextSectionId.toString();
+            nextModuleId = data.nextModuleId.toString();
+            console.log("these are the next ids", nextSectionId, nextModuleId);
+        } catch (err) {
+            console.log(err);
+            setError(err.message);
+        }
 
         setTimeout(() => {
             setIsAnimating(false);
             console.log("Next Next Next");
+            if (nextModuleId && nextSectionId) {
+                navigate(
+                    `/courses/${courseId}/${nextModuleId}/sections/${nextSectionId}`,
+                );
+                setSelectedSectionId(nextSectionId);
+            } else {
+                showFlash("this is the last section in this course", "info");
+            }
         }, 200);
     };
 
@@ -135,12 +164,12 @@ function CourseSectionPage() {
                                 <li
                                     key={index}
                                     className={`transition duration-150 ease-in-out cursor-pointer p-2 mb-3 ${
-                                        selectedSectionId === section._id
+                                        sectionId === section._id
                                             ? "selected-index"
                                             : "unselected-index"
                                     }`}
                                     onClick={() => {
-                                        setSelectedSectionId(section._id);
+                                        // setSelectedSectionId(section._id);
                                         navigate(
                                             `/courses/${courseId}/${moduleId}/sections/${section._id}`,
                                         );
