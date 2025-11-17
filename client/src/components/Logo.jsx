@@ -7,7 +7,7 @@ export default function Logo({ height, width }) {
 
     return (
         <img
-            className={`tca-logo`}
+            className="tca-logo"
             style={{ height, width }}
             src={theme === "dark" ? tcaLogoDark : tcaLogo}
             alt="Logo"

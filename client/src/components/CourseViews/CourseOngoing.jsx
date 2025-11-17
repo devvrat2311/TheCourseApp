@@ -3,6 +3,7 @@ import { useState } from "react";
 // import api from "../../utils/api";
 import { ChevronRight, CircleDashed, CheckCircle2 } from "lucide-react";
 import BackButton from "../BackBtn";
+import BackButton2 from "../BackBtn2";
 import { Link } from "react-router-dom";
 
 function CourseOngoing({ course }) {
@@ -24,7 +25,8 @@ function CourseOngoing({ course }) {
             <main>
                 <div className="main-content flex border border-[var(--shadow)]">
                     <div className="flex flex-col h-full w-[20vw] border-r-2 border-[var(--shadow)] p-6">
-                        <BackButton locationURL={"/"} />
+                        {/* <BackButton locationURL={"/"} />*/}
+                        <BackButton2 locationURL={"/"} />
                         <h2 className="text-left text-2xl font-semibold mb-[2rem]">
                             Modules
                         </h2>
