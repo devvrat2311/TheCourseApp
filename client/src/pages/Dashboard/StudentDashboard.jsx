@@ -39,93 +39,88 @@ function StudentDashboard() {
 
     return (
         <>
-            <Navbar />
-            <main className="">
-                <div className="main-content">
-                    <h2 className=" mb-6 text-left">
-                        Welcome back! {decoded.userFullName}
+            <div className="main-content">
+                <h2 className=" mb-6 text-left">
+                    Welcome back! {decoded.userFullName}
+                </h2>
+
+                <h2 className="text-2xl font-bold mb-6 text-left">
+                    My Dashboard
+                </h2>
+
+                {/* Ongoing Courses */}
+                <section className="mb-10 mt-10 text-left">
+                    <h2 className="text-xl font-semibold mb-4">
+                        Ongoing Courses
                     </h2>
+                    {ongoingCourses.length === 0 ? (
+                        <p className="text-gray-600">
+                            You have not enrolled in any courses yet.
+                        </p>
+                    ) : (
+                        <ul className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            {ongoingCourses.map((item) => (
+                                <li
+                                    key={item.courseId._id}
+                                    className="border p-4 rounded shadow"
+                                >
+                                    <h3 className="text-lg font-semibold mb-2">
+                                        {item.courseId.title}
+                                    </h3>
+                                    <p className="text-sm mb-2">
+                                        {item.courseId.description}
+                                    </p>
+                                    <p className="text-sm text-gray-600 mb-2">
+                                        Progress:{" "}
+                                        {item.completedSections?.length || 0} /{" "}
+                                        {item.courseId.modules.length || 0}
+                                    </p>
+                                    <Link
+                                        to={`/courses/${item.courseId._id}`}
+                                        className="text-blue-600 font-medium"
+                                    >
+                                        Continue Course →
+                                    </Link>
+                                </li>
+                            ))}
+                        </ul>
+                    )}
+                </section>
 
-                    <h2 className="text-2xl font-bold mb-6 text-left">
-                        My Dashboard
+                {/* Completed Courses */}
+                <section className="text-left">
+                    <h2 className="text-xl font-semibold mb-4">
+                        Completed Courses
                     </h2>
-
-                    {/* Ongoing Courses */}
-                    <section className="mb-10 mt-10 text-left">
-                        <h2 className="text-xl font-semibold mb-4">
-                            Ongoing Courses
-                        </h2>
-                        {ongoingCourses.length === 0 ? (
-                            <p className="text-gray-600">
-                                You have not enrolled in any courses yet.
-                            </p>
-                        ) : (
-                            <ul className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                {ongoingCourses.map((item) => (
-                                    <li
-                                        key={item.courseId._id}
-                                        className="border p-4 rounded shadow"
+                    {completedCourses.length === 0 ? (
+                        <p className="text-gray-600">
+                            No courses completed yet.
+                        </p>
+                    ) : (
+                        <ul className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            {completedCourses.map((item) => (
+                                <li
+                                    key={item.courseId._id}
+                                    className="border p-4 rounded shadow"
+                                >
+                                    <h3 className="text-lg font-semibold mb-2">
+                                        {item.courseId.title}
+                                    </h3>
+                                    <p className="text-sm mb-2">
+                                        {item.courseId.description}
+                                    </p>
+                                    <Link
+                                        to={`/courses/${item.courseId._id}`}
+                                        className="text-green-600 font-medium"
                                     >
-                                        <h3 className="text-lg font-semibold mb-2">
-                                            {item.courseId.title}
-                                        </h3>
-                                        <p className="text-sm mb-2">
-                                            {item.courseId.description}
-                                        </p>
-                                        <p className="text-sm text-gray-600 mb-2">
-                                            Progress:{" "}
-                                            {item.completedSections?.length ||
-                                                0}{" "}
-                                            /{" "}
-                                            {item.courseId.modules.length || 0}
-                                        </p>
-                                        <Link
-                                            to={`/courses/${item.courseId._id}`}
-                                            className="text-blue-600 font-medium"
-                                        >
-                                            Continue Course →
-                                        </Link>
-                                    </li>
-                                ))}
-                            </ul>
-                        )}
-                    </section>
-
-                    {/* Completed Courses */}
-                    <section className="text-left">
-                        <h2 className="text-xl font-semibold mb-4">
-                            Completed Courses
-                        </h2>
-                        {completedCourses.length === 0 ? (
-                            <p className="text-gray-600">
-                                No courses completed yet.
-                            </p>
-                        ) : (
-                            <ul className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                {completedCourses.map((item) => (
-                                    <li
-                                        key={item.courseId._id}
-                                        className="border p-4 rounded shadow"
-                                    >
-                                        <h3 className="text-lg font-semibold mb-2">
-                                            {item.courseId.title}
-                                        </h3>
-                                        <p className="text-sm mb-2">
-                                            {item.courseId.description}
-                                        </p>
-                                        <Link
-                                            to={`/courses/${item.courseId._id}`}
-                                            className="text-green-600 font-medium"
-                                        >
-                                            View Certificate →
-                                        </Link>
-                                    </li>
-                                ))}
-                            </ul>
-                        )}
-                    </section>
-                </div>
-            </main>
+                                        View Certificate →
+                                    </Link>
+                                </li>
+                            ))}
+                        </ul>
+                    )}
+                </section>
+            </div>
         </>
     );
 }

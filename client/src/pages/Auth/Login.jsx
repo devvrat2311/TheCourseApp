@@ -23,7 +23,7 @@ function Login() {
 
             showFlash("Welcome to your account", "info");
             //redirect to dashboard
-            navigate("/");
+            navigate("/dashboard");
         } catch (err) {
             showFlash(`Error: ${err.message}`, "info");
         }

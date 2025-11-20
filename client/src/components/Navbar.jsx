@@ -21,7 +21,7 @@ export default function Navbar() {
                         </Link>
                         <Link
                             className="transition duration-200 text-[var(--fg-faded)] underline underline-offset-4 decoration-transparent hover:decoration-[var(--fg)] group-hover:text-[var(--fg)]"
-                            to="/"
+                            to="/dashboard"
                         >
                             Dashboard
                         </Link>

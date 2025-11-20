@@ -12,6 +12,7 @@ import ThemeToggle from "./components/ThemeToggle";
 import CourseSectionPage from "./pages/Courses/CourseSectionPage";
 import Navbar from "./components/Navbar";
 import { ThemeProvider } from "./contexts/ThemeContext";
+import Layout from "./components/Layout";
 
 function App() {
     return (
@@ -28,34 +29,30 @@ function App() {
                                 path="/"
                                 element={
                                     <PrivateRoute>
-                                        <StudentDashboard />
+                                        <Layout />
                                     </PrivateRoute>
                                 }
-                            />
-                            <Route
-                                path="/explore"
-                                element={
-                                    <PrivateRoute>
-                                        <ExploreCourses />
-                                    </PrivateRoute>
-                                }
-                            />
-                            <Route
-                                path="/courses/:courseId"
-                                element={
-                                    <PrivateRoute>
-                                        <CoursePage />
-                                    </PrivateRoute>
-                                }
-                            />
-                            <Route
-                                path="/courses/:courseId/:moduleId/sections/:sectionId"
-                                element={
-                                    <PrivateRoute>
-                                        <CourseSectionPage />
-                                    </PrivateRoute>
-                                }
-                            />
+                            >
+                                <Route index element={<StudentDashboard />} />
+                                <Route
+                                    path="dashboard"
+                                    element={<StudentDashboard />}
+                                />
+
+                                <Route
+                                    path="/explore"
+                                    element={<ExploreCourses />}
+                                />
+                                <Route
+                                    path="/courses/:courseId"
+                                    element={<CoursePage />}
+                                />
+
+                                <Route
+                                    path="/courses/:courseId/:moduleId/sections/:sectionId"
+                                    element={<CourseSectionPage />}
+                                />
+                            </Route>
                         </Routes>
                     </Router>
                 </FlashProvider>

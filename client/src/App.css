@@ -8,7 +8,7 @@
     justify-content: center;
     place-items: center;
     width: 100%;
-    height: 100vh;
+    min-height: 100vh;
 }
 
 nav {
@@ -111,31 +111,24 @@ main {
 
 .selected-index {
     color: var(--fg);
-    font-weight: bold;
-    border: 2px solid transparent;
-    transform: translate(-4px, -4px);
-    box-shadow: 4px 4px var(--shadow);
-    background-color: var(--accent-blue);
+    /*font-weight: bold;*/
+    border: 2px solid var(--shadow);
+    /*transform: translate(-4px, -4px);*/
+    box-shadow: 6px 0 var(--shadow);
+    background-color: var(--bg);
 }
 
-/*.selected-index {
-    color: black;
-    font-weight: bold;
-    border: 2px solid #557899;
-    transform: translate(-4px, -4px);
-    box-shadow: 4px 4px #557899;
-    background-color: #bcddfc;
-}*/
-
 .unselected-index {
-    border: 2px solid var(--fg-faded);
-    font-weight: bold;
+    border: 2px solid transparent;
+    box-shadow: 6px 0 var(--fg-faded);
+    /*font-weight: bold;*/
     /*background-color: var(--accent-red-faded);*/
 }
 
 .unselected-index:hover {
-    transform: translate(-4px, -4px);
-    box-shadow: 4px 4px var(--fg-faded);
+    border-color: var(--shadow);
+    transform: translate(6px, 0);
+    box-shadow: -6px 0 var(--shadow);
 }
 
 @keyframes buttonPress {
@@ -175,7 +168,7 @@ main {
 
 .logout-btn {
     border: 2px solid var(--fg-faded);
-    padding: 0.25rem;
+    padding: 0.25rem 0.75rem;
     font-size: 0.75rem;
     line-height: 1rem;
     font-weight: 700;
@@ -318,4 +311,14 @@ main {
     background-color: var(--bg);
     color: var(--fg);
     border: 2px solid var(--shadow);
+}
+
+.sidebar-modules {
+    border: 2px dashed var(--fg-faded);
+    border-radius: 10px;
+    width: 350px;
+}
+
+.lucide {
+    vertical-align: baseline;
 }

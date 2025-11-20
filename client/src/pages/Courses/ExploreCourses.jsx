@@ -28,32 +28,29 @@ function ExploreCourses() {
 
     return (
         <>
-            <Navbar />
-            <main className="">
-                <div className="main-content p-6">
-                    <h2 className="text-2xl font-bold mb-4 text-left">
-                        Explore Courses
-                    </h2>
-                    <ul className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        {courses.map((course) => (
-                            <li
-                                key={course._id}
-                                className="border p-4 rounded shadow"
-                            >
-                                <h2 className="text-lg font-semibold">
-                                    {course.title}
-                                </h2>
-                                <p className="text-sm text-shadow-white">
-                                    {course.description}
-                                </p>
-                                <Link to={`/courses/${course._id}`}>
-                                    Go to Course →
-                                </Link>
-                            </li>
-                        ))}
-                    </ul>
-                </div>
-            </main>
+            <div className="main-content p-6">
+                <h2 className="text-2xl font-bold mb-4 text-left">
+                    Explore Courses
+                </h2>
+                <ul className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    {courses.map((course) => (
+                        <li
+                            key={course._id}
+                            className="border p-4 rounded shadow"
+                        >
+                            <h2 className="text-lg font-semibold">
+                                {course.title}
+                            </h2>
+                            <p className="text-sm text-shadow-white">
+                                {course.description}
+                            </p>
+                            <Link to={`/courses/${course._id}`}>
+                                Go to Course →
+                            </Link>
+                        </li>
+                    ))}
+                </ul>
+            </div>
         </>
     );
 }

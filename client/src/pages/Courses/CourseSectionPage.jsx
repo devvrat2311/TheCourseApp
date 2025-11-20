@@ -151,77 +151,72 @@ function CourseSectionPage() {
 
     return (
         <>
-            <Navbar />
-            <main>
-                <div className="main-content flex border border-[var(--shadow)]">
-                    <div className="flex flex-col h-full w-[20vw] border-r-2 border-[var(--shadow)] p-6">
-                        <BackButton locationURL={`/courses/${courseId}`} />
-                        <h2 className="text-left text-2xl font-semibold mb-[2rem]">
-                            Sections
-                        </h2>
-                        <ul className="text-left">
-                            {allSections.map((section, index) => (
-                                <li
-                                    key={index}
-                                    className={`transition duration-150 ease-in-out cursor-pointer p-2 mb-3 ${
-                                        sectionId === section._id
-                                            ? "selected-index"
-                                            : "unselected-index"
-                                    }`}
-                                    onClick={() => {
-                                        // setSelectedSectionId(section._id);
-                                        navigate(
-                                            `/courses/${courseId}/${moduleId}/sections/${section._id}`,
-                                        );
-                                    }}
-                                >
-                                    <p className="text-[0.9rem]">
-                                        Section {index + 1}
-                                    </p>
-                                    {isSectionComplete(section._id)
-                                        ? "yes"
-                                        : "no"}
-                                </li>
-                            ))}
-                        </ul>
-                    </div>
+            <div className="main-content flex border border-[var(--shadow)]">
+                <div className="flex flex-col h-full w-[20vw] border-r-2 border-[var(--shadow)] p-6">
+                    <BackButton locationURL={`/courses/${courseId}`} />
+                    <h2 className="text-left text-2xl font-semibold mb-[2rem]">
+                        Sections
+                    </h2>
+                    <ul className="text-left">
+                        {allSections.map((section, index) => (
+                            <li
+                                key={index}
+                                className={`transition duration-150 ease-in-out cursor-pointer p-2 mb-3 ${
+                                    sectionId === section._id
+                                        ? "selected-index"
+                                        : "unselected-index"
+                                }`}
+                                onClick={() => {
+                                    // setSelectedSectionId(section._id);
+                                    navigate(
+                                        `/courses/${courseId}/${moduleId}/sections/${section._id}`,
+                                    );
+                                }}
+                            >
+                                <p className="text-[0.9rem]">
+                                    Section {index + 1}
+                                </p>
+                                {isSectionComplete(section._id) ? "yes" : "no"}
+                            </li>
+                        ))}
+                    </ul>
+                </div>
 
-                    <div className="flex-1 text-left flex flex-col">
-                        <h2 className="font-semibold text-2xl ml-6 mt-5 h-[4rem]">
-                            {sectionData.title}
-                        </h2>
-                        <div className="relative flex-1">
-                            {sectionData.sectionType === "normal" ? (
-                                <>
-                                    <SectionContent sectionData={sectionData} />
-                                    <button
-                                        className={`back-btn w-auto absolute bottom-0 left-6 ${isAnimating ? "active" : ""}`}
-                                        onClick={
-                                            isSelectedSectionComplete
-                                                ? handleNextSection
-                                                : handleMarkComplete
-                                        }
-                                    >
-                                        {isSelectedSectionComplete
-                                            ? "Next"
-                                            : "Mark as Complete"}
-                                    </button>
-                                </>
-                            ) : isSelectedSectionComplete ? (
-                                <CompletedQuizContent />
-                            ) : (
-                                <QuizContent
-                                    sectionData={sectionData}
-                                    onQuizComplete={(completedSections) => {
-                                        setSectionsCompleted(completedSections);
-                                        setIsSelectedSectionComplete(true);
-                                    }}
-                                />
-                            )}
-                        </div>
+                <div className="flex-1 text-left flex flex-col">
+                    <h2 className="font-semibold text-2xl ml-6 mt-5 h-[4rem]">
+                        {sectionData.title}
+                    </h2>
+                    <div className="relative flex-1">
+                        {sectionData.sectionType === "normal" ? (
+                            <>
+                                <SectionContent sectionData={sectionData} />
+                                <button
+                                    className={`back-btn w-auto absolute bottom-0 left-6 ${isAnimating ? "active" : ""}`}
+                                    onClick={
+                                        isSelectedSectionComplete
+                                            ? handleNextSection
+                                            : handleMarkComplete
+                                    }
+                                >
+                                    {isSelectedSectionComplete
+                                        ? "Next"
+                                        : "Mark as Complete"}
+                                </button>
+                            </>
+                        ) : isSelectedSectionComplete ? (
+                            <CompletedQuizContent />
+                        ) : (
+                            <QuizContent
+                                sectionData={sectionData}
+                                onQuizComplete={(completedSections) => {
+                                    setSectionsCompleted(completedSections);
+                                    setIsSelectedSectionComplete(true);
+                                }}
+                            />
+                        )}
                     </div>
                 </div>
-            </main>
+            </div>
         </>
     );
 }

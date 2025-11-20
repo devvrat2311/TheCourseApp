@@ -60,7 +60,7 @@ function LogoutBtn() {
         <ClickyBtn clickFunction={handleLogout} stylingClass={"logout-btn"}>
             <div className="flex gap-2 items-center">
                 <p>LOGOUT</p>
-                <LogOut />
+                <LogOut size={"16px"} />
             </div>
         </ClickyBtn>
     );
