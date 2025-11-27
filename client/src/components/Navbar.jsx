@@ -14,13 +14,13 @@ export default function Navbar() {
                     <Logo width={"20rem"} padding={"2px"} />
                     <div className="space-x-7 text-[0.8rem]">
                         <Link
-                            className="transition duration-200 text-[var(--fg-faded)] underline underline-offset-4 decoration-transparent hover:decoration-[var(--fg)] group-hover:text-[var(--fg)]"
+                            className="transition duration-200 text-[var(--border)] underline underline-offset-4 decoration-transparent hover:decoration-[var(--fg)] group-hover:text-[var(--fg)]"
                             to="/explore"
                         >
                             Explore
                         </Link>
                         <Link
-                            className="transition duration-200 text-[var(--fg-faded)] underline underline-offset-4 decoration-transparent hover:decoration-[var(--fg)] group-hover:text-[var(--fg)]"
+                            className="transition duration-200 text-[var(--border)] underline underline-offset-4 decoration-transparent hover:decoration-[var(--fg)] group-hover:text-[var(--fg)]"
                             to="/dashboard"
                         >
                             Dashboard

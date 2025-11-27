@@ -1,14 +1,26 @@
 import { useState } from "react";
 
-export default function ClickyBtn({ clickFunction, children, stylingClass }) {
+export default function ClickyBtn({
+    clickFunction,
+    children,
+    stylingClass,
+    buttonType,
+}) {
     const [isAnimating, setIsAnimating] = useState(false);
 
-    const handleClick = () => {
+    const handleClick = (e) => {
+        if (e && buttonType === "submit") {
+            e.preventDefault();
+        }
         setIsAnimating(true);
 
         setTimeout(() => {
             setIsAnimating(false);
-            clickFunction();
+            if (clickFunction) {
+                clickFunction();
+            } else if (e && buttonType === "submit") {
+                e.target.closest("form")?.requestSubmit();
+            }
         }, 200);
     };
 
@@ -16,6 +28,7 @@ export default function ClickyBtn({ clickFunction, children, stylingClass }) {
         <button
             className={`${stylingClass} flex w-fit pr-[30px] ${isAnimating ? "active" : ""}`}
             onClick={handleClick}
+            type={buttonType}
         >
             {children}
         </button>

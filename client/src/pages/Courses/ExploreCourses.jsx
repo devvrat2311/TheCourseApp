@@ -28,7 +28,7 @@ function ExploreCourses() {
 
     return (
         <>
-            <div className="main-content p-6">
+            <div className="main-content p-6 flex-col">
                 <h2 className="text-2xl font-bold mb-4 text-left">
                     Explore Courses
                 </h2>

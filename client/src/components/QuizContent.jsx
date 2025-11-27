@@ -2,13 +2,12 @@ import { useState } from "react";
 import { useParams } from "react-router-dom";
 import api from "../utils/api";
 import { useFlash } from "../contexts/FlashContext";
+import ClickyBtn from "./ClickyBtn";
 
 export default function QuizContent({ sectionData, onQuizComplete }) {
     const { showFlash } = useFlash();
     const { courseId, moduleId, sectionId } = useParams();
 
-    // const [currentQuizCompleted, setCurrentQuizCompleted] =
-    //     useState(isSectionCompleted);
     const quizData = sectionData.quiz;
     const [quizAnswers, setQuizAnswers] = useState({});
 
@@ -46,60 +45,63 @@ export default function QuizContent({ sectionData, onQuizComplete }) {
         } catch (err) {
             console.log(err);
         }
-        // const answersArray = Object.values(quizAnswers);
     };
 
-    console.log("quizAnswers", quizAnswers);
     return (
-        <div className="ml-6">
-            <>
-                <form className="mr-6 mb-5 p-4" onSubmit={handleSubmitQuiz}>
-                    {quizData.map((quizQuestion, questionIndex) => (
-                        <div
-                            className="first:rounded-t-xl last:rounded-b-xl border border-b-0 last:border-b-2 border-[var(--shadow)] p-4"
-                            key={questionIndex}
-                        >
-                            <p className="font-bold text-[var(--shadow)]">
-                                {quizQuestion.question}
-                            </p>
-                            {quizQuestion.options.map((option, optionIndex) => (
-                                <div key={optionIndex}>
-                                    <label
-                                        key={optionIndex}
-                                        className="block ml-4 mt-2"
-                                    >
-                                        <input
-                                            type="radio"
-                                            name={`question-${questionIndex}`}
-                                            value={option}
-                                            checked={
-                                                quizAnswers[questionIndex] ===
-                                                option
-                                            }
-                                            onChange={() => {
-                                                handleQuizAnswer(
-                                                    questionIndex,
-                                                    option,
-                                                );
-                                            }}
-                                        />
-                                        <span className="ml-2 text-xs">
-                                            {option}
-                                        </span>
-                                    </label>
-                                </div>
-                            ))}
-                        </div>
-                    ))}
+        <div className="ml-6 ">
+            <form className="mr-6 mb-5 p-4 " onSubmit={handleSubmitQuiz}>
+                {quizData.map((quizQuestion, questionIndex) => (
+                    <div className="p-4" key={questionIndex}>
+                        <p className="font-bold text-[var(--shadow)]">
+                            {quizQuestion.question}
+                        </p>
+                        {quizQuestion.options.map((option, optionIndex) => (
+                            <div key={optionIndex}>
+                                <label
+                                    key={optionIndex}
+                                    className="block ml-4 mt-2"
+                                >
+                                    <input
+                                        type="radio"
+                                        name={`question-${questionIndex}`}
+                                        value={option}
+                                        checked={
+                                            quizAnswers[questionIndex] ===
+                                            option
+                                        }
+                                        onChange={() => {
+                                            handleQuizAnswer(
+                                                questionIndex,
+                                                option,
+                                            );
+                                        }}
+                                    />
+                                    <span className="ml-2 text-xs">
+                                        {option}
+                                    </span>
+                                </label>
+                            </div>
+                        ))}
+                    </div>
+                ))}
 
+                {/* <div>
                     <button
                         type="submit"
                         className="absolute bottom-6 left-6 text-xs bg-green-200 text-black px-4 py-2 font-bold mt-4"
                     >
                         Submit Quiz
                     </button>
-                </form>
-            </>
+                </div>*/}
+                <div>
+                    <ClickyBtn
+                        clickFunction={handleSubmitQuiz}
+                        stylingClass={"back-btn"}
+                    >
+                        Submit
+                    </ClickyBtn>
+                </div>
+            </form>
         </div>
     );
 }

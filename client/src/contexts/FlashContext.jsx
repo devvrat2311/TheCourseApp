@@ -6,6 +6,7 @@ export function FlashProvider({ children }) {
     const [flashType, setFlashType] = useState("info"); //success, error, info
 
     const showFlash = (message, type = "info") => {
+        console.log("showing flash now");
         setFlashMessage(message);
         setFlashType(type);
 

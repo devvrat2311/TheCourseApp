@@ -3,12 +3,29 @@ import { useEffect, useState } from "react";
 import api from "../../utils/api"; //methods of this api class apply the Authorization header automatically
 import Navbar from "../../components/Navbar";
 import BackButton from "../../components/BackBtn";
+import BackButton2 from "../../components/BackBtn2";
 import SectionContent from "../../components/SectionContent";
 import QuizContent from "../../components/QuizContent";
 import CompletedQuizContent from "../../components/CompletedQuizContent";
 import { useFlash } from "../../contexts/FlashContext";
+import { CheckCircle2, CircleDashed, ChevronDown } from "lucide-react";
+
+function useWindowWidth() {
+    const [width, setWidth] = useState(window.innerWidth);
+
+    useEffect(() => {
+        console.log("hello tera makichud");
+        const handleResize = () => setWidth(window.innerWidth);
+        window.addEventListener("resize", handleResize);
+        return () => window.removeEventListener("resize", handleResize);
+    }, []);
+
+    return width;
+}
 
 function CourseSectionPage() {
+    const windowWidth = useWindowWidth();
+    const isMobile = windowWidth < 1000;
     const { courseId, moduleId, sectionId } = useParams();
     const [sectionDataLoading, setSectionDataLoading] = useState(true);
     const [allSectionsLoading, setAllSectionsLoading] = useState(true);
@@ -22,10 +39,6 @@ function CourseSectionPage() {
     const [isAnimating, setIsAnimating] = useState(false);
     const navigate = useNavigate();
     const { showFlash } = useFlash();
-
-    useEffect(() => {
-        setSelectedSectionId(sectionId);
-    }, [sectionId]);
 
     const handleNextSection = async () => {
         setIsAnimating(true);
@@ -113,6 +126,10 @@ function CourseSectionPage() {
     }, [courseId, moduleId, selectedSectionId]);
 
     useEffect(() => {
+        setSelectedSectionId(sectionId);
+    }, [sectionId]);
+
+    useEffect(() => {
         const fetchAllSections = async () => {
             try {
                 const response = await api.get(
@@ -140,6 +157,11 @@ function CourseSectionPage() {
         fetchAllSections();
     }, [courseId, moduleId]);
 
+    const [dropdown, setDropdown] = useState(false);
+    const toggleDropDown = () => {
+        setDropdown(!dropdown);
+    };
+
     if (sectionDataLoading || allSectionsLoading)
         return <p>Loading Section. . .</p>;
     if (error) return <p className="text-red-500">Error: {error}</p>;
@@ -151,38 +173,109 @@ function CourseSectionPage() {
 
     return (
         <>
-            <div className="main-content flex border border-[var(--shadow)]">
-                <div className="flex flex-col h-full w-[20vw] border-r-2 border-[var(--shadow)] p-6">
-                    <BackButton locationURL={`/courses/${courseId}`} />
-                    <h2 className="text-left text-2xl font-semibold mb-[2rem]">
-                        Sections
-                    </h2>
-                    <ul className="text-left">
-                        {allSections.map((section, index) => (
-                            <li
-                                key={index}
-                                className={`transition duration-150 ease-in-out cursor-pointer p-2 mb-3 ${
-                                    sectionId === section._id
-                                        ? "selected-index"
-                                        : "unselected-index"
-                                }`}
-                                onClick={() => {
-                                    // setSelectedSectionId(section._id);
-                                    navigate(
-                                        `/courses/${courseId}/${moduleId}/sections/${section._id}`,
-                                    );
-                                }}
-                            >
-                                <p className="text-[0.9rem]">
-                                    Section {index + 1}
-                                </p>
-                                {isSectionComplete(section._id) ? "yes" : "no"}
-                            </li>
-                        ))}
-                    </ul>
-                </div>
-
-                <div className="flex-1 text-left flex flex-col">
+            <div className="main-content">
+                {isMobile ? (
+                    <div className="mobile-dropdown">
+                        <div className="mobile-dropdown-topsection ">
+                            {/* flex gap-[1rem] items-center px-6*/}
+                            <BackButton2 locationURL={`/courses/${courseId}`} />
+                            <div className="mobile-dd-dd">
+                                <div
+                                    onClick={toggleDropDown}
+                                    className="mobile-dd-display cursor-pointer flex justify-between rounded p-[10px] text-xs items-center"
+                                >
+                                    {
+                                        allSections.find(
+                                            (section) =>
+                                                section._id ===
+                                                selectedSectionId,
+                                        )?.title
+                                    }
+                                    <ChevronDown
+                                        className={`transition-transform duration-200 ${dropdown ? "rotate-180" : ""}`}
+                                    />
+                                </div>
+                                <div
+                                    className={`dropdown border-2 border-[var(--fg)] rounded ${dropdown ? "dd-active" : "dd-inactive"} `}
+                                >
+                                    <ul className="text-left">
+                                        {allSections.map((section, index) => (
+                                            <li
+                                                key={index}
+                                                className="flex justify-between bg-[var(--bg)] border-b-1 border-b-[var(--border)] last:border-b-0 text-[0.8rem]"
+                                                onClick={() => {
+                                                    if (
+                                                        section._id !=
+                                                        selectedSectionId
+                                                    ) {
+                                                        navigate(
+                                                            `/courses/${courseId}/${moduleId}/sections/${section._id}`,
+                                                        );
+                                                        toggleDropDown();
+                                                    }
+                                                }}
+                                            >
+                                                <div className="flex gap-2">
+                                                    <p>{index + 1}</p>
+                                                    <p>{section.title}</p>
+                                                </div>
+                                                {isSectionComplete(
+                                                    section._id,
+                                                ) ? (
+                                                    <CheckCircle2 className="text-green-500" />
+                                                ) : (
+                                                    <CircleDashed className="text-gray-400" />
+                                                )}
+                                            </li>
+                                        ))}
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                ) : (
+                    <div className="sidebar-modules">
+                        <BackButton2 locationURL={`/courses/${courseId}`} />
+                        {/* <h2 className="text-left text-2xl font-semibold mb-[2rem]">*/}
+                        <h2 className="text-left text-xl font-semibold mt-[2rem] mb-[2rem]">
+                            Sections
+                        </h2>
+                        <ul className="text-left">
+                            {allSections.map((section, index) => (
+                                <li
+                                    key={index}
+                                    className={`border-b-1 border-t-1 first:rounded-t-[10px] first:border-t-2 last:rounded-b-[10px] last:border-b-2 border-2
+                                                transition duration-150 ease-in-out cursor-pointer pr-3 pl-3 pt-1 pb-1 flex justify-between gap-2 ${
+                                                    sectionId === section._id
+                                                        ? "selected-index"
+                                                        : "unselected-index"
+                                                }`}
+                                    onClick={() => {
+                                        // setSelectedSectionId(section._id);
+                                        navigate(
+                                            `/courses/${courseId}/${moduleId}/sections/${section._id}`,
+                                        );
+                                    }}
+                                >
+                                    <div className="flex gap-2 items-baseline-last">
+                                        <p className="text-[0.8rem]">
+                                            {index + 1}.
+                                        </p>
+                                        <p className="text-[0.8rem]">
+                                            {section.title}
+                                        </p>
+                                    </div>
+                                    {isSectionComplete(section._id) ? (
+                                        <CheckCircle2 className="text-green-500" />
+                                    ) : (
+                                        <CircleDashed className="text-gray-400" />
+                                    )}
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+                )}
+                <div className="section-content flex-1 text-left flex flex-col">
                     <h2 className="font-semibold text-2xl ml-6 mt-5 h-[4rem]">
                         {sectionData.title}
                     </h2>
@@ -190,18 +283,20 @@ function CourseSectionPage() {
                         {sectionData.sectionType === "normal" ? (
                             <>
                                 <SectionContent sectionData={sectionData} />
-                                <button
-                                    className={`back-btn w-auto absolute bottom-0 left-6 ${isAnimating ? "active" : ""}`}
-                                    onClick={
-                                        isSelectedSectionComplete
-                                            ? handleNextSection
-                                            : handleMarkComplete
-                                    }
-                                >
-                                    {isSelectedSectionComplete
-                                        ? "Next"
-                                        : "Mark as Complete"}
-                                </button>
+                                <div className="mt-6 p-4 bg-[var(--fg)] rounded-b-[10px]">
+                                    <button
+                                        className={`back-btn w-auto left-6 ${isAnimating ? "active" : ""}`}
+                                        onClick={
+                                            isSelectedSectionComplete
+                                                ? handleNextSection
+                                                : handleMarkComplete
+                                        }
+                                    >
+                                        {isSelectedSectionComplete
+                                            ? "Next"
+                                            : "Mark as Complete"}
+                                    </button>
+                                </div>
                             </>
                         ) : isSelectedSectionComplete ? (
                             <CompletedQuizContent />

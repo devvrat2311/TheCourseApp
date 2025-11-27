@@ -39,7 +39,7 @@ function StudentDashboard() {
 
     return (
         <>
-            <div className="main-content">
+            <div className="main-content flex-col">
                 <h2 className=" mb-6 text-left">
                     Welcome back! {decoded.userFullName}
                 </h2>

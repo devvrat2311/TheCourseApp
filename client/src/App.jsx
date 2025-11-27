@@ -19,7 +19,6 @@ function App() {
         <>
             <ThemeProvider>
                 <FlashProvider>
-                    <ThemeToggle />
                     <FlashMessage />
                     <Router>
                         <Routes>
@@ -30,6 +29,7 @@ function App() {
                                 element={
                                     <PrivateRoute>
                                         <Layout />
+                                        <ThemeToggle />
                                     </PrivateRoute>
                                 }
                             >
