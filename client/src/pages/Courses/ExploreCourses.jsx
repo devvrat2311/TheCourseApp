@@ -57,7 +57,9 @@ function ExploreCourses() {
                                 clickFunction={() =>
                                     navigateToCourse(course._id)
                                 }
-                                stylingClass={"back-btn gap-2 px-[1.4rem] py-[0.6rem] items-center"}
+                                stylingClass={
+                                    "back-btn gap-2 px-[1.4rem] py-[0.6rem] items-center"
+                                }
                             >
                                 Go to Course
                                 <ChevronRight />

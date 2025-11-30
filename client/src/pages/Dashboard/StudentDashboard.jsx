@@ -45,7 +45,6 @@ function StudentDashboard() {
                     Welcome back! {decoded.userFullName}
                 </h2>
 
-
                 {/* Ongoing Courses */}
                 <section className="mb-10 mt-6 text-left">
                     <h2 className="text-xl font-semibold mb-4">
@@ -79,7 +78,9 @@ function StudentDashboard() {
                                                 `/courses/${item.courseId._id}`,
                                             );
                                         }}
-                                        stylingClass={"back-btn px-[1rem] py-[0.4rem]"}
+                                        stylingClass={
+                                            "back-btn px-[1rem] py-[0.4rem]"
+                                        }
                                     >
                                         Continue Course →
                                     </ClickyBtn>

@@ -102,7 +102,7 @@ const sectionSchema = new mongoose.Schema({
 const moduleSchema = new mongoose.Schema({
     title: { type: String, required: true },
     description: { type: String },
-    learningObjective: {type: String},
+    learningObjective: { type: String },
     sections: [sectionSchema],
 });
 

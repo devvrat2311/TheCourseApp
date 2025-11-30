@@ -39,7 +39,6 @@ nav {
     gap: 1rem;
 }
 
-
 .group img {
     opacity: 40%;
     transition: 0.2s all ease-in-out;
@@ -90,7 +89,7 @@ main {
     border-radius: 10px;
 }
 @media (max-width: 800px) {
-    .logo-navbar{
+    .logo-navbar {
         margin-left: 10px;
         width: 14rem;
     }
@@ -470,7 +469,6 @@ main {
     color: #cecece;
 }
 
-
 .section-bullet {
     display: list-item;
     list-style-type: disc;
@@ -488,6 +486,7 @@ main {
     gap: 2rem;
     z-index: 1001;
     border-radius: 10px;
+    font-size: 14px;
 }
 
 .flash-info {
