@@ -2,6 +2,7 @@ import { useState, useRef } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useFlash } from "../../contexts/FlashContext";
 import ThemeToggle from "../../components/ThemeToggle";
+import ClickyBtn from "../../components/ClickyBtn";
 
 function SignUp() {
     const navigate = useNavigate();
@@ -14,6 +15,7 @@ function SignUp() {
     const lastNameRef = useRef();
     const emailRef = useRef();
     const mobileRef = useRef();
+    // const passwordRef = useRef();
 
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
@@ -29,6 +31,9 @@ function SignUp() {
                 mobile: mobileRef.current.value,
                 password,
             };
+            if (formData.password !== confirmPassword) {
+                throw new Error("Passwords are not matching");
+            }
             const res = await fetch("/api/v1/auth/signup", {
                 method: "POST",
                 headers: {
@@ -56,7 +61,7 @@ function SignUp() {
     return (
         <>
             <div className="login-container-wrapper">
-                <div className="login-container bg-[var(--bg-dark)] border-2 border-[var(--shadow-dark)] flex flex-col">
+                <div className="login-container bg-[var(--bg-dark)] flex flex-col">
                     <h2 className="text-3xl font-bold text-left">Sign Up</h2>
                     <form
                         className="flex flex-col"
@@ -151,7 +156,7 @@ function SignUp() {
                             </label>
                         </div>
                         <input
-                            className={`input-class p-2 border-2 mb-3  ${password !== "" ? (confirmPassword === password ? "border-green-400" : "border-red-400") : "border-gray-400"}`}
+                            className={`input-class p-2 border-2 mb-3  ${password != "" ? (confirmPassword === password ? "border-green-400" : "border-red-400") : "border-gray-400"}`}
                             name="confirmPassword"
                             type="password"
                             value={confirmPassword}
@@ -161,12 +166,16 @@ function SignUp() {
                             required
                         />
 
-                        <button
-                            className="signup-btn mt-4 cursor-pointer"
-                            type="submit"
+                        <ClickyBtn
+                            buttonType={"submit"}
+                            stylingClass={"back-btn center-btn login-btn"}
                         >
-                            <span className="font-bold">SIGN UP</span>
-                        </button>
+                            <div
+                                className="flex gap-2 items-center px-[3rem] py-[0.4rem]"
+                            >
+                                <p>Sign Up</p>
+                            </div>
+                        </ClickyBtn>
 
                         <hr className="border-t border-gray-300 my-6"></hr>
                     </form>

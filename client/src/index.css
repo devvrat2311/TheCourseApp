@@ -17,16 +17,19 @@
     --border: #2222228f;
     --shadow: #ff6d1f;
     --accent: #ff6d1f;
-
+    --success-green: #00bc7d;
+    --error-red: #ec003f;
     color-scheme: light;
 }
 :root[data-theme="dark"] {
-    --bg: #1f1f1f;
+    --bg: #051824;
     --fg: #f8f8f8;
-    --bg-highlighted: #5757576e;
-    --border: #f8f8f88f;
-    --shadow: #fbf9e4;
-    --accent: #fbf9e4;
+    --bg-highlighted: #162936;
+    --border: #3b5265;
+    --shadow: #27e9b5;
+    --accent: #27e9b5;
+    --success-green: #00bc7d;
+    --error-red: #ec003f;
     color-scheme: dark;
 }
 html {

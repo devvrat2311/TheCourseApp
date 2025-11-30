@@ -73,29 +73,29 @@ export default function CompletedQuizContent() {
 
     return (
         <>
-            <div className="ml-6 mr-6 mt-2">
+            <p className="ml-6 mt-5 bg-[var(--bg)] rounded-xl p-4 inline-block">
+                Score: {userMarks}/{totalMarks}
+            </p>
+            <p className="ml-6 mt-5">Correct Answers</p>
+            <div className="ml-6 mr-6">
                 {quizSectionData.quiz.map((ques, quesIndex) => (
-                    <div key={quesIndex} className="mt-3">
-                        <p className="text-xl font-semibold">
-                            {/* <span className="font-bold mr-2">Q.</span>*/}
+                    <div key={quesIndex} className="mt-3 rounded-xl">
+                        <p className="text-xl font-semibold text-[var(--accent)]">
                             {ques.question}
                         </p>
-                        <p className="mt-2">
-                            {/* <span className="font-bold mr-2">A.</span>*/}
-                            {ques.correctAnswer}
-                        </p>
+                        <p className="mt-2">{ques.correctAnswer}</p>
                     </div>
                 ))}
             </div>
-            <p className=" ml-6 mt-5 bg-green-400 rounded border-2 border-[var(--shadow)] p-2 inline-block">
-                Your Score: {userMarks}/{totalMarks}
-            </p>
-            <button
-                className={`back-btn w-auto absolute bottom-0 left-6 ${isAnimating ? "active" : ""}`}
-                onClick={handleNextSection}
-            >
-                Next
-            </button>
+
+            <div className="mt-6 p-4 bg-[var(--border)] rounded-b-2xl">
+                <button
+                    className={`back-btn w-auto px-[1rem] py-[0.4rem] ${isAnimating ? "active" : ""}`}
+                    onClick={handleNextSection}
+                >
+                    Next
+                </button>
+            </div>
         </>
     );
 }

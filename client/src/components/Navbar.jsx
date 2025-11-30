@@ -7,18 +7,19 @@ export default function Navbar() {
     return (
         <nav className="group flex justify-center items-center">
             <div className="nav-content flex justify-between items-center w-full">
-                <div className="flex justify-center items-center gap-[3rem]">
+                <div className="nav-logo-links">
                     {/* <div className="text-center font-extrabold text-2xl text-[var(--fg)] p-2 pl-0 rounded-2xl">
                         TheCourseApp
                     </div>*/}
-                    <Logo width={"20rem"} padding={"2px"} />
-                    <div className="space-x-7 text-[0.8rem]">
+                    <Logo stylingClass={"logo-navbar"} />
+                    <div className="nav-links space-x-2 ">
                         <Link
                             className="transition duration-200 text-[var(--border)] underline underline-offset-4 decoration-transparent hover:decoration-[var(--fg)] group-hover:text-[var(--fg)]"
                             to="/explore"
                         >
                             Explore
                         </Link>
+                        <p className="inline text-[var(--border)] group-hover:text-[var(--fg)] ">&middot;</p>
                         <Link
                             className="transition duration-200 text-[var(--border)] underline underline-offset-4 decoration-transparent hover:decoration-[var(--fg)] group-hover:text-[var(--fg)]"
                             to="/dashboard"

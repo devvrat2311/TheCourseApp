@@ -1,15 +1,16 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Navbar from "../../components/Navbar";
 import api from "../../utils/api";
 import { jwtDecode } from "jwt-decode";
+import ClickyBtn from "../../components/ClickyBtn";
 
 function StudentDashboard() {
+    const navigate = useNavigate();
     const [ongoingCourses, setOngoingCourses] = useState([]);
     const [completedCourses, setCompletedCourses] = useState([]);
     const accessToken = localStorage.getItem("accessToken");
     const decoded = jwtDecode(accessToken);
-    // console.log("rendering this page", decoded.userFullName);
     console.log("ongoingCourses", ongoingCourses);
     console.log("completedCourses", completedCourses);
 
@@ -40,16 +41,13 @@ function StudentDashboard() {
     return (
         <>
             <div className="main-content flex-col">
-                <h2 className=" mb-6 text-left">
+                <h2 className="mb-2 text-left">
                     Welcome back! {decoded.userFullName}
                 </h2>
 
-                <h2 className="text-2xl font-bold mb-6 text-left">
-                    My Dashboard
-                </h2>
 
                 {/* Ongoing Courses */}
-                <section className="mb-10 mt-10 text-left">
+                <section className="mb-10 mt-6 text-left">
                     <h2 className="text-xl font-semibold mb-4">
                         Ongoing Courses
                     </h2>
@@ -62,7 +60,7 @@ function StudentDashboard() {
                             {ongoingCourses.map((item) => (
                                 <li
                                     key={item.courseId._id}
-                                    className="border p-4 rounded shadow"
+                                    className="explore-courses-card"
                                 >
                                     <h3 className="text-lg font-semibold mb-2">
                                         {item.courseId.title}
@@ -75,12 +73,16 @@ function StudentDashboard() {
                                         {item.completedSections?.length || 0} /{" "}
                                         {item.courseId.modules.length || 0}
                                     </p>
-                                    <Link
-                                        to={`/courses/${item.courseId._id}`}
-                                        className="text-blue-600 font-medium"
+                                    <ClickyBtn
+                                        clickFunction={() => {
+                                            navigate(
+                                                `/courses/${item.courseId._id}`,
+                                            );
+                                        }}
+                                        stylingClass={"back-btn px-[1rem] py-[0.4rem]"}
                                     >
                                         Continue Course →
-                                    </Link>
+                                    </ClickyBtn>
                                 </li>
                             ))}
                         </ul>
@@ -101,7 +103,7 @@ function StudentDashboard() {
                             {completedCourses.map((item) => (
                                 <li
                                     key={item.courseId._id}
-                                    className="border p-4 rounded shadow"
+                                    className="explore-courses-card border p-4 rounded shadow"
                                 >
                                     <h3 className="text-lg font-semibold mb-2">
                                         {item.courseId.title}
@@ -109,12 +111,16 @@ function StudentDashboard() {
                                     <p className="text-sm mb-2">
                                         {item.courseId.description}
                                     </p>
-                                    <Link
-                                        to={`/courses/${item.courseId._id}`}
-                                        className="text-green-600 font-medium"
+                                    <ClickyBtn
+                                        clickFunction={() => {
+                                            navigate(
+                                                `/courses/${item.courseId._id}`,
+                                            );
+                                        }}
+                                        stylingClass={"back-btn"}
                                     >
-                                        View Certificate →
-                                    </Link>
+                                        View Certificate→
+                                    </ClickyBtn>
                                 </li>
                             ))}
                         </ul>

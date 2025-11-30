@@ -1,12 +1,15 @@
 // pages/ExploreCourses.jsx
 import { useEffect, useState } from "react";
 import Navbar from "../../components/Navbar";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import api from "../../utils/api";
+import ClickyBtn from "../../components/ClickyBtn";
+import { ChevronRight } from "lucide-react";
 
 function ExploreCourses() {
     const [courses, setCourses] = useState([]);
     console.log("rendering explore page", courses);
+    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchCourses = async () => {
@@ -26,6 +29,12 @@ function ExploreCourses() {
         fetchCourses();
     }, []);
 
+    const navigateToCourse = (courseId) => {
+        navigate(`/courses/${courseId}`, {
+            state: { from: location.pathname },
+        });
+    };
+
     return (
         <>
             <div className="main-content p-6 flex-col">
@@ -36,7 +45,7 @@ function ExploreCourses() {
                     {courses.map((course) => (
                         <li
                             key={course._id}
-                            className="border p-4 rounded shadow"
+                            className="explore-courses-card shadow"
                         >
                             <h2 className="text-lg font-semibold">
                                 {course.title}
@@ -44,9 +53,15 @@ function ExploreCourses() {
                             <p className="text-sm text-shadow-white">
                                 {course.description}
                             </p>
-                            <Link to={`/courses/${course._id}`}>
-                                Go to Course →
-                            </Link>
+                            <ClickyBtn
+                                clickFunction={() =>
+                                    navigateToCourse(course._id)
+                                }
+                                stylingClass={"back-btn gap-2 px-[1.4rem] py-[0.6rem] items-center"}
+                            >
+                                Go to Course
+                                <ChevronRight />
+                            </ClickyBtn>
                         </li>
                     ))}
                 </ul>

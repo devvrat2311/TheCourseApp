@@ -17,6 +17,7 @@ nav {
     top: 0;
     margin: 0;
     width: 100%;
+    min-height: 100px;
     height: fit-content;
     /*border: 2px solid #1c398e;*/
     /*border-bottom: 2px solid var(--border);*/
@@ -32,6 +33,13 @@ nav {
     width: 1350px;
     margin: 0 50px;
 }
+.nav-logo-links {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+
 .group img {
     opacity: 40%;
     transition: 0.2s all ease-in-out;
@@ -72,16 +80,70 @@ main {
     min-width: 400px;
 }
 
-.tca-logo {
+.logo-login {
     width: 30rem;
 }
+.logo-navbar {
+    width: 20rem;
+    /* border: 2px solid var(--border); */
+    margin-block: 6px;
+    border-radius: 10px;
+}
+@media (max-width: 800px) {
+    .logo-navbar{
+        margin-left: 10px;
+        width: 14rem;
+    }
+    .nav-logo-links {
+        flex-direction: column;
+        gap: 0;
+    }
+    .nav-links {
+        margin-bottom: 10px;
+    }
+}
+/* .tca-logo {
+    width: 30rem;
+} */
 .login-container-wrapper {
-    background: linear-gradient(-90deg, var(--accent), var(--fg));
-    padding: 10px;
+    background: linear-gradient(0deg, var(--accent), var(--border));
+    padding: 8px;
     border-radius: 20px;
     transition: 0.2s all ease;
 }
 
+.certificate-container-wrapper {
+    background: linear-gradient(90deg, var(--accent), var(--border));
+    padding: 20px;
+    border-radius: 20px;
+    transition: 0.2s all ease;
+}
+.animated-gradient {
+    padding: 14px;
+    border-radius: 14px;
+    /* border: 2px solid var(--border); */
+    background: linear-gradient(
+        90deg,
+        var(--border),
+        var(--accent),
+        var(--border),
+        var(--accent)
+    );
+    background-size: 300% 300%;
+    animation: gradientShift 8s ease infinite;
+}
+
+@keyframes gradientShift {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
+}
 /*.login-container-wrapper:hover,
 .login-container-wrapper.input-class:focus {
     padding: 10px;
@@ -95,15 +157,6 @@ main {
     width: 30rem;
     border-radius: 15px;
 }
-@media (max-width: 600px) {
-    /*.login-container {
-        width: 20rem;
-        padding: 1.5rem;
-    }
-    .tca-logo {
-        width: 20rem;
-    }*/
-}
 
 .input-class {
     outline: none;
@@ -113,7 +166,6 @@ main {
 }
 .input-class:focus {
     transform: translate(-4px, -6px);
-    border-color: var(--fg);
     box-shadow: 4px 6px var(--shadow);
 }
 
@@ -133,7 +185,7 @@ main {
     display: flex;
     flex-direction: column;
     position: sticky;
-    top: 100px;
+    top: 110px;
     height: fit-content;
     border: 2px solid var(--border);
     border-radius: 10px;
@@ -171,6 +223,8 @@ main {
     position: relative;
 }
 .mobile-dd-display {
+    border-radius: 10px;
+    border: 2px solid var(--border);
     background-color: var(--bg-highlighted);
     transition: 0.2s all ease-in;
 }
@@ -186,11 +240,12 @@ main {
         transform 0.25s ease-out,
         opacity 0.2s ease-out;
     pointer-events: none;
-    border: 2px solid var(--fg);
+    border: 2px solid var(--border);
+    border-radius: 10px;
     box-shadow: 6px 6px var(--accent);
 }
 .dropdown li {
-    padding: 10px;
+    padding: 6px;
     transition: 0.15s all ease-in-out;
 }
 .dropdown li:hover {
@@ -214,23 +269,26 @@ main {
     color: var(--fg);
     font-weight: bold;
     border-style: solid;
-    border-color: var(--border);
+    border-color: var(--accent);
+    /*border-left-color: var(--accent);*/
     /*transform: translate(-4px, -4px);*/
-    box-shadow: -4px 0 var(--border);
+    box-shadow: -6px 0 var(--accent);
     background-color: var(--bg-highlighted);
+    padding: 6px;
 }
 
 .unselected-index {
     font-weight: bold;
     border-style: solid;
     border-color: var(--border);
-    box-shadow: -4px 0 var(--border);
+    box-shadow: -6px 0 var(--border);
+    padding: 6px;
 }
 
 .unselected-index:hover {
     /*border-color: var(--accent);*/
-    transform: translate(-4px, 0);
-    box-shadow: 4px 0 var(--border);
+    transform: translate(-6px, 0);
+    box-shadow: 6px 0 var(--border);
 }
 
 .modules-content {
@@ -243,9 +301,9 @@ main {
 .section-content {
     background-color: var(--bg-highlighted);
     margin-left: 10px;
-    border-radius: 15px;
+    border-radius: 18px;
     height: fit-content;
-    border: 2px solid var(--fg);
+    /*border: 2px solid var(--fg);*/
 }
 
 @keyframes buttonPress {
@@ -270,17 +328,14 @@ main {
 }
 
 .back-btn {
-    /*max-width: 10rem;*/
     font-weight: bold;
     color: var(--fg);
     background-color: var(--bg);
-    border: 2px solid var(--fg);
+    border: 2px solid var(--border);
     border-radius: 10px;
-    padding: 4px 15px;
     cursor: pointer;
     transform: translate(-4px, -4px);
     box-shadow: 4px 4px var(--accent);
-    /*margin-bottom: 2rem;*/
     transition: 0.2s all ease-in;
 }
 
@@ -415,9 +470,6 @@ main {
     color: #cecece;
 }
 
-.module-info {
-    box-shadow: 8px 8px var(--shadow);
-}
 
 .section-bullet {
     display: list-item;
@@ -425,7 +477,7 @@ main {
 }
 
 .flash-message {
-    position: absolute;
+    position: fixed;
     top: 10px;
     left: 50%;
     transform: translateX(-50%);
@@ -434,16 +486,46 @@ main {
     display: flex;
     justify-content: space-between;
     gap: 2rem;
-    box-shadow: 4px 4px var(--shadow);
     z-index: 1001;
+    border-radius: 10px;
 }
 
 .flash-info {
+    box-shadow: 4px 4px var(--border);
     background-color: var(--bg);
     color: var(--fg);
-    border: 2px solid var(--shadow);
+    border: 2px solid var(--border);
+}
+.flash-error {
+    box-shadow: 4px 4px var(--error-red);
+    background-color: var(--bg);
+    color: var(--fg);
+    border: 2px solid var(--error-red);
+}
+.flash-success {
+    box-shadow: 4px 4px var(--success-green);
+    background-color: var(--bg);
+    color: var(--fg);
+    border: 2px solid var(--success-green);
 }
 
 .lucide {
     vertical-align: baseline;
+}
+
+.explore-courses-card {
+    border: 2px solid var(--border);
+    border-radius: 10px;
+    padding: 20px;
+    text-align: left;
+    width: 400px;
+    transition: 0.2s border-color ease-in;
+}
+
+.explore-courses-card h2 {
+    margin-bottom: 10px;
+}
+
+.explore-courses-card p {
+    margin-bottom: 20px;
 }

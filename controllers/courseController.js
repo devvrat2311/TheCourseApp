@@ -668,6 +668,7 @@ const getCourseById = async (req, res) => {
         );
         if (!isEnrolled && !isCompleted) {
             //Not enrolled: preview preview
+            //we can actually get the module names and their learningObjectives and descriptions metadata and return it in another variable for the preview view
             return res.status(200).json({
                 id: courseId,
                 view: "preview",
@@ -681,6 +682,7 @@ const getCourseById = async (req, res) => {
                 id: courseId,
                 view: "completed",
                 title: course.title,
+                description: course.description,
                 certificate: `Congratulations, you completed the course ${course.title}`,
             });
         } else {

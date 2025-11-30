@@ -33,7 +33,7 @@ function Login() {
 
     return (
         <>
-            <Logo />
+            <Logo stylingClass={"logo-login"} />
             <div className="login-container-wrapper">
                 <div className="login-container bg-[var(--bg-dark)] border-[var(--shadow-dark)] flex flex-col">
                     <h2 className="text-3xl font-bold text-left mb-2">Login</h2>
@@ -77,13 +77,11 @@ function Login() {
                         />
 
                         <ClickyBtn
-                            // clickFunction={handleSubmit}
                             buttonType={"submit"}
                             stylingClass={"back-btn center-btn login-btn"}
                         >
                             <div
-                                className="flex gap-2 items-center"
-                                style={{ padding: "0 20px" }}
+                                className="flex gap-2 items-center px-[3rem] py-[0.4rem]"
                             >
                                 <p>Login</p>
                             </div>

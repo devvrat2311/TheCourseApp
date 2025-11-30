@@ -37,10 +37,10 @@ export default function QuizContent({ sectionData, onQuizComplete }) {
             console.log("quizComplete response data", data);
             if (!data.passed) {
                 resetQuiz();
-                showFlash("Quiz Failed, please try again", "info");
+                showFlash("Quiz Failed, please try again", "error");
             } else {
                 onQuizComplete(data.completedSections);
-                showFlash("Quiz Passed, Congrax!", "info");
+                showFlash("Quiz Passed, Congrax!", "success");
             }
         } catch (err) {
             console.log(err);
@@ -49,7 +49,10 @@ export default function QuizContent({ sectionData, onQuizComplete }) {
 
     return (
         <div className="ml-6 ">
-            <form className="mr-6 mb-5 p-4 " onSubmit={handleSubmitQuiz}>
+            <form
+                className="mr-6 mb-5 border-2 border-[var(--border)] rounded-[19px]"
+                onSubmit={handleSubmitQuiz}
+            >
                 {quizData.map((quizQuestion, questionIndex) => (
                     <div className="p-4" key={questionIndex}>
                         <p className="font-bold text-[var(--shadow)]">
@@ -85,19 +88,8 @@ export default function QuizContent({ sectionData, onQuizComplete }) {
                     </div>
                 ))}
 
-                {/* <div>
-                    <button
-                        type="submit"
-                        className="absolute bottom-6 left-6 text-xs bg-green-200 text-black px-4 py-2 font-bold mt-4"
-                    >
-                        Submit Quiz
-                    </button>
-                </div>*/}
-                <div>
-                    <ClickyBtn
-                        clickFunction={handleSubmitQuiz}
-                        stylingClass={"back-btn"}
-                    >
+                <div className="mt-6 p-4 bg-[var(--border)] rounded-b-2xl">
+                    <ClickyBtn stylingClass={"back-btn px-[1rem] py-[0.4rem]"} buttonType={"submit"}>
                         Submit
                     </ClickyBtn>
                 </div>

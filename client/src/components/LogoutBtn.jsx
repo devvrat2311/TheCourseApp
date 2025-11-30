@@ -44,18 +44,6 @@ function LogoutBtn() {
         }
     };
 
-    // return (
-    //     <button
-    //         onClick={handleLogout}
-    //         className="border-2 p-1 border-[var(--fg-faded)] text-xs font-bold text-[var(--fg-faded)] cursor-pointer transition duration-200 ease-in-out group-hover:text-red-400 group-hover:border-red-400"
-    //     >
-    //         <div className="flex gap-2 items-center">
-    //             <p>LOGOUT</p>
-    //             <LogOut />
-    //         </div>
-    //     </button>
-    // );
-
     return (
         <ClickyBtn clickFunction={handleLogout} stylingClass={"logout-btn"}>
             <div className="flex gap-2 items-center">

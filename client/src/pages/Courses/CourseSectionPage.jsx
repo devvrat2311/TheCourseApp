@@ -196,7 +196,7 @@ function CourseSectionPage() {
                                     />
                                 </div>
                                 <div
-                                    className={`dropdown border-2 border-[var(--fg)] rounded ${dropdown ? "dd-active" : "dd-inactive"} `}
+                                    className={`dropdown ${dropdown ? "dd-active" : "dd-inactive"} `}
                                 >
                                     <ul className="text-left">
                                         {allSections.map((section, index) => (
@@ -216,7 +216,7 @@ function CourseSectionPage() {
                                                 }}
                                             >
                                                 <div className="flex gap-2">
-                                                    <p>{index + 1}</p>
+                                                    <p>{index + 1}.</p>
                                                     <p>{section.title}</p>
                                                 </div>
                                                 {isSectionComplete(
@@ -245,13 +245,12 @@ function CourseSectionPage() {
                                 <li
                                     key={index}
                                     className={`border-b-1 border-t-1 first:rounded-t-[10px] first:border-t-2 last:rounded-b-[10px] last:border-b-2 border-2
-                                                transition duration-150 ease-in-out cursor-pointer pr-3 pl-3 pt-1 pb-1 flex justify-between gap-2 ${
+                                                transition duration-150 ease-in-out cursor-pointer flex justify-between gap-2 ${
                                                     sectionId === section._id
                                                         ? "selected-index"
                                                         : "unselected-index"
                                                 }`}
                                     onClick={() => {
-                                        // setSelectedSectionId(section._id);
                                         navigate(
                                             `/courses/${courseId}/${moduleId}/sections/${section._id}`,
                                         );
@@ -283,9 +282,9 @@ function CourseSectionPage() {
                         {sectionData.sectionType === "normal" ? (
                             <>
                                 <SectionContent sectionData={sectionData} />
-                                <div className="mt-6 p-4 bg-[var(--fg)] rounded-b-[10px]">
+                                <div className="mt-6 p-4 bg-[var(--border)] rounded-b-2xl">
                                     <button
-                                        className={`back-btn w-auto left-6 ${isAnimating ? "active" : ""}`}
+                                        className={`back-btn w-auto px-[1rem] py-[0.4rem] left-6 ${isAnimating ? "active" : ""}`}
                                         onClick={
                                             isSelectedSectionComplete
                                                 ? handleNextSection
@@ -294,7 +293,7 @@ function CourseSectionPage() {
                                     >
                                         {isSelectedSectionComplete
                                             ? "Next"
-                                            : "Mark as Complete"}
+                                            : "Mark Complete"}
                                     </button>
                                 </div>
                             </>

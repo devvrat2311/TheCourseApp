@@ -26,7 +26,7 @@ export default function ClickyBtn({
 
     return (
         <button
-            className={`${stylingClass} flex w-fit pr-[30px] ${isAnimating ? "active" : ""}`}
+            className={`flex justify-center align-middle items-center ${stylingClass} w-fit ${isAnimating ? "active" : ""}`}
             onClick={handleClick}
             type={buttonType}
         >

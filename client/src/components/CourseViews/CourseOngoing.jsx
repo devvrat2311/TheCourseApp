@@ -8,13 +8,12 @@ import {
 } from "lucide-react";
 import BackButton from "../BackBtn";
 import BackButton2 from "../BackBtn2";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 function useWindowWidth() {
     const [width, setWidth] = useState(window.innerWidth);
 
     useEffect(() => {
-        console.log("hello tera makichud");
         const handleResize = () => setWidth(window.innerWidth);
         window.addEventListener("resize", handleResize);
         return () => window.removeEventListener("resize", handleResize);
@@ -24,6 +23,8 @@ function useWindowWidth() {
 }
 
 function CourseOngoing({ course }) {
+    const location = useLocation();
+    const from = location.state?.from || "/dashboard";
     const windowWidth = useWindowWidth();
     const isMobile = windowWidth < 1000;
 
@@ -46,8 +47,7 @@ function CourseOngoing({ course }) {
                 {isMobile ? (
                     <div className="mobile-dropdown">
                         <div className="mobile-dropdown-topsection ">
-                            {/* flex gap-[1rem] items-center px-6*/}
-                            <BackButton2 locationURL={"/dashboard"} />
+                            <BackButton2 locationURL={from} />
                             <div className="mobile-dd-dd">
                                 <div
                                     onClick={toggleDropDown}
@@ -95,7 +95,7 @@ function CourseOngoing({ course }) {
                     </div>
                 ) : (
                     <div className="sidebar-modules">
-                        <BackButton2 locationURL={"/dashboard"} />
+                        <BackButton2 locationURL={from} />
                         <h2 className="text-left text-xl font-semibold mt-[2rem] mb-[2rem]">
                             Modules
                         </h2>
@@ -133,10 +133,11 @@ function CourseOngoing({ course }) {
                     <h2 className="font-bold text-3xl ml-6">
                         {modules[selectedIndex].title}
                     </h2>
-                    <p className=" ml-6 mt-5">
+                    <p className=" ml-6 mt-5 text-xl">
                         {modules[selectedIndex].description}
                     </p>
-                    <ul className="ml-6 mt-6 mr-6">
+                    <p className=" ml-6 mt-5 font-semibold">Sections</p>
+                    <ul className="ml-6 mt-2 mr-6">
                         {modules[selectedIndex].sections.map(
                             (section, index) => (
                                 <li
