@@ -82,7 +82,7 @@ function StudentDashboard() {
                                             "back-btn px-[1rem] py-[0.4rem]"
                                         }
                                     >
-                                        Continue Course →
+                                        Continue Course &#8594;
                                     </ClickyBtn>
                                 </li>
                             ))}

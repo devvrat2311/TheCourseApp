@@ -4,7 +4,6 @@ import Navbar from "../../components/Navbar";
 import { Link, useNavigate } from "react-router-dom";
 import api from "../../utils/api";
 import ClickyBtn from "../../components/ClickyBtn";
-import { ChevronRight } from "lucide-react";
 
 function ExploreCourses() {
     const [courses, setCourses] = useState([]);
@@ -58,11 +57,10 @@ function ExploreCourses() {
                                     navigateToCourse(course._id)
                                 }
                                 stylingClass={
-                                    "back-btn gap-2 px-[1.4rem] py-[0.6rem] items-center"
+                                    "back-btn gap-2 px-[1rem] py-[0.4rem] items-center"
                                 }
                             >
-                                Go to Course
-                                <ChevronRight />
+                                Go to Course &#8594;
                             </ClickyBtn>
                         </li>
                     ))}

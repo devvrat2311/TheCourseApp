@@ -1,12 +1,10 @@
-import Navbar from "../../components/Navbar";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import {
     ChevronRight,
     CircleDashed,
     CheckCircle2,
     ChevronDown,
 } from "lucide-react";
-import BackButton from "../BackBtn";
 import BackButton2 from "../BackBtn2";
 import { Link, useLocation } from "react-router-dom";
 
@@ -27,6 +25,7 @@ function CourseOngoing({ course }) {
     const from = location.state?.from || "/dashboard";
     const windowWidth = useWindowWidth();
     const isMobile = windowWidth < 1000;
+    const ddRef = useRef();
 
     const [selectedIndex, setSelectedIndex] = useState(0);
     const [dropdown, setDropdown] = useState(false);
@@ -41,11 +40,27 @@ function CourseOngoing({ course }) {
         return course.completedModules.includes(moduleId);
     };
 
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (ddRef.current && !ddRef.current.contains(event.target)) {
+                setDropdown(false);
+            }
+        };
+
+        if (dropdown) {
+            document.addEventListener("mousedown", handleClickOutside);
+        }
+
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, [dropdown]);
+
     return (
         <>
             <div className="main-content">
                 {isMobile ? (
-                    <div className="mobile-dropdown">
+                    <div ref={ddRef} className="mobile-dropdown">
                         <div className="mobile-dropdown-topsection ">
                             <BackButton2 locationURL={from} />
                             <div className="mobile-dd-dd">
@@ -130,12 +145,15 @@ function CourseOngoing({ course }) {
                     </div>
                 )}
                 <div className="modules-content flex-1 text-left">
-                    <h2 className="font-bold text-3xl ml-6">
-                        {modules[selectedIndex].title}
+                    <h2 className="font-bold text-3xl ml-6 mb-11 text-[var(--accent)]">
+                        <span className="text-[var(--fg)]">Course </span>
+                        {course.title}
                     </h2>
-                    <p className=" ml-6 mt-5 text-xl">
-                        {modules[selectedIndex].description}
-                    </p>
+
+                    <h3 className="font-semibold text-2xl ml-6 text-[var(--accent)]">
+                        {modules[selectedIndex].title}
+                    </h3>
+                    <p className="ml-6">{modules[selectedIndex].description}</p>
                     <p className=" ml-6 mt-5 font-semibold">Sections</p>
                     <ul className="ml-6 mt-2 mr-6">
                         {modules[selectedIndex].sections.map(

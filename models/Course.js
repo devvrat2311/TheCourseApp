@@ -13,6 +13,7 @@ const sectionContentBlockSchema = new mongoose.Schema(
                 "image",
                 "video",
                 "code",
+                "latex",
             ],
         },
     },
@@ -73,6 +74,13 @@ const codeSchema = new mongoose.Schema(
     { _id: false },
 );
 
+const latexSchema = new mongoose.Schema(
+    {
+        text: { type: String, required: true },
+    },
+    { _id: false },
+);
+
 sectionContentBlockSchema.discriminator("heading", headingSchema);
 sectionContentBlockSchema.discriminator("subheading", subheadingSchema);
 sectionContentBlockSchema.discriminator("paragraph", paragraphSchema);
@@ -80,6 +88,7 @@ sectionContentBlockSchema.discriminator("bullet", bulletSchema);
 sectionContentBlockSchema.discriminator("image", imageSchema);
 sectionContentBlockSchema.discriminator("video", videoSchema);
 sectionContentBlockSchema.discriminator("code", codeSchema);
+sectionContentBlockSchema.discriminator("latex", latexSchema);
 
 const quizQuestionSchema = new mongoose.Schema({
     question: { type: String, required: true },
