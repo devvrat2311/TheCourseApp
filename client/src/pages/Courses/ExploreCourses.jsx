@@ -13,11 +13,7 @@ function ExploreCourses() {
     useEffect(() => {
         const fetchCourses = async () => {
             try {
-                const response = await api.get("/api/v1/courses", {
-                    headers: {
-                        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-                    },
-                });
+                const response = await api.get("/courses");
                 const data = await response.json();
                 setCourses(data);
             } catch (err) {

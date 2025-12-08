@@ -30,7 +30,7 @@ export default function QuizContent({ sectionData, onQuizComplete }) {
         console.log("here is the answersArray", submission);
         try {
             const response = await api.post(
-                `/api/v1/courses/${courseId}/${moduleId}/sections/${sectionId}/submit-quiz`,
+                `/courses/${courseId}/${moduleId}/sections/${sectionId}/submit-quiz`,
                 { answers: submission },
             );
             const data = await response.json();
@@ -89,7 +89,10 @@ export default function QuizContent({ sectionData, onQuizComplete }) {
                 ))}
 
                 <div className="mt-6 p-4 bg-[var(--border)] rounded-b-2xl">
-                    <ClickyBtn stylingClass={"back-btn px-[1rem] py-[0.4rem]"} buttonType={"submit"}>
+                    <ClickyBtn
+                        stylingClass={"back-btn px-[1rem] py-[0.4rem]"}
+                        buttonType={"submit"}
+                    >
                         Submit
                     </ClickyBtn>
                 </div>

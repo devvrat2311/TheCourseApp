@@ -16,7 +16,7 @@ function CoursePage() {
     useEffect(() => {
         const fetchCourse = async () => {
             try {
-                const response = await api.get(`/api/v1/courses/${courseId}`, {
+                const response = await api.get(`/courses/${courseId}`, {
                     headers: {
                         Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
                     },

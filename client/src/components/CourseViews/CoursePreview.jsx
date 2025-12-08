@@ -10,7 +10,7 @@ function CoursePreview({ course }) {
     const { showFlash } = useFlash();
     const handleEnroll = async () => {
         try {
-            const res = await api.post(`/api/v1/courses/${course.id}/enroll`, {
+            const res = await api.post(`/courses/${course.id}/enroll`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -48,7 +48,12 @@ function CoursePreview({ course }) {
                     <div className="module-info text-left text-xl h-[30vh] mt-2 mb-2 border-2 border-[var(--border)] rounded-xl p-3 flex flex-col justify-baseline items-baseline">
                         Modules and module wise breakdown of topics here
                     </div>
-                    <ClickyBtn clickFunction={handleEnroll} stylingClass={"back-btn gap-2 max-w-3s mt-[2rem] px-[2rem] py-[0.5rem]"} >
+                    <ClickyBtn
+                        clickFunction={handleEnroll}
+                        stylingClass={
+                            "back-btn gap-2 max-w-3s mt-[2rem] px-[2rem] py-[0.5rem]"
+                        }
+                    >
                         <DiamondPlus className="text-[var(--accent)]" />
                         <p>Enroll</p>
                     </ClickyBtn>

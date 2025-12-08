@@ -1,5 +1,5 @@
 class ApiClient {
-    constructor(baseURL = "/baseURI") {
+    constructor(baseURL = "/api/v1") {
         this.baseURL = baseURL;
         this.isRefreshing = false;
         this.failedQueue = [];
@@ -54,7 +54,8 @@ class ApiClient {
     async fetch(url, options = {}) {
         // Ensure URL is properly formatted
         // const fullUrl = url.startsWith("http") ? url : `${this.baseURL}${url}`;
-        const fullUrl = url;
+        const fullUrl = `${this.baseURL}${url}`;
+        // const fullUrl = url;
 
         // Add authorization header if token exists
         const token = localStorage.getItem("accessToken");

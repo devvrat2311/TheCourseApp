@@ -17,11 +17,7 @@ function StudentDashboard() {
     useEffect(() => {
         const fetchCourses = async () => {
             try {
-                const response = await api.get("/api/v1/courses/my-courses", {
-                    headers: {
-                        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-                    },
-                });
+                const response = await api.get("/courses/my-courses");
 
                 const data = await response.json();
                 if (response.ok) {

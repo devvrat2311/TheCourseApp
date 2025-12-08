@@ -45,7 +45,7 @@ function CourseSectionPage() {
         let nextModuleId;
         try {
             const response = await api.get(
-                `/api/v1/courses/${courseId}/${moduleId}/sections/${selectedSectionId}/next`,
+                `/courses/${courseId}/${moduleId}/sections/${selectedSectionId}/next`,
             );
             const data = await response.json();
             console.log("data is", data);
@@ -77,7 +77,7 @@ function CourseSectionPage() {
         // Remove animation class after it completes
         try {
             const response = await api.post(
-                `/api/v1/courses/${courseId}/${moduleId}/sections/${selectedSectionId}/complete`,
+                `/courses/${courseId}/${moduleId}/sections/${selectedSectionId}/complete`,
             );
             if (response.ok) {
                 const data = await response.json();
@@ -97,7 +97,7 @@ function CourseSectionPage() {
         const fetchCourseSection = async () => {
             try {
                 const response = await api.get(
-                    `/api/v1/courses/${courseId}/${moduleId}/sections/${selectedSectionId}`,
+                    `/courses/${courseId}/${moduleId}/sections/${selectedSectionId}`,
                 );
 
                 const data = await response.json();
@@ -132,7 +132,7 @@ function CourseSectionPage() {
         const fetchAllSections = async () => {
             try {
                 const response = await api.get(
-                    `/api/v1/courses/${courseId}/${moduleId}`,
+                    `/courses/${courseId}/${moduleId}`,
                 );
 
                 const data = await response.json();

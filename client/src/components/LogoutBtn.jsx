@@ -17,7 +17,7 @@ function LogoutBtn() {
 
         try {
             const res = await api.post(
-                "/api/v1/auth/logout",
+                "/auth/logout",
                 { refreshToken },
                 {
                     headers: {

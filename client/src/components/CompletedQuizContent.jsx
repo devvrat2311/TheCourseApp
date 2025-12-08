@@ -21,7 +21,7 @@ export default function CompletedQuizContent() {
         let nextModuleId;
         try {
             const response = await api.get(
-                `/api/v1/courses/${courseId}/${moduleId}/sections/${sectionId}/next`,
+                `/courses/${courseId}/${moduleId}/sections/${sectionId}/next`,
             );
             const data = await response.json();
             console.log("data is", data);
@@ -49,7 +49,7 @@ export default function CompletedQuizContent() {
         const getCompletedQuizData = async () => {
             try {
                 const response = await api.get(
-                    `/api/v1/courses/${courseId}/${moduleId}/sections/${sectionId}/completed-quiz`,
+                    `/courses/${courseId}/${moduleId}/sections/${sectionId}/completed-quiz`,
                 );
                 const data = await response.json();
                 console.log(data);
