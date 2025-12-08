@@ -36,10 +36,10 @@ export default function Navlinks() {
                     <Link
                         key={to}
                         ref={(el) => (linksRef.current[to] = el)}
-                        className={`relative transition duration-200 z-10 ${
+                        className={`relative text-[0.9rem] transition duration-200 z-10 ${
                             location.pathname === to
                                 ? "text-[var(--accent)]"
-                                : "text-[var(--border)] hover:text-[var(--accent)]"
+                                : "text-[var(--fg-lighter)] hover:text-[var(--accent)]"
                         }`}
                         to={to}
                     >

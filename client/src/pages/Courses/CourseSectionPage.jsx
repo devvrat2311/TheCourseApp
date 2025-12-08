@@ -1,5 +1,5 @@
 import { useParams, useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import api from "../../utils/api"; //methods of this api class apply the Authorization header automatically
 import Navbar from "../../components/Navbar";
 import BackButton from "../../components/BackBtn";
@@ -155,12 +155,28 @@ function CourseSectionPage() {
         };
         fetchAllSections();
     }, [courseId, moduleId]);
+    const ddRef = useRef();
 
     const [dropdown, setDropdown] = useState(false);
     const toggleDropDown = () => {
         setDropdown(!dropdown);
     };
 
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (ddRef.current && !ddRef.current.contains(event.target)) {
+                setDropdown(false);
+            }
+        };
+
+        if (dropdown) {
+            document.addEventListener("mousedown", handleClickOutside);
+        }
+
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, [dropdown]);
     if (sectionDataLoading || allSectionsLoading)
         return <p>Loading Section. . .</p>;
     if (error) return <p className="text-red-500">Error: {error}</p>;
@@ -174,7 +190,7 @@ function CourseSectionPage() {
         <>
             <div className="main-content">
                 {isMobile ? (
-                    <div className="mobile-dropdown">
+                    <div ref={ddRef} className="mobile-dropdown">
                         <div className="mobile-dropdown-topsection ">
                             {/* flex gap-[1rem] items-center px-6*/}
                             <BackButton2 locationURL={`/courses/${courseId}`} />

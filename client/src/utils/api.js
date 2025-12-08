@@ -62,7 +62,6 @@ class ApiClient {
             "Content-Type": "application/json",
             ...options.headers,
         };
-
         if (token) {
             headers.Authorization = `Bearer ${token}`;
         }
@@ -78,6 +77,7 @@ class ApiClient {
         if (response.ok) {
             return response;
         }
+        console.log("not default response");
 
         // If unauthorized and we haven't tried refreshing yet
         if (response.status === 401 || response.status === 403) {

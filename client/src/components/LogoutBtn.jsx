@@ -45,12 +45,23 @@ function LogoutBtn() {
     };
 
     return (
-        <ClickyBtn clickFunction={handleLogout} stylingClass={"logout-btn"}>
-            <div className="flex gap-2 items-center">
-                <p>LOGOUT</p>
-                <LogOut size={"16px"} />
-            </div>
-        </ClickyBtn>
+        <>
+            <button
+                onClick={handleLogout}
+                className="duration-200 transition-all text-xs cursor-pointer hover:bg-[var(--bg-secondary)] rounded-[5px] py-2 px-1 "
+            >
+                <div className="flex gap-2 font-semibold items-center">
+                    <LogOut size={"16px"} />
+                    <p>logout</p>
+                </div>
+            </button>
+        </>
+        // <ClickyBtn clickFunction={handleLogout} stylingClass={"logout-btn"}>
+        //     <div className="flex gap-2 items-center">
+        //         <p>LOGOUT</p>
+        //         <LogOut size={"16px"} />
+        //     </div>
+        // </ClickyBtn>
     );
 }
 

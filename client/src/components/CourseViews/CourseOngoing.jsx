@@ -155,7 +155,7 @@ function CourseOngoing({ course }) {
                     </h3>
                     <p className="ml-6">{modules[selectedIndex].description}</p>
                     <p className=" ml-6 mt-5 font-semibold">Sections</p>
-                    <ul className="ml-6 mt-2 mr-6">
+                    <ul className="ml-6 mt-2 mr-6 max-w-[500px]">
                         {modules[selectedIndex].sections.map(
                             (section, index) => (
                                 <li
