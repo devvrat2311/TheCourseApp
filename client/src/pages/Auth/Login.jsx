@@ -23,7 +23,7 @@ function Login() {
             localStorage.setItem("accessToken", result.accessToken);
             localStorage.setItem("refreshToken", result.refreshToken);
 
-            showFlash("Welcome to your account", "info");
+            showFlash(`Welcome to your account ${result.userRole}`, "info");
             //redirect to dashboard
             navigate("/dashboard");
         } catch (err) {
@@ -80,9 +80,7 @@ function Login() {
                             buttonType={"submit"}
                             stylingClass={"back-btn center-btn login-btn"}
                         >
-                            <div
-                                className="flex gap-2 items-center px-[3rem] py-[0.4rem]"
-                            >
+                            <div className="flex gap-2 items-center px-[3rem] py-[0.4rem]">
                                 <p>Login</p>
                             </div>
                         </ClickyBtn>

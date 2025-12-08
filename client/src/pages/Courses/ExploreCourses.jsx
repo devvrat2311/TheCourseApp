@@ -53,7 +53,7 @@ function ExploreCourses() {
                                     navigateToCourse(course._id)
                                 }
                                 stylingClass={
-                                    "back-btn gap-2 px-[1rem] py-[0.4rem] items-center"
+                                    "back-btn text-xs gap-2 px-[1rem] py-[0.4rem] items-center"
                                 }
                             >
                                 Go to Course &#8594;

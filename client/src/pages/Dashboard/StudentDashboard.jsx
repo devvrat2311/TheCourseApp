@@ -75,7 +75,7 @@ function StudentDashboard() {
                                             );
                                         }}
                                         stylingClass={
-                                            "back-btn px-[1rem] py-[0.4rem]"
+                                            "back-btn text-xs px-[1rem] py-[0.4rem]"
                                         }
                                     >
                                         Continue Course &#8594;
@@ -114,9 +114,11 @@ function StudentDashboard() {
                                                 `/courses/${item.courseId._id}`,
                                             );
                                         }}
-                                        stylingClass={"back-btn"}
+                                        stylingClass={
+                                            "back-btn text-xs px-[1rem] py-[0.4rem]"
+                                        }
                                     >
-                                        View Certificate→
+                                        View Certificate &#8594;
                                     </ClickyBtn>
                                 </li>
                             ))}

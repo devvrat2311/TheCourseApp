@@ -45,8 +45,13 @@ export default function UserOptions() {
             <div
                 className={`user-menu ${userMenuOpen ? "user-menu-open" : "user-menu-closed"}`}
             >
-                <p className="text-left py-1 px-1 mb-2 font-bold">
+                <p className="text-left py-1 px-1 font-bold">
                     {decodedToken.userFullName}
+                </p>
+                <p
+                    className={`text-left font-bold px-1 mb-2 text-xs rounded-full ${decodedToken.role === "instructor" ? "bg-[var(--accent)]" : "bg-[var(--success-green)]"}  text-[var(--bg)] w-fit`}
+                >
+                    {decodedToken.role}
                 </p>
                 <div className="flex items-center hover:bg-[var(--bg-secondary)] duration-200 transition-all rounded-[5px] gap-2 text-xs text-left py-2 px-1">
                     <Settings size={"16px"} />
