@@ -157,6 +157,7 @@ const login = async (req, res) => {
     try {
         const { email, password } = req.body;
         const user = await User.findOne({ email });
+        const userRole = user.role;
         // console.log("logging user", user.firstName, "\n");
         if (!user)
             return res.status(401).json({ error: "Invalid Credentials" });
@@ -205,7 +206,7 @@ const login = async (req, res) => {
 
         await auth.save();
 
-        res.json({ accessToken, refreshToken });
+        res.json({ accessToken, refreshToken, userRole });
     } catch (err) {
         res.status(500).json({ error: err.message });
     }
