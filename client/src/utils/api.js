@@ -13,6 +13,7 @@ class ApiClient {
                 resolve(token);
             }
         });
+        this.failedQueue = [];
     }
 
     async refreshAccessToken() {
@@ -53,9 +54,7 @@ class ApiClient {
 
     async fetch(url, options = {}) {
         // Ensure URL is properly formatted
-        // const fullUrl = url.startsWith("http") ? url : `${this.baseURL}${url}`;
         const fullUrl = `${this.baseURL}${url}`;
-        // const fullUrl = url;
 
         // Add authorization header if token exists
         const token = localStorage.getItem("accessToken");
@@ -78,8 +77,8 @@ class ApiClient {
         if (response.ok) {
             return response;
         }
-        console.log("not default response");
 
+        console.log("not default response");
         // If unauthorized and we haven't tried refreshing yet
         if (response.status === 401 || response.status === 403) {
             // If already refreshing, queue this request
@@ -99,7 +98,6 @@ class ApiClient {
                 });
             }
 
-            // Try to refresh token
             this.isRefreshing = true;
 
             try {

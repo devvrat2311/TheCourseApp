@@ -7,8 +7,8 @@ export default function Navlinks() {
     const linksRef = useRef({});
 
     const links = [
-        { to: "/explore", label: "Explore" },
-        { to: "/dashboard", label: "Dashboard" },
+        { to: "/student/explore", label: "Explore" },
+        { to: "/student/dashboard", label: "Dashboard" },
     ];
 
     useEffect(() => {
@@ -29,7 +29,7 @@ export default function Navlinks() {
         <>
             <div className="relative nav-links flex space-x-8 p-1 h-fit font-bold">
                 <div
-                    className="absolute bottom-0 bg-[var(--bg)] rounded-full transition-all duration-300 ease-in-out z-0"
+                    className="absolute bottom-0 bg-[var(--accent)] rounded-full transition-all duration-300 ease-in-out z-0"
                     style={indicatorStyle}
                 />
                 {links.map(({ to, label }) => (
@@ -38,8 +38,8 @@ export default function Navlinks() {
                         ref={(el) => (linksRef.current[to] = el)}
                         className={`relative text-[0.9rem] transition duration-200 z-10 ${
                             location.pathname === to
-                                ? "text-[var(--accent)]"
-                                : "text-[var(--fg-lighter)] hover:text-[var(--accent)]"
+                                ? "text-[var(--fg)]"
+                                : "text-[var(--border)] hover:text-[var(--accent)]"
                         }`}
                         to={to}
                     >

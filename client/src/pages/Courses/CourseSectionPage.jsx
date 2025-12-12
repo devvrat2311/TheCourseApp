@@ -1,8 +1,6 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState, useRef } from "react";
 import api from "../../utils/api"; //methods of this api class apply the Authorization header automatically
-import Navbar from "../../components/Navbar";
-import BackButton from "../../components/BackBtn";
 import BackButton2 from "../../components/BackBtn2";
 import SectionContent from "../../components/SectionContent";
 import QuizContent from "../../components/QuizContent";
@@ -62,7 +60,7 @@ function CourseSectionPage() {
             console.log("Next Next Next");
             if (nextModuleId && nextSectionId) {
                 navigate(
-                    `/courses/${courseId}/${nextModuleId}/sections/${nextSectionId}`,
+                    `/student/courses/${courseId}/${nextModuleId}/sections/${nextSectionId}`,
                 );
                 setSelectedSectionId(nextSectionId);
             } else {
@@ -193,7 +191,9 @@ function CourseSectionPage() {
                     <div ref={ddRef} className="mobile-dropdown">
                         <div className="mobile-dropdown-topsection ">
                             {/* flex gap-[1rem] items-center px-6*/}
-                            <BackButton2 locationURL={`/courses/${courseId}`} />
+                            <BackButton2
+                                locationURL={`/student/courses/${courseId}`}
+                            />
                             <div className="mobile-dd-dd">
                                 <div
                                     onClick={toggleDropDown}
@@ -224,7 +224,7 @@ function CourseSectionPage() {
                                                         selectedSectionId
                                                     ) {
                                                         navigate(
-                                                            `/courses/${courseId}/${moduleId}/sections/${section._id}`,
+                                                            `/student/courses/${courseId}/${moduleId}/sections/${section._id}`,
                                                         );
                                                         toggleDropDown();
                                                     }
@@ -250,7 +250,9 @@ function CourseSectionPage() {
                     </div>
                 ) : (
                     <div className="sidebar-modules">
-                        <BackButton2 locationURL={`/courses/${courseId}`} />
+                        <BackButton2
+                            locationURL={`/student/courses/${courseId}`}
+                        />
                         {/* <h2 className="text-left text-2xl font-semibold mb-[2rem]">*/}
                         <h2 className="text-left text-xl font-semibold mt-[2rem] mb-[2rem]">
                             Sections
@@ -267,7 +269,7 @@ function CourseSectionPage() {
                                                 }`}
                                     onClick={() => {
                                         navigate(
-                                            `/courses/${courseId}/${moduleId}/sections/${section._id}`,
+                                            `/student/courses/${courseId}/${moduleId}/sections/${section._id}`,
                                         );
                                     }}
                                 >

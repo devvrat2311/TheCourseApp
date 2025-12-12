@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
-const verifyToken = require("../middleware/auth");
+const { verifyToken } = require("../middleware/auth");
+const { verifyStudent } = require("../middleware/roleMiddleware");
 const {
     enrollInCourse,
     getAllCourses,
@@ -12,39 +13,32 @@ const {
     getAllSections,
     getCompletedQuizDetails,
     returnNextSection,
+    createCourse,
+    getMyCreatedCourses,
 } = require("../controllers/courseController");
 
-// router.get("/:courseId/:moduleId/sections/:sectionId/next", returnNextSection);
+router.use(verifyToken);
 
-router.get("/my-courses", verifyToken, getMyCourses);
-router.get("/", verifyToken, getAllCourses);
-router.get("/:id", verifyToken, getCourseById);
-router.post("/:id/enroll", verifyToken, enrollInCourse);
-router.get(
-    "/:courseId/:moduleId/sections/:sectionId",
-    verifyToken,
-    getSectionById,
-);
-router.get("/:courseId/:moduleId", verifyToken, getAllSections);
+//teacher endpoints
+router.post("/create-course", createCourse);
+router.get("/my-created-courses", getMyCreatedCourses);
+
+//students endpoints
+router.get("/my-courses", getMyCourses);
+router.get("/", getAllCourses);
+router.get("/:id", getCourseById);
+router.post("/:id/enroll", enrollInCourse);
+router.get("/:courseId/:moduleId/sections/:sectionId", getSectionById);
+router.get("/:courseId/:moduleId", getAllSections);
 router.post(
     "/:courseId/:moduleId/sections/:sectionId/complete",
-    verifyToken,
     markSectionComplete,
 );
-router.post(
-    "/:courseId/:moduleId/sections/:sectionId/submit-quiz",
-    verifyToken,
-    submitQuiz,
-);
+router.post("/:courseId/:moduleId/sections/:sectionId/submit-quiz", submitQuiz);
 router.get(
     "/:courseId/:moduleId/sections/:sectionId/completed-quiz",
-    verifyToken,
     getCompletedQuizDetails,
 );
-router.get(
-    "/:courseId/:moduleId/sections/:sectionId/next",
-    verifyToken,
-    returnNextSection,
-);
+router.get("/:courseId/:moduleId/sections/:sectionId/next", returnNextSection);
 
 module.exports = router;

@@ -86,6 +86,7 @@ const refreshToken = async (req, res) => {
 
 const logout = async (req, res) => {
     const refreshToken = req.body.refreshToken;
+    console.log("From logout controller method:", refreshToken);
 
     if (!refreshToken) {
         return res.status(400).json({ message: "Refresh token required" });
@@ -105,6 +106,7 @@ const logout = async (req, res) => {
         );
 
         await authDoc.save();
+        // console.log("From logout controller method authDoc.save():", resp);
 
         res.status(200).json({ message: "Logged out successfully" });
     } catch (err) {
@@ -119,7 +121,7 @@ const signUp = async (req, res) => {
 
         const existingUser = await User.findOne({ email });
         if (existingUser)
-            return res.status(409).json({ error: "Email already in use" });
+            return res.status(409).json({ message: "Email already in use" });
 
         const newUser = await new User({
             firstName,

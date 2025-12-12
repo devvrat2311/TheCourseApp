@@ -1,11 +1,13 @@
 import api from "../../utils/api";
 import BackButton2 from "../BackBtn2";
 import { useFlash } from "../../contexts/FlashContext";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import ClickyBtn from "../ClickyBtn";
 import { DiamondPlus } from "lucide-react";
 
 function CoursePreview({ course }) {
+    const location = useLocation();
+    const from = location.state?.from || "/student/explore";
     const navigate = useNavigate();
     const { showFlash } = useFlash();
     const handleEnroll = async () => {
@@ -32,7 +34,7 @@ function CoursePreview({ course }) {
     return (
         <>
             <div className="main-content flex flex-col">
-                <BackButton2 locationURL={"/explore"} />
+                <BackButton2 locationURL={from} />
                 <div className="flex flex-col h-full w-full m-3 p-2">
                     <h2 className="text-3xl font-bold text-left mt-2 mb-2">
                         {course.title}

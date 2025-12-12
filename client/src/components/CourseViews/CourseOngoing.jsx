@@ -22,7 +22,7 @@ function useWindowWidth() {
 
 function CourseOngoing({ course }) {
     const location = useLocation();
-    const from = location.state?.from || "/dashboard";
+    const from = location.state?.from || "/student/dashboard";
     const windowWidth = useWindowWidth();
     const isMobile = windowWidth < 1000;
     const ddRef = useRef();
@@ -55,7 +55,14 @@ function CourseOngoing({ course }) {
             document.removeEventListener("mousedown", handleClickOutside);
         };
     }, [dropdown]);
-
+    if (modules.length === 0) {
+        console.log("yo");
+        return (
+            <div className="main-content">
+                No modules found for this course yet
+            </div>
+        );
+    }
     return (
         <>
             <div className="main-content">
@@ -163,7 +170,7 @@ function CourseOngoing({ course }) {
                                     className="text-xs  first:rounded-t-2xl last:rounded-b-2xl hover:bg-[var(--bg-highlighted)] border border-b-0 last:border-b-1 hover:cursor-pointer transition duration-200 ease-in-out border-[var(--border)]"
                                 >
                                     <Link
-                                        to={`/courses/${course.id}/${modules[selectedIndex]._id}/sections/${section._id}`}
+                                        to={`/student/courses/${course.id}/${modules[selectedIndex]._id}/sections/${section._id}`}
                                         className="p-[14px] flex h-full w-full"
                                     >
                                         <div className="flex-1">

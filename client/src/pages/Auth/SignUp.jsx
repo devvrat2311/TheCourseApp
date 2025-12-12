@@ -8,9 +8,6 @@ function SignUp() {
     const navigate = useNavigate();
     const { showFlash } = useFlash();
 
-    console.log(showFlash);
-    console.log("Re-Rendered");
-
     const firstNameRef = useRef();
     const lastNameRef = useRef();
     const emailRef = useRef();
@@ -42,19 +39,20 @@ function SignUp() {
                 body: JSON.stringify(formData),
             });
 
-            const data = res.json();
+            const data = await res.json();
+            console.log("From signup page:", data);
 
             if (res.ok) {
                 console.log("response", res.ok);
                 showFlash("Signup Successful", "info");
                 navigate("/login");
             } else {
-                console.log(res);
-                showFlash(`error: ${data}`, "info");
+                console.log(data);
+                showFlash(`error: ${data.message}`, "error");
             }
         } catch (err) {
-            console.error("Error:", err);
-            showFlash(`error: ${err}`, "info");
+            console.error("Error:", err.message);
+            showFlash(`error: ${err.message}`, "error");
         }
     };
 
@@ -170,9 +168,7 @@ function SignUp() {
                             buttonType={"submit"}
                             stylingClass={"back-btn center-btn login-btn"}
                         >
-                            <div
-                                className="flex gap-2 items-center px-[3rem] py-[0.4rem]"
-                            >
+                            <div className="flex gap-2 items-center px-[3rem] py-[0.4rem]">
                                 <p>Sign Up</p>
                             </div>
                         </ClickyBtn>

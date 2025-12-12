@@ -23,9 +23,14 @@ function Login() {
             localStorage.setItem("accessToken", result.accessToken);
             localStorage.setItem("refreshToken", result.refreshToken);
 
-            showFlash(`Welcome to your account ${result.userRole}`, "info");
+            if (result.userRole === "student") {
+                showFlash(`Welcome to your account`, "info");
+                navigate("/dashboard");
+            } else if (result.userRole === "instructor") {
+                showFlash(`Welcome to your account`, "info");
+                navigate("/instructor");
+            }
             //redirect to dashboard
-            navigate("/dashboard");
         } catch (err) {
             showFlash(`Error: ${err.message}`, "info");
         }

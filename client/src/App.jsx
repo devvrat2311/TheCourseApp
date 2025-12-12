@@ -1,18 +1,31 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import "./App.css";
+import {
+    BrowserRouter as Router,
+    Routes,
+    Route,
+    Navigate,
+} from "react-router-dom";
+
 import Login from "./pages/Auth/Login";
 import SignUp from "./pages/Auth/SignUp";
+
+import { ThemeProvider } from "./contexts/ThemeContext";
+import { FlashProvider } from "./contexts/FlashContext";
+import FlashMessage from "./components/FlashMessage";
+import ThemeToggle from "./components/ThemeToggle";
+
+import CourseSectionPage from "./pages/Courses/CourseSectionPage";
+import Layout from "./components/Layout";
 import StudentDashboard from "./pages/Dashboard/StudentDashboard";
 import PrivateRoute from "./components/PrivateRoute";
 import ExploreCourses from "./pages/Courses/ExploreCourses";
 import CoursePage from "./pages/Courses/CoursePage";
-import "./App.css";
-import { FlashProvider } from "./contexts/FlashContext";
-import FlashMessage from "./components/FlashMessage";
-import ThemeToggle from "./components/ThemeToggle";
-import CourseSectionPage from "./pages/Courses/CourseSectionPage";
-import Navbar from "./components/Navbar";
-import { ThemeProvider } from "./contexts/ThemeContext";
-import Layout from "./components/Layout";
+
+import InstructorLayout from "./components/InstructorLayout";
+import InstructorDashboard from "./pages/Instructor/InstructorDashboard";
+import RootRedirect from "./components/RootRedirect";
+import CreateCourse from "./pages/Instructor/CreateCourse";
+import EditCourse from "./pages/Instructor/EditCourse";
 
 function App() {
     return (
@@ -22,12 +35,37 @@ function App() {
                     <FlashMessage />
                     <Router>
                         <Routes>
+                            <Route path="/" element={<RootRedirect />} />
+
                             <Route path="/login" element={<Login />} />
                             <Route path="/signup" element={<SignUp />} />
                             <Route
-                                path="/"
+                                path="/instructor"
                                 element={
-                                    <PrivateRoute>
+                                    <PrivateRoute role={"instructor"}>
+                                        <InstructorLayout />
+                                        <ThemeToggle />
+                                    </PrivateRoute>
+                                }
+                            >
+                                <Route
+                                    index
+                                    element={<InstructorDashboard />}
+                                />
+                                <Route
+                                    path="courses/new"
+                                    element={<CreateCourse />}
+                                />
+                                <Route
+                                    path="courses/:id/edit"
+                                    element={<EditCourse />}
+                                />
+                            </Route>
+                            <Route
+                                path="/student"
+                                // path="/"
+                                element={
+                                    <PrivateRoute role={"student"}>
                                         <Layout />
                                         <ThemeToggle />
                                     </PrivateRoute>
@@ -40,19 +78,23 @@ function App() {
                                 />
 
                                 <Route
-                                    path="/explore"
+                                    path="explore"
                                     element={<ExploreCourses />}
                                 />
                                 <Route
-                                    path="/courses/:courseId"
+                                    path="courses/:courseId"
                                     element={<CoursePage />}
                                 />
 
                                 <Route
-                                    path="/courses/:courseId/:moduleId/sections/:sectionId"
+                                    path="courses/:courseId/:moduleId/sections/:sectionId"
                                     element={<CourseSectionPage />}
                                 />
                             </Route>
+                            <Route
+                                path="*"
+                                element={<Navigate to="/" replace />}
+                            />
                         </Routes>
                     </Router>
                 </FlashProvider>

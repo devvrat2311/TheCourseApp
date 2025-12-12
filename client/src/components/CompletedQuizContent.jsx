@@ -37,7 +37,7 @@ export default function CompletedQuizContent() {
             console.log("Next Next Next");
             if (nextModuleId && nextSectionId) {
                 navigate(
-                    `/courses/${courseId}/${nextModuleId}/sections/${nextSectionId}`,
+                    `/student/courses/${courseId}/${nextModuleId}/sections/${nextSectionId}`,
                 );
             } else {
                 showFlash("this is the last section in this course", "info");

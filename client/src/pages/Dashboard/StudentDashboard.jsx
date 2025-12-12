@@ -71,7 +71,7 @@ function StudentDashboard() {
                                     <ClickyBtn
                                         clickFunction={() => {
                                             navigate(
-                                                `/courses/${item.courseId._id}`,
+                                                `/student/courses/${item.courseId._id}`,
                                             );
                                         }}
                                         stylingClass={
@@ -111,7 +111,7 @@ function StudentDashboard() {
                                     <ClickyBtn
                                         clickFunction={() => {
                                             navigate(
-                                                `/courses/${item.courseId._id}`,
+                                                `/student/courses/${item.courseId._id}`,
                                             );
                                         }}
                                         stylingClass={

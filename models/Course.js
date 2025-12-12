@@ -117,9 +117,19 @@ const moduleSchema = new mongoose.Schema({
 
 const courseSchema = new mongoose.Schema({
     title: { type: String, required: true },
-    description: { type: String },
+    description: { type: String, required: true },
+    //this following version of author is for later
+    // author: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
     author: { type: String },
     modules: [moduleSchema],
+    courseStatus: {
+        type: String,
+        enum: {
+            values: ["created", "submitted", "published"],
+        },
+        required: true,
+        default: "created",
+    },
     enrolledStudents: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
     createdAt: { type: Date, default: Date.now },
 });

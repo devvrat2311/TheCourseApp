@@ -1,4 +1,3 @@
-// pages/ExploreCourses.jsx
 import { useEffect, useState } from "react";
 import Navbar from "../../components/Navbar";
 import { Link, useNavigate } from "react-router-dom";
@@ -25,7 +24,7 @@ function ExploreCourses() {
     }, []);
 
     const navigateToCourse = (courseId) => {
-        navigate(`/courses/${courseId}`, {
+        navigate(`/student/courses/${courseId}`, {
             state: { from: location.pathname },
         });
     };
@@ -47,6 +46,9 @@ function ExploreCourses() {
                             </h2>
                             <p className="text-sm text-shadow-white">
                                 {course.description}
+                            </p>
+                            <p className="text-sm text-shadow-white">
+                                Author: {course.author}
                             </p>
                             <ClickyBtn
                                 clickFunction={() =>

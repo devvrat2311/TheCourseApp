@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const ROLES = require("../constants/roles");
 
 const opts = { toJSON: { virtuals: true }, timestamps: true };
 const UserSchema = new mongoose.Schema(
@@ -41,11 +42,11 @@ const UserSchema = new mongoose.Schema(
         role: {
             type: String,
             enum: {
-                values: ["student", "instructor", "admin"],
+                values: [ROLES.STUDENT, ROLES.INSTRUCTOR, ROLES.ADMIN],
                 message: "Role must be student, instructor or admin",
             },
             required: true,
-            default: "student",
+            default: ROLES.STUDENT,
         },
         //Profile Information
         profilePicture: {
@@ -73,6 +74,12 @@ const UserSchema = new mongoose.Schema(
                     trim: true,
                 },
             ],
+            createdCourses: [
+                {
+                    type: mongoose.Schema.Types.ObjectId,
+                    ref: "Course",
+                },
+            ],
         },
         studentProfile: {
             enrolledCourses: [
@@ -84,10 +91,6 @@ const UserSchema = new mongoose.Schema(
                     enrolledAt: {
                         type: Date,
                         default: Date.now,
-                    },
-                    completedModules: {
-                        type: [mongoose.Schema.Types.ObjectId],
-                        default: [],
                     },
                     completedSections: {
                         type: [

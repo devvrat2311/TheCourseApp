@@ -49,7 +49,7 @@ export default function UserOptions() {
                     {decodedToken.userFullName}
                 </p>
                 <p
-                    className={`text-left font-bold px-1 mb-2 text-xs rounded-full ${decodedToken.role === "instructor" ? "bg-[var(--accent)]" : "bg-[var(--success-green)]"}  text-[var(--bg)] w-fit`}
+                    className={`text-left font-bold px-2 mb-2 text-xs rounded-full ${decodedToken.role === "instructor" ? "bg-[var(--accent)]" : "bg-[var(--success-green)]"}  text-[var(--bg)] w-fit`}
                 >
                     {decodedToken.role}
                 </p>

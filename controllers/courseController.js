@@ -2,6 +2,62 @@ const Course = require("../models/Course");
 const User = require("../models/User");
 const mongoose = require("mongoose");
 
+const getMyCreatedCourses = async (req, res) => {
+    const userId = req.user.userId;
+
+    try {
+        const user = await User.findById(userId);
+        const myCreatedCourses = user.teacherProfile.createdCourses;
+        //do some more work here to actually return good information
+        // for each course
+        const myCreatedCoursesProper = await Course.find(
+            {
+                _id: { $in: myCreatedCourses },
+            },
+            {
+                title: 1,
+                description: 1,
+                courseStatus: 1,
+                enrolledStudents: 1,
+                createdAt: 1,
+            },
+        );
+        console.log(myCreatedCoursesProper);
+
+        res.status(200).json(myCreatedCoursesProper);
+    } catch (err) {
+        console.log(err.message);
+        res.status(400).json({ error: err.message });
+    }
+};
+
+const createCourse = async (req, res) => {
+    console.log(
+        "from createCourse controller method, this is req.user",
+        req.user,
+    );
+    console.log("from createCourse controller method, this is req.body", {
+        ...req.body,
+    });
+    try {
+        const course = new Course({
+            ...req.body,
+            author: req.user.userFullName,
+        });
+        await course.save();
+        const user = await User.findById(req.user.userId);
+        console.log(
+            "User teacherProfile from createCourse:",
+            user.teacherProfile.createdCourses,
+        );
+        user.teacherProfile.createdCourses.push(course._id);
+        await user.save();
+        res.status(201).json(course);
+    } catch (err) {
+        res.status(400).json({ error: err.message });
+    }
+};
+
 const getMyCourses = async (req, res) => {
     try {
         const userId = req.user.userId;
@@ -708,7 +764,14 @@ const getCourseById = async (req, res) => {
 
 const getAllCourses = async (req, res) => {
     try {
-        const courses = await Course.find({});
+        const courses = await Course.find(
+            { courseStatus: "published" },
+            {
+                title: 1,
+                description: 1,
+                author: 1,
+            },
+        ).lean();
         res.status(200).json(courses);
     } catch (err) {
         res.status(500).json({
@@ -729,4 +792,6 @@ module.exports = {
     getAllSections,
     getCompletedQuizDetails,
     returnNextSection,
+    createCourse,
+    getMyCreatedCourses,
 };
