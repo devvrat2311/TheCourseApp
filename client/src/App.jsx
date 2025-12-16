@@ -26,6 +26,12 @@ import InstructorDashboard from "./pages/Instructor/InstructorDashboard";
 import RootRedirect from "./components/RootRedirect";
 import CreateCourse from "./pages/Instructor/CreateCourse";
 import EditCourse from "./pages/Instructor/EditCourse";
+import CreateModule from "./pages/Instructor/CreateModule";
+import EditModule from "./pages/Instructor/EditModule";
+import CreateSection from "./pages/Instructor/CreateSection";
+import EditSection from "./pages/Instructor/EditSection";
+import CreateContentBlock from "./pages/Instructor/CreateContentBlock";
+import CreateQuizQuestion from "./pages/Instructor/CreateQuizQuestion";
 
 function App() {
     return (
@@ -59,6 +65,30 @@ function App() {
                                 <Route
                                     path="courses/:id/edit"
                                     element={<EditCourse />}
+                                />
+                                <Route
+                                    path="courses/:id/modules/new"
+                                    element={<CreateModule />}
+                                />
+                                <Route
+                                    path="courses/:courseId/modules/:moduleId/edit"
+                                    element={<EditModule />}
+                                />
+                                <Route
+                                    path="courses/:courseId/modules/:moduleId/sections/new"
+                                    element={<CreateSection />}
+                                />
+                                <Route
+                                    path="courses/:courseId/modules/:moduleId/sections/:sectionId/edit"
+                                    element={<EditSection />}
+                                />
+                                <Route
+                                    path="courses/:courseId/modules/:moduleId/sections/:sectionId/content/new"
+                                    element={<CreateContentBlock />}
+                                />
+                                <Route
+                                    path="courses/:courseId/modules/:moduleId/sections/:sectionId/quiz/new"
+                                    element={<CreateQuizQuestion />}
                                 />
                             </Route>
                             <Route

@@ -32,6 +32,16 @@ export default function SectionContent({ sectionData }) {
                                 {contentBlock.text}
                             </h2>
                         );
+
+                    case "paragraph":
+                        return (
+                            <h2
+                                key={index}
+                                className="section-paragraph ml-6 mt-5"
+                            >
+                                {contentBlock.text}
+                            </h2>
+                        );
                     case "bullet":
                         return (
                             <p

@@ -26,7 +26,6 @@ function InstructorDashboard() {
     if (isLoading) return <p>Loading ...</p>;
     if (error) return <p className="text-red-500 text-xl">Error: {error}</p>;
     if (!myCourses) return <p>No Course Data found for you</p>;
-    console.log(myCourses);
     return (
         <div className="main-content">
             <div className="flex flex-col border-1 flex-1">

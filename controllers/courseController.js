@@ -2,6 +2,231 @@ const Course = require("../models/Course");
 const User = require("../models/User");
 const mongoose = require("mongoose");
 
+const createQuizQuestion = async (req, res) => {
+    const { courseId, moduleId, sectionId } = req.params;
+    console.log("req.body is: ", req.body);
+
+    try {
+        const course = await Course.findById(courseId);
+        if (!course) {
+            return res.status(404).json({ message: "Course not found" });
+        }
+        // const courseTitle = course.title;
+
+        const module = course.modules.id(moduleId);
+        if (!module) {
+            return res.status(404).json({ message: "Module not found" });
+        }
+        // const moduleTitle = module.title;
+
+        const section = module.sections.id(sectionId);
+        if (!section) {
+            return res.status(404).json({ message: "Section not found" });
+        }
+        // const sectionTitle = section.title;
+        section.quiz.push(req.body);
+        await course.save();
+
+        return res
+            .status(201)
+            .json({ message: "Successfully modified the course" });
+    } catch (err) {
+        console.log(err);
+        return res.status(500).json({ message: "Server Error", error: err });
+    }
+};
+
+const createContentBlock = async (req, res) => {
+    const { courseId, moduleId, sectionId } = req.params;
+    console.log("req.body is: ", req.body);
+
+    try {
+        const course = await Course.findById(courseId);
+        if (!course) {
+            return res.status(404).json({ message: "Course not found" });
+        }
+        // const courseTitle = course.title;
+
+        const module = course.modules.id(moduleId);
+        if (!module) {
+            return res.status(404).json({ message: "Module not found" });
+        }
+        // const moduleTitle = module.title;
+
+        const section = module.sections.id(sectionId);
+        if (!section) {
+            return res.status(404).json({ message: "Section not found" });
+        }
+        // const sectionTitle = section.title;
+        section.content.push(req.body);
+        await course.save();
+
+        return res
+            .status(201)
+            .json({ message: "Successfully modified the course" });
+    } catch (err) {
+        console.log(err);
+        return res.status(500).json({ message: "Server Error", error: err });
+    }
+};
+
+const getContentForSection = async (req, res) => {
+    const { courseId, moduleId, sectionId } = req.params;
+
+    try {
+        const course = await Course.findById(courseId);
+        if (!course) {
+            return res.status(404).json({ message: "Course not found" });
+        }
+        const courseTitle = course.title;
+
+        const module = course.modules.id(moduleId);
+        if (!module) {
+            return res.status(404).json({ message: "Module not found" });
+        }
+        const moduleTitle = module.title;
+
+        const section = module.sections.id(sectionId);
+        if (!section) {
+            return res.status(404).json({ message: "Section not found" });
+        }
+        const sectionTitle = section.title;
+
+        if (section.sectionType === "normal") {
+            console.log(
+                "From getContentForSection controller method",
+                section.content,
+            );
+            return res.status(200).json({
+                content: section.content,
+                contentType: section.sectionType,
+                sectionDetails: {
+                    courseTitle,
+                    moduleTitle,
+                    sectionTitle,
+                },
+            });
+        } else if (section.sectionType === "quiz") {
+            console.log(
+                "From getContentForSection controller method",
+                section.quiz,
+            );
+            return res.status(200).json({
+                content: section.quiz,
+                contentType: section.sectionType,
+                sectionDetails: {
+                    courseTitle,
+                    moduleTitle,
+                    sectionTitle,
+                },
+            });
+        }
+    } catch (err) {
+        console.error(err);
+        return res
+            .status(500)
+            .json({ message: "Server error", error: err.message });
+    }
+};
+const createFreshSection = async (req, res) => {
+    const { courseId, moduleId } = req.params;
+
+    try {
+        const course = await Course.findById(courseId);
+
+        if (!course) {
+            return res.status(404).json({ message: "Course not found" });
+        }
+
+        const module = course.modules.id(moduleId);
+
+        if (!module) {
+            return res.status(404).json({ message: "Module not found" });
+        }
+
+        module.sections.push(req.body);
+
+        await course.save();
+        return res.status(201).json({
+            message: "Section Created Successfully",
+            sectionId: module.sections[module.sections.length - 1]._id,
+        });
+    } catch (err) {
+        console.error(err);
+        return res
+            .status(500)
+            .json({ message: "Server error", error: err.message });
+    }
+};
+
+const getSectionsForModule = async (req, res) => {
+    const { courseId, moduleId } = req.params;
+
+    try {
+        const result = await Course.aggregate([
+            { $match: { _id: new mongoose.Types.ObjectId(courseId) } },
+            { $unwind: "$modules" },
+            {
+                $match: {
+                    "modules._id": new mongoose.Types.ObjectId(moduleId),
+                },
+            },
+            {
+                $project: {
+                    "modules.sections.content": 0,
+                    "modules.sections.quiz": 0,
+                },
+            },
+        ]);
+
+        console.log(result[0]);
+        console.log("course title", result[0].title);
+        const sectionDetails = {
+            courseTitle: result[0]?.title,
+            moduleTitle: result[0]?.modules.title,
+        };
+        console.log("sectionDetails", sectionDetails);
+        const sections = result[0]?.modules.sections;
+        console.log("sections", sections);
+        if (!sections)
+            return res.status(404).json({ message: "Sections Data Not Found" });
+
+        return res.status(200).json({ sections, sectionDetails });
+    } catch (err) {
+        console.error(err);
+        return res
+            .status(500)
+            .json({ message: "Server error", error: err.message });
+    }
+};
+
+const createModule = async (req, res) => {
+    const { id } = req.params;
+    try {
+        const course = await Course.findById(id);
+        const newModule = course.modules.create(req.body);
+        course.modules.push(newModule);
+        await course.save();
+        return res.status(201).json({ newModuleId: newModule._id });
+    } catch (err) {
+        console.log(err.message);
+        return res.status(400).json({ error: err.message });
+    }
+};
+
+const getModulesForCreatedCourse = async (req, res) => {
+    const { id } = req.params;
+    try {
+        const course = await Course.findById(id);
+        return res.status(200).json(course.modules);
+    } catch (err) {
+        console.log(err.message);
+        return res
+            .status(500)
+            .json({ message: "Server Error", error: err.message });
+    }
+};
+
 const getMyCreatedCourses = async (req, res) => {
     const userId = req.user.userId;
 
@@ -24,21 +249,16 @@ const getMyCreatedCourses = async (req, res) => {
         );
         console.log(myCreatedCoursesProper);
 
-        res.status(200).json(myCreatedCoursesProper);
+        return res.status(200).json(myCreatedCoursesProper);
     } catch (err) {
         console.log(err.message);
-        res.status(400).json({ error: err.message });
+        return res
+            .status(500)
+            .json({ message: "Server Error", error: err.message });
     }
 };
 
 const createCourse = async (req, res) => {
-    console.log(
-        "from createCourse controller method, this is req.user",
-        req.user,
-    );
-    console.log("from createCourse controller method, this is req.body", {
-        ...req.body,
-    });
     try {
         const course = new Course({
             ...req.body,
@@ -46,15 +266,11 @@ const createCourse = async (req, res) => {
         });
         await course.save();
         const user = await User.findById(req.user.userId);
-        console.log(
-            "User teacherProfile from createCourse:",
-            user.teacherProfile.createdCourses,
-        );
         user.teacherProfile.createdCourses.push(course._id);
         await user.save();
-        res.status(201).json(course);
+        return res.status(201).json({ courseId: course._id });
     } catch (err) {
-        res.status(400).json({ error: err.message });
+        return res.status(500).json({ error: err.message });
     }
 };
 
@@ -181,7 +397,7 @@ const returnNextSection = async (req, res) => {
         }
 
         console.log(currentModuleIndex);
-        res.status(200).json({
+        return res.status(200).json({
             prevModuleId,
             prevSectionId,
             nextModuleId,
@@ -189,7 +405,7 @@ const returnNextSection = async (req, res) => {
         });
     } catch (err) {
         console.log(err);
-        res.status(500).json({ message: err });
+        return res.status(500).json({ message: err });
     }
 };
 
@@ -794,4 +1010,11 @@ module.exports = {
     returnNextSection,
     createCourse,
     getMyCreatedCourses,
+    getModulesForCreatedCourse,
+    createModule,
+    getSectionsForModule,
+    createFreshSection,
+    getContentForSection,
+    createContentBlock,
+    createQuizQuestion,
 };
