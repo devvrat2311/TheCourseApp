@@ -1,11 +1,14 @@
-import { Link } from "react-router-dom";
+import { Link, Outlet, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import api from "../../utils/api";
+import ClickyBtn from "../../components/ClickyBtn";
+import { DiamondPlus, House, Pencil } from "lucide-react";
 
 function InstructorDashboard() {
     const [error, setError] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
     const [myCourses, setMyCourses] = useState(null);
+    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchMyCourses = async () => {
@@ -23,33 +26,77 @@ function InstructorDashboard() {
         fetchMyCourses();
     }, []);
 
+    const navigateToNewCoursePage = () => {
+        navigate(`/instructor/courses/new`, {
+            state: { from: location.pathname },
+        });
+    };
+
+    const navigateToEditCoursePage = (courseId) => {
+        navigate(`/instructor/courses/${courseId}/edit`, {
+            state: { from: location.pathname },
+        });
+    };
+
     if (isLoading) return <p>Loading ...</p>;
     if (error) return <p className="text-red-500 text-xl">Error: {error}</p>;
     if (!myCourses) return <p>No Course Data found for you</p>;
     return (
-        <div className="main-content">
-            <div className="flex flex-col border-1 flex-1">
-                <h2 className="border-1">Teacher Dashboard</h2>
-                <Link className="border-1" to="/instructor/courses/new">
-                    Create Course
-                </Link>
-                <p>My Courses</p>
-                {myCourses.map((course, index) => (
-                    <div key={index} className="p-2 border-1">
-                        <p>{course.title}</p>
-                        <p>{course.description}</p>
-                        <p>students: {course.enrolledStudents.length}</p>
-                        <p>status: {course.courseStatus}</p>
-                        <Link
-                            className="border-1"
-                            to={`/instructor/courses/${course._id}/edit`}
-                        >
-                            Edit Course
-                        </Link>
+        <>
+            <Outlet />
+            <div className="main-content">
+                <div className="flex-1 text-left">
+                    <h2 className="flex gap-2 items-center text-2xl font-bold ml-5 text-[var(--fg)] ">
+                        <House size={24} />
+                        Home
+                    </h2>
+                    <ClickyBtn
+                        clickFunction={() => navigateToNewCoursePage()}
+                        stylingClass={
+                            "back-btn gap-2 px-[1rem] py-[0.4rem] items-center ml-5 mt-5"
+                        }
+                    >
+                        <DiamondPlus
+                            className="text-[var(--accent)]"
+                            size={22}
+                        />
+                        Create Course
+                    </ClickyBtn>
+
+                    <p className="ml-5 text-xl font-bold text-[var(--accent)] mt-5">
+                        My Courses
+                    </p>
+                    <div className="courses-grid">
+                        {myCourses.map((course, index) => (
+                            <div key={index} className="courses-grid-item">
+                                <p id="courseTitle">{course.title}</p>
+                                <p id="courseDesc">{course.description}</p>
+                                <p id="courseStudents">
+                                    students: {course.enrolledStudents.length}
+                                </p>
+                                <p id="courseStatus">
+                                    status: {course.courseStatus}
+                                </p>
+                                <ClickyBtn
+                                    clickFunction={() =>
+                                        navigateToEditCoursePage(course._id)
+                                    }
+                                    stylingClass={
+                                        "text-[0.9rem] back-btn gap-2 px-[1rem] py-[0.4rem] items-center ml-5 mt-3 absolute bottom-1 right-1"
+                                    }
+                                >
+                                    <Pencil
+                                        className="text-[var(--accent)]"
+                                        size={22}
+                                    />
+                                    {/* Edit Course*/}
+                                </ClickyBtn>
+                            </div>
+                        ))}
                     </div>
-                ))}
+                </div>
             </div>
-        </div>
+        </>
     );
 }
 

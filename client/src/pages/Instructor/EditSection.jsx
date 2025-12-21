@@ -1,21 +1,34 @@
-import { useParams, Link } from "react-router-dom";
+import {
+    useParams,
+    Link,
+    Outlet,
+    useOutletContext,
+    useLocation,
+    useNavigate,
+} from "react-router-dom";
 import { useState, useEffect } from "react";
 import api from "../../utils/api";
 import Prism from "prismjs";
-import "prismjs/themes/prism-tomorrow.css";
+import "prism-themes/themes/prism-nord.css";
+// import "prismjs/themes/prism-tomorrow.css";
 import "prismjs/components/prism-javascript";
 import "prismjs/components/prism-python";
 import "prismjs/components/prism-c";
+import "katex/dist/katex.min.css";
+import TeX from "@matejmazur/react-katex";
+import ClickyBtn from "../../components/ClickyBtn";
+import { DiamondPlus, Pencil } from "lucide-react";
 
 function EditSection() {
     const { courseId, moduleId, sectionId } = useParams();
+    const { setCourseTitle, setModuleTitle, setSectionTitle, setLocationURL } =
+        useOutletContext();
     const [loading, setLoading] = useState(true);
     const [content, setContent] = useState(null);
-    const [courseTitle, setCourseTitle] = useState("");
-    const [moduleTitle, setModuleTitle] = useState("");
-    const [sectionTitle, setSectionTitle] = useState("");
     const [contentType, setContentType] = useState("");
     const [error, setError] = useState(null);
+    const location = useLocation();
+    const navigate = useNavigate();
 
     useEffect(() => {
         Prism.highlightAll();
@@ -34,6 +47,9 @@ function EditSection() {
                 setSectionTitle(data.sectionDetails.sectionTitle);
                 setContentType(data.contentType);
                 setContent(data.content);
+                setLocationURL(
+                    `/instructor/courses/${courseId}/modules/${moduleId}/edit`,
+                );
             } catch (err) {
                 console.log(err);
                 setError(err.message);
@@ -42,27 +58,35 @@ function EditSection() {
             }
         };
         fetchContent();
-    }, [courseId, moduleId, sectionId]);
+    }, [
+        courseId,
+        moduleId,
+        sectionId,
+        setCourseTitle,
+        setModuleTitle,
+        setSectionTitle,
+        setLocationURL,
+        location.pathname,
+    ]);
 
     if (loading) return <p>Loading Sections...</p>;
     if (error) return <p>ERROR: {error}</p>;
     if (!content) return <p>No sections found for this module</p>;
 
+    const navigateToCreateContentBlock = () => {
+        navigate(
+            `/instructor/courses/${courseId}/modules/${moduleId}/sections/${sectionId}/edit/new-content`,
+            {
+                state: { from: location.pathname },
+            },
+        );
+    };
+
     return (
-        <div className="main-content">
+        <>
+            <Outlet />
             <div className="flex-1 text-left">
-                <div className="flex gap-1 items-baseline">
-                    <p className="text-[var(--border)] font-bold">
-                        {courseTitle}/
-                    </p>
-                    <p className="text-[var(--border)] font-bold">
-                        {moduleTitle}/
-                    </p>
-                    <p className="text-[var(--accent)] font-bold">
-                        {sectionTitle}
-                    </p>
-                </div>
-                <div className="flex flex-col rounded border-2 border-[var(--border)] p-3 m-2 h-full">
+                <div className="flex flex-col rounded p-3 m-2 h-full">
                     {contentType === "normal" ? (
                         <>
                             {content.map((contentBlock, index) => {
@@ -89,7 +113,7 @@ function EditSection() {
                                         return (
                                             <h2
                                                 key={index}
-                                                className="section-paragraph text-xs ml-6 mt-2"
+                                                className="section-paragraph ml-6 mt-2"
                                             >
                                                 {contentBlock.text}
                                             </h2>
@@ -107,9 +131,9 @@ function EditSection() {
                                         return (
                                             <div
                                                 key={index}
-                                                className="section-code  ml-6 mt-5 mr-6"
+                                                className="section-code ml-6 mt-5 mr-6"
                                             >
-                                                <pre className="rounded-2xl border-2 border-[var(--fg-faded)] p-4">
+                                                <pre>
                                                     <code
                                                         className={`language-${contentBlock.language}`}
                                                     >
@@ -118,18 +142,42 @@ function EditSection() {
                                                 </pre>
                                             </div>
                                         );
+                                    case "latex":
+                                        return (
+                                            <div
+                                                key={index}
+                                                className="latex-code ml-6 mt-5 mr-6"
+                                            >
+                                                <TeX>{contentBlock.text}</TeX>
+                                            </div>
+                                        );
                                     default:
                                         return null;
                                 }
                             })}
-                            <button className="border-1 rounded-[5px] mt-2 ml-5 p-0 w-fit">
+
+                            <ClickyBtn
+                                clickFunction={() =>
+                                    navigateToCreateContentBlock()
+                                }
+                                stylingClass={
+                                    "back-btn gap-2 px-[1rem] py-[0.4rem] items-center ml-1 mt-5"
+                                }
+                            >
+                                <DiamondPlus
+                                    className="text-[var(--accent)]"
+                                    size={22}
+                                />
+                                Create New Content Block
+                            </ClickyBtn>
+                            {/* <button className="border-1 rounded-[5px] mt-2 ml-5 p-0 w-fit">
                                 <Link
-                                    to={`/instructor/courses/${courseId}/modules/${moduleId}/sections/${sectionId}/content/new`}
+                                    to={`/instructor/courses/${courseId}/modules/${moduleId}/sections/${sectionId}/edit/new-content`}
                                     className="p-4 text-xs"
                                 >
                                     Create New Content Block +
                                 </Link>
-                            </button>
+                            </button>*/}
                         </>
                     ) : (
                         <>
@@ -156,7 +204,7 @@ function EditSection() {
                             })}
                             <button className="p-0 w-fit">
                                 <Link
-                                    to={`/instructor/courses/${courseId}/modules/${moduleId}/sections/${sectionId}/quiz/new`}
+                                    to={`/instructor/courses/${courseId}/modules/${moduleId}/sections/${sectionId}/edit/new-quiz`}
                                     className="border-1 p-1"
                                 >
                                     Create New Quiz Question
@@ -166,7 +214,7 @@ function EditSection() {
                     )}
                 </div>
             </div>
-        </div>
+        </>
     );
 }
 

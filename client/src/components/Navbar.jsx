@@ -4,7 +4,6 @@ import LogoutBtn from "./LogoutBtn";
 import Logo from "./Logo";
 import Navlinks from "./Navlinks";
 import UserOptions from "./UserOptions";
-import { User } from "lucide-react";
 
 export default function Navbar() {
     return (

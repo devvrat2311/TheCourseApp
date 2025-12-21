@@ -32,41 +32,80 @@ function CreateCourse() {
     };
 
     return (
-        <div className="main-content">
-            <div>
-                <p>Create Course</p>
-                <p>Create Course Page YAYYYY</p>
+        <div
+            className="create-course-overlay"
+            onClick={() => {
+                navigate(`/instructor/courses`);
+            }}
+        >
+            <div
+                className="create-course max-h-fit max-w-[350px]"
+                onClick={(e) => e.stopPropagation()}
+            >
+                <h2 className="popup-form-title">Create Course</h2>
                 <form
                     onSubmit={handleSubmit}
-                    className="border-1 p-2 flex flex-col gap-2"
+                    className="p-2 flex flex-col gap-2 text-left mt-[30px]"
                 >
-                    <label htmlFor="title">title</label>
-                    <input
-                        type="text"
-                        name="title"
-                        className="border-1 p-2"
-                        value={courseTitle}
-                        onChange={(e) => setCourseTitle(e.target.value)}
-                        required
-                    />
+                    <div className="flex flex-col">
+                        <label
+                            htmlFor="title"
+                            className="text-xs text-left mb-1 ml-1 mt-3"
+                        >
+                            title
+                        </label>
+                        <textarea
+                            type="text"
+                            name="title"
+                            className="input-class p-2"
+                            value={courseTitle}
+                            onChange={(e) => setCourseTitle(e.target.value)}
+                            onInput={(e) => {
+                                e.target.style.height = "auto";
+                                e.target.style.height =
+                                    e.target.scrollHeight + "px";
+                            }}
+                            rows={1}
+                            required
+                        />
+                    </div>
 
-                    <label htmlFor="description">description</label>
-                    <input
-                        type="text"
-                        name="description"
-                        className="border-1 p-2"
-                        value={courseDescription}
-                        onChange={(e) => setCourseDescription(e.target.value)}
-                        required
-                    />
+                    <div className="flex flex-col">
+                        <label
+                            htmlFor="description"
+                            className="text-xs text-left mb-1 ml-1 mt-3"
+                        >
+                            description
+                        </label>
+                        <textarea
+                            name="description"
+                            className="input-class p-2"
+                            value={courseDescription}
+                            onChange={(e) =>
+                                setCourseDescription(e.target.value)
+                            }
+                            onInput={(e) => {
+                                e.target.style.height = "auto";
+                                e.target.style.height =
+                                    e.target.scrollHeight + "px";
+                            }}
+                            rows={1}
+                            required
+                        />
+                    </div>
 
-                    <button
-                        type="submit"
-                        className="border-1 p-2 cursor-pointer"
+                    <ClickyBtn
+                        buttonType={"submit"}
+                        stylingClass={"back-btn center-btn login-btn"}
                     >
-                        create +
-                    </button>
+                        <div className="flex gap-2 items-center px-[3rem] py-[0.4rem]">
+                            <p>Create +</p>
+                        </div>
+                    </ClickyBtn>
                 </form>
+                <p className="text-xs text-[var(--border)] font-bold mt-2">
+                    click outside the form to exit
+                </p>
             </div>
         </div>
     );

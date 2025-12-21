@@ -12,20 +12,14 @@ function CoursePreview({ course }) {
     const { showFlash } = useFlash();
     const handleEnroll = async () => {
         try {
-            const res = await api.post(`/courses/${course.id}/enroll`, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-                },
-            });
+            const res = await api.post(`/courses/${course.id}/enroll`);
 
             const data = await res.json();
 
             if (!res.ok) throw new Error(data.message);
 
             showFlash("Enrolled Successfully!", "info");
-            navigate("/");
+            navigate("/student");
         } catch (err) {
             console.error(err);
             showFlash(`Error: ${err.message}`, "info");

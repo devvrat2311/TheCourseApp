@@ -8,6 +8,8 @@
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    scrollbar-width: thin;
+    scrollbar-color: var(--fg) var(--bg-secondary);
 }
 
 :root[data-theme="light"] {
@@ -19,9 +21,11 @@
     --highlighted: #e0f2fe;
     --border: #cbd5e1;
     --shadow: #6dc7d1;
-    --accent: #6dc7d1;
+    --accent: #6dc7d1ac;
     --success-green: #00bc7d;
+    --success-green-lighter: #00bc7d30;
     --error-red: #ec003f;
+    --error-red-lighter: #ec003f30;
     --color-blue: #0ea5e9;
     color-scheme: light;
 }
@@ -36,7 +40,9 @@
     --shadow: #59b9c7;
     --accent: #59b9c7;
     --success-green: #00bc7d;
+    --success-green-lighter: #00bc7d30;
     --error-red: #ec003f;
+    --error-red-lighter: #ec003f30;
     --color-blue: #1fb6ff;
     color-scheme: dark;
 }

@@ -32,6 +32,7 @@ import CreateSection from "./pages/Instructor/CreateSection";
 import EditSection from "./pages/Instructor/EditSection";
 import CreateContentBlock from "./pages/Instructor/CreateContentBlock";
 import CreateQuizQuestion from "./pages/Instructor/CreateQuizQuestion";
+import EditCourseLayout from "./pages/Instructor/EditCourseLayout";
 
 function App() {
     return (
@@ -59,28 +60,55 @@ function App() {
                                     element={<InstructorDashboard />}
                                 />
                                 <Route
-                                    path="courses/new"
-                                    element={<CreateCourse />}
-                                />
+                                    path="courses"
+                                    element={<InstructorDashboard />}
+                                >
+                                    <Route
+                                        path="new"
+                                        element={<CreateCourse />}
+                                    />
+                                </Route>
                                 <Route
-                                    path="courses/:id/edit"
-                                    element={<EditCourse />}
-                                />
+                                    path="courses/:courseId/"
+                                    element={<EditCourseLayout />}
+                                >
+                                    <Route index element={<EditCourse />} />
+                                    <Route path="edit" element={<EditCourse />}>
+                                        <Route
+                                            path="new"
+                                            element={<CreateModule />}
+                                        />
+                                    </Route>
+                                    <Route
+                                        path="modules/:moduleId/edit"
+                                        element={<EditModule />}
+                                    >
+                                        <Route
+                                            path="new"
+                                            element={<CreateSection />}
+                                        />
+                                    </Route>
+                                    <Route
+                                        path="modules/:moduleId/sections/:sectionId/edit"
+                                        element={<EditSection />}
+                                    >
+                                        <Route
+                                            path="new-content"
+                                            element={<CreateContentBlock />}
+                                        />
+                                        <Route
+                                            path="new-quiz"
+                                            element={<CreateQuizQuestion />}
+                                        />
+                                    </Route>
+                                </Route>
                                 <Route
                                     path="courses/:id/modules/new"
                                     element={<CreateModule />}
                                 />
                                 <Route
-                                    path="courses/:courseId/modules/:moduleId/edit"
-                                    element={<EditModule />}
-                                />
-                                <Route
                                     path="courses/:courseId/modules/:moduleId/sections/new"
                                     element={<CreateSection />}
-                                />
-                                <Route
-                                    path="courses/:courseId/modules/:moduleId/sections/:sectionId/edit"
-                                    element={<EditSection />}
                                 />
                                 <Route
                                     path="courses/:courseId/modules/:moduleId/sections/:sectionId/content/new"

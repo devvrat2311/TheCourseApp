@@ -218,7 +218,11 @@ const getModulesForCreatedCourse = async (req, res) => {
     const { id } = req.params;
     try {
         const course = await Course.findById(id);
-        return res.status(200).json(course.modules);
+
+        return res.status(200).json({
+            modules: course.modules,
+            courseTitle: course.title,
+        });
     } catch (err) {
         console.log(err.message);
         return res

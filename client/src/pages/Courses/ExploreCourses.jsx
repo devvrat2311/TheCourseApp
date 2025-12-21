@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
-import Navbar from "../../components/Navbar";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import api from "../../utils/api";
 import ClickyBtn from "../../components/ClickyBtn";
 

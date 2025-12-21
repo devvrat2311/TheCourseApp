@@ -51,7 +51,7 @@ function StudentDashboard() {
                             You have not enrolled in any courses yet.
                         </p>
                     ) : (
-                        <ul className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <ul className="explore-courses-grid">
                             {ongoingCourses.map((item) => (
                                 <li
                                     key={item.courseId._id}

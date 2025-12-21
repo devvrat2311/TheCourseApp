@@ -1,20 +1,36 @@
-import { useParams, Link } from "react-router-dom";
+import {
+    useNavigate,
+    useParams,
+    Link,
+    Outlet,
+    useOutletContext,
+} from "react-router-dom";
 import { useEffect, useState } from "react";
 import api from "../../utils/api";
+import ClickyBtn from "../../components/ClickyBtn";
+import { DiamondPlus, Pencil } from "lucide-react";
 
 function EditCourse() {
-    const { id } = useParams();
+    const { courseId } = useParams();
+    // const [courseTitle, setCourseTitle] = useState("");
+    const { setCourseTitle, setModuleTitle, setSectionTitle, setLocationURL } =
+        useOutletContext();
     const [loading, setLoading] = useState(true);
     const [modules, setModules] = useState(null);
     const [error, setError] = useState(null);
+    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchModules = async () => {
             try {
-                const response = await api.get(`/courses/${id}/modules`);
+                const response = await api.get(`/courses/${courseId}/modules`);
                 const data = await response.json();
                 console.log(data);
-                setModules(data);
+                setModules(data.modules);
+                setCourseTitle(data.courseTitle);
+                setModuleTitle("");
+                setSectionTitle("");
+                setLocationURL(`/instructor/`);
             } catch (err) {
                 console.log(err);
                 setError(err.message);
@@ -23,51 +39,98 @@ function EditCourse() {
             }
         };
         fetchModules();
-    }, [id]);
+    }, [
+        courseId,
+        setCourseTitle,
+        setModuleTitle,
+        setSectionTitle,
+        setLocationURL,
+    ]);
 
     if (loading) return <p>Loading Modules...</p>;
     if (error) return <p>ERROR: {error}</p>;
     if (!modules) return <p>No modules found for this course</p>;
 
+    const navigateToNewModulePage = () => {
+        navigate(`/instructor/courses/${courseId}/edit/new`, {
+            state: { from: location.pathname },
+        });
+    };
+
+    const navigateToEditModulePage = (moduleId) => {
+        navigate(`/instructor/courses/${courseId}/modules/${moduleId}/edit`, {
+            state: { from: location.pathname },
+        });
+    };
+
+    const returnDoubleDigit = (number) => {
+        if (number < 10) {
+            return "0" + number;
+        } else {
+            return number;
+        }
+    };
+
     return (
-        <div className="main-content ">
+        <>
+            <Outlet />
             <div className="flex-1 text-left">
-                <div className="rounded border-2 border-[var(--border)] p-3 m-2 w-fit">
-                    <h2>List of things to get done</h2>
-                    <ol className="list-decimal list-inside">
-                        <li className="line-through">Create Module</li>
-                        <li className="line-through">Module List</li>
-                        <li className="line-through">Edit Modules Link</li>
-                        <li>Rearrange Modules</li>
-                    </ol>
-                </div>
-                <div className="rounded border-2 border-[var(--border)] p-3 m-2 h-full">
-                    <Link
-                        to={`/instructor/courses/${id}/modules/new`}
-                        className="border-1 p-1"
+                <div className="rounded p-3 m-2">
+                    <ClickyBtn
+                        clickFunction={() => navigateToNewModulePage()}
+                        stylingClass={
+                            "back-btn gap-2 px-[1rem] py-[0.4rem] items-center ml-1 mt-5"
+                        }
                     >
-                        Create New Module
-                    </Link>
-                    <p className="mt-2">Modules: </p>
-                    {modules.length === 0
-                        ? "No modules found"
-                        : modules.map((module, index) => (
-                              <div
-                                  className="border-1 mt-2 px-2 py-1 rounded w-fit"
-                                  key={index}
-                              >
-                                  {module.title}
-                                  <Link
-                                      to={`/instructor/courses/${id}/modules/${module._id}/edit`}
-                                      className="border-1 p-1 ml-2"
-                                  >
-                                      Edit Module
-                                  </Link>
-                              </div>
-                          ))}
+                        <DiamondPlus
+                            className="text-[var(--accent)]"
+                            size={22}
+                        />
+                        Create Module
+                    </ClickyBtn>
+                    <p className="text-2xl font-bold mt-[20px]">Modules</p>
+                    <div className="scrollable-list">
+                        {modules.length === 0
+                            ? "No modules found"
+                            : modules.map((module, index) => (
+                                  <div key={index}>
+                                      <div className="flex flex-col items-baseline justify-between border-2 mt-2 p-3 rounded-xl border-[var(--border)] w-[350px]">
+                                          <div className="flex items-start w-full justify-between">
+                                              <p className="text-2xl mb-3 font-bold">
+                                                  {module.title}
+                                              </p>
+                                              <p className="text-5xl font-bold text-[var(--border)]">
+                                                  {returnDoubleDigit(index + 1)}
+                                              </p>
+                                          </div>
+                                          <p className="">
+                                              {module.description}
+                                          </p>
+                                          <div className="flex items-baseline w-full justify-between">
+                                              <p> </p>
+                                              <ClickyBtn
+                                                  clickFunction={() =>
+                                                      navigateToEditModulePage(
+                                                          module._id,
+                                                      )
+                                                  }
+                                                  stylingClass={
+                                                      "back-btn text-xs gap-2 px-[1rem] py-[0.4rem] items-center ml-1 mt-5"
+                                                  }
+                                              >
+                                                  <Pencil
+                                                      className="text-[var(--accent)]"
+                                                      size={22}
+                                                  />
+                                              </ClickyBtn>
+                                          </div>
+                                      </div>
+                                  </div>
+                              ))}
+                    </div>
                 </div>
             </div>
-        </div>
+        </>
     );
 }
 

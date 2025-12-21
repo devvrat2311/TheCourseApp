@@ -5,7 +5,7 @@ import ClickyBtn from "../../components/ClickyBtn";
 import { useFlash } from "../../contexts/FlashContext";
 
 function CreateCourse() {
-    const { id } = useParams();
+    const { courseId } = useParams();
     const navigate = useNavigate();
     const { showFlash } = useFlash();
     const [moduleTitle, setModuleTitle] = useState("");
@@ -23,7 +23,7 @@ function CreateCourse() {
             };
 
             const response = await api.post(
-                `/courses/${id}/modules/create`,
+                `/courses/${courseId}/modules/create`,
                 formData,
             );
             const data = await response.json();
@@ -31,7 +31,7 @@ function CreateCourse() {
             if (response.ok) {
                 showFlash("Module Created!", "info");
                 navigate(
-                    `/instructor/courses/${id}/modules/${newModuleId}/edit`,
+                    `/instructor/courses/${courseId}/modules/${newModuleId}/edit`,
                 );
             }
             // const data = await response.json();
@@ -41,50 +41,106 @@ function CreateCourse() {
     };
 
     return (
-        <div className="main-content">
-            <div>
-                <p>Create Module</p>
-                <form
-                    onSubmit={handleSubmit}
-                    className="border-1 p-2 flex flex-col gap-2"
-                >
-                    <label htmlFor="title">title</label>
-                    <input
-                        type="text"
-                        name="title"
-                        className="border-1 p-2"
-                        value={moduleTitle}
-                        onChange={(e) => setModuleTitle(e.target.value)}
-                        required
-                    />
-
-                    <label htmlFor="description">description</label>
-                    <input
-                        type="text"
-                        name="description"
-                        className="border-1 p-2"
-                        value={moduleDescription}
-                        onChange={(e) => setModuleDescription(e.target.value)}
-                        required
-                    />
-
-                    <label htmlFor="objective">learning objective</label>
-                    <input
-                        type="text"
-                        name="objective"
-                        className="border-1 p-2"
-                        value={moduleObjective}
-                        onChange={(e) => setModuleObjective(e.target.value)}
-                        required
-                    />
-
-                    <button
-                        type="submit"
-                        className="border-1 p-2 cursor-pointer"
+        <div
+            className="create-course-overlay"
+            onClick={() => {
+                navigate(`/instructor/courses/${courseId}/edit`);
+            }}
+        >
+            <div
+                className="create-course max-h-fit max-w-[350px]"
+                onClick={(e) => e.stopPropagation()}
+            >
+                <div>
+                    <p className="popup-form-title">Create Module</p>
+                    <form
+                        onSubmit={handleSubmit}
+                        className="p-2 flex flex-col gap-2 text-left mt-[30px]"
                     >
-                        create module
-                    </button>
-                </form>
+                        <div className="flex flex-col">
+                            <label
+                                htmlFor="title"
+                                className="text-xs text-left mb-1 ml-1 mt-3"
+                            >
+                                title
+                            </label>
+                            <textarea
+                                type="text"
+                                name="title"
+                                className="input-class p-2"
+                                value={moduleTitle}
+                                onChange={(e) => setModuleTitle(e.target.value)}
+                                onInput={(e) => {
+                                    e.target.style.height = "auto";
+                                    e.target.style.height =
+                                        e.target.scrollHeight + "px";
+                                }}
+                                rows={1}
+                                required
+                            />
+                        </div>
+
+                        <div className="flex flex-col">
+                            <label
+                                htmlFor="description"
+                                className="text-xs text-left mb-1 ml-1 mt-3"
+                            >
+                                description
+                            </label>
+                            <textarea
+                                name="description"
+                                className="input-class p-2"
+                                value={moduleDescription}
+                                onChange={(e) =>
+                                    setModuleDescription(e.target.value)
+                                }
+                                onInput={(e) => {
+                                    e.target.style.height = "auto";
+                                    e.target.style.height =
+                                        e.target.scrollHeight + "px";
+                                }}
+                                rows={1}
+                                required
+                            />
+                        </div>
+
+                        <div className="flex flex-col">
+                            <label
+                                htmlFor="objective"
+                                className="text-xs text-left mb-1 ml-1 mt-3"
+                            >
+                                learning objective
+                            </label>
+                            <textarea
+                                name="objective"
+                                className="input-class p-2"
+                                value={moduleObjective}
+                                onChange={(e) =>
+                                    setModuleObjective(e.target.value)
+                                }
+                                onInput={(e) => {
+                                    e.target.style.height = "auto";
+                                    e.target.style.height =
+                                        e.target.scrollHeight + "px";
+                                }}
+                                rows={1}
+                                required
+                            />
+                        </div>
+
+                        <ClickyBtn
+                            buttonType={"submit"}
+                            stylingClass={"back-btn center-btn login-btn"}
+                        >
+                            <div className="flex gap-2 items-center px-[3rem] py-[0.4rem]">
+                                <p>Create +</p>
+                            </div>
+                        </ClickyBtn>
+                    </form>
+                    <p className="text-xs text-[var(--border)] font-bold mt-2">
+                        click outside the form to exit
+                    </p>
+                </div>
             </div>
         </div>
     );

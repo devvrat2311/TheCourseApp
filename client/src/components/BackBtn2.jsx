@@ -11,7 +11,7 @@ function BackButton2({ locationURL }) {
     return (
         <ClickyBtn
             clickFunction={clickFunction}
-            stylingClass={"back-btn px-[1rem] py-[0.2rem] gap-2 font-bold"}
+            stylingClass={"back-btn px-[1em] py-[0.2em] gap-2 font-bold"}
         >
             &#8592;<span className="text-xs">back</span>
         </ClickyBtn>
