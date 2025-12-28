@@ -161,13 +161,14 @@ main {
 .input-class {
     outline: none;
     transition: 0.2s all;
-    border: 2px solid var(--border);
+    /*border: 2px solid var(--border);*/
+    background-color: var(--bg-secondary);
     border-radius: 10px;
 }
 .input-class:focus {
-    transform: translate(-4px, -6px);
-    border-color: var(--accent);
-    box-shadow: 4px 6px var(--shadow);
+    transform: translate(-6px, -6px);
+    /*border-color: var(--accent);*/
+    box-shadow: 6px 6px var(--shadow);
 }
 textarea.input-class {
     resize: none;
@@ -497,6 +498,18 @@ textarea.input-class {
     border: 2px solid var(--accent);
     border-radius: 20px;
     padding: 24px;
+    background-color: var(--bg);
+}
+.section-image {
+    max-height: 500px;
+    /*width: inherit;*/
+    width: 90%;
+    margin-block: 30px;
+    /*align-self: center;*/
+    padding: 14px;
+    object-fit: contain;
+    border-radius: 10px;
+    border: 2px solid var(--border);
     background-color: var(--bg);
 }
 

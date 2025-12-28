@@ -127,6 +127,16 @@ function EditSection() {
                                                 {contentBlock.text}
                                             </p>
                                         );
+
+                                    case "image":
+                                        return (
+                                            <img
+                                                key={index}
+                                                src={contentBlock.src}
+                                                alt={contentBlock.alt}
+                                                className="section-image ml-5"
+                                            />
+                                        );
                                     case "code":
                                         return (
                                             <div

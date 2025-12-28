@@ -87,12 +87,12 @@ function CreateContentBlock() {
                         <input
                             type="url"
                             placeholder="Image URL"
-                            value={formData.url || ""}
+                            value={formData.src || ""}
                             className="input-class p-2 w-full mb-[20px]"
                             onChange={(e) => {
                                 setFormData({
                                     ...formData,
-                                    url: e.target.value,
+                                    src: e.target.value,
                                 });
                             }}
                         />

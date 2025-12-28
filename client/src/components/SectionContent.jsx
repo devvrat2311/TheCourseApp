@@ -64,6 +64,25 @@ export default function SectionContent({ sectionData }) {
                                 </pre>
                             </div>
                         );
+
+                    case "latex":
+                        return (
+                            <div
+                                key={index}
+                                className="latex-code ml-6 mt-5 mr-6"
+                            >
+                                <TeX>{contentBlock.text}</TeX>
+                            </div>
+                        );
+                    case "image":
+                        return (
+                            <img
+                                key={index}
+                                src={contentBlock.src}
+                                alt={contentBlock.alt}
+                                className="section-image ml-5"
+                            />
+                        );
                     default:
                         return null;
                 }

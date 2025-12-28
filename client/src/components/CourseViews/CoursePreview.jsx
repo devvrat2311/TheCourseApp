@@ -42,7 +42,13 @@ function CoursePreview({ course }) {
                         </p>
                     </div>
                     <div className="module-info text-left text-xl h-[30vh] mt-2 mb-2 border-2 border-[var(--border)] rounded-xl p-3 flex flex-col justify-baseline items-baseline">
-                        Modules and module wise breakdown of topics here
+                        {/* {course.modules.map((module, index) => {
+                            return (
+                                <div key={index}>
+                                    {module.learningObjective}
+                                </div>
+                            );
+                        })}*/}
                     </div>
                     <ClickyBtn
                         clickFunction={handleEnroll}
