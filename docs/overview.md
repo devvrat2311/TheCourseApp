@@ -5,6 +5,7 @@
 ## Project Structure
 
 This is a full-stack web application built with a React frontend and Express.js Backend, using MongoDB as the database.
+This is a change from my local machine that I want to pull to the VPS
 
 ```
 theCourseApp/
@@ -55,6 +56,7 @@ theCourseApp/
 ## Architecture Overview
 
 ### Frontend ("client/")
+
 - **Technology Stack**: React.js with Vite build tool
 - **Creation Method**: Bootstrapped with `npm create vite@latest client -- --template react`
 - **Development**: Modern React with functional components and hooks
@@ -62,6 +64,7 @@ theCourseApp/
 - **Entry point**: main.jsx
 
 ### Backend ("Root Directory")
+
 - **Technology Stack**: Node.js with Express.js framework and MongoDB via Mongoose
 - **Creation Method**: Build from Scratch using vanilla approach:
     1. `npm init` to initialize the project
@@ -72,26 +75,31 @@ theCourseApp/
 ### Key Backend Components
 
 **Models (`/models`)**
+
 - Mongoose schema definitions for database entities
 - Handles data structure and validation rules
 - Defines relationships between entities
 
 **Controllers (`/controllers`)**
+
 - Business logic and request handling
 - Processes HTTP requests and sends responses
 - Orchestrates interaction between models and routes
 
 **Routes (`/routes`)**
+
 - API endpoint definitions
 - HTTP method handlers (GET, POST, PUT, DELETE)
 - Middleware integration for authentication and validation
 
 **Middleware (`/middleware`)**
+
 - Custom middleware functions for cross-cutting concerns
 - Authentication and authorization logic
 - Input validation and error handling
 
 **Configuration (`/config`)**
+
 - Database connection setup
 - Authentication configuration (JWT settings, etc.)
 - Environment-specific configurations
@@ -101,21 +109,21 @@ theCourseApp/
 This project demonstrates a **learn-by-building** approach:
 
 1. **Backend**: Hand-crafted Express.js application following MVC principles
-   - No generators or boilerplates used
-   - Clean, purposeful directory structure
-   - Custom middleware and configuration setup
+    - No generators or boilerplates used
+    - Clean, purposeful directory structure
+    - Custom middleware and configuration setup
 
 2. **Frontend**: Modern React development with Vite
-   - Fast development server and hot module replacement
-   - Component-based architecture
-   - Modern JavaScript/JSX syntax
+    - Fast development server and hot module replacement
+    - Component-based architecture
+    - Modern JavaScript/JSX syntax
 
 ### Database Strategy
+
 - **Primary Database**: MongoDB with Mongoose ODM
 - **Migration System**: Custom migration scripts in `/migrations`
 - **Data Seeding**: Utility scripts for populating development data (`seeder.js`)
 
 This structure represents a well-organized full-stack application that separates concerns effectively while maintaining clear relationships between different parts of the system.
-
 
 [Back to Main Page](../README.md)
