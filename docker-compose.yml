@@ -3,8 +3,11 @@ services:
         image: mongo:latest
         container_name: mongodb
         restart: unless-stopped
-        ports:
-            - "127.0.0.1:27018:27017"
+        environment:
+            - MONGO_INITDB_ROOT_USERNAME=${MONGO_INITDB_ROOT_USERNAME}
+            - MONGO_INITDB_ROOT_PASSWORD=${MONGO_INITDB_ROOT_PASSWORD}
+        command:
+            - "--auth"
         volumes:
             - course-mongo-data:/data/db
         networks:
@@ -16,6 +19,10 @@ services:
             dockerfile: Dockerfile
         container_name: my-backend
         restart: unless-stopped
+        environment:
+            - MONGO_URI=mongodb://${MONGO_INITDB_ROOT_USERNAME}:${MONGO_INITDB_ROOT_PASSWORD}@mongodb:27017/
+        env_file:
+            - .env
         ports:
             - "5000:5000"
         depends_on:
