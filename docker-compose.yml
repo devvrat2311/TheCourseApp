@@ -23,8 +23,6 @@ services:
             - MONGO_URI=mongodb://${MONGO_INITDB_ROOT_USERNAME}:${MONGO_INITDB_ROOT_PASSWORD}@mongodb:27017/
         env_file:
             - .env
-        ports:
-            - "5000:5000"
         depends_on:
             - mongodb
         networks:
