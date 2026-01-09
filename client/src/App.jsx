@@ -8,6 +8,10 @@ import {
 
 import Login from "./pages/Auth/Login";
 import SignUp from "./pages/Auth/SignUp";
+import NotVerifiedPage from "./pages/Auth/NotVerifiedPage";
+import VerifyEmail from "./pages/Auth/VerifyEmail";
+import ForgotPasswordPage from "./pages/Auth/ForgotPasswordPage";
+import ResetPasswordPage from "./pages/Auth/ResetPasswordPage";
 
 import { ThemeProvider } from "./contexts/ThemeContext";
 import { FlashProvider } from "./contexts/FlashContext";
@@ -46,6 +50,22 @@ function App() {
 
                             <Route path="/login" element={<Login />} />
                             <Route path="/signup" element={<SignUp />} />
+                            <Route
+                                path="/not-verified"
+                                element={<NotVerifiedPage />}
+                            />
+                            <Route
+                                path="/verify-email"
+                                element={<VerifyEmail />}
+                            />
+                            <Route
+                                path="/forgot-password"
+                                element={<ForgotPasswordPage />}
+                            />
+                            <Route
+                                path="/reset-password"
+                                element={<ResetPasswordPage />}
+                            />
                             <Route
                                 path="/instructor"
                                 element={

@@ -3,6 +3,8 @@ import { useNavigate, Link } from "react-router-dom";
 import { useFlash } from "../../contexts/FlashContext";
 import ThemeToggle from "../../components/ThemeToggle";
 import ClickyBtn from "../../components/ClickyBtn";
+import Logo from "../../components/Logo";
+import Loader from "../../components/Loader";
 
 function SignUp() {
     const navigate = useNavigate();
@@ -17,9 +19,12 @@ function SignUp() {
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
 
+    const [processing, setProcessing] = useState(false);
+
     const handleSubmit = async (e) => {
         e.preventDefault(); //prevent page reload
 
+        setProcessing(true);
         try {
             const formData = {
                 firstName: firstNameRef.current.value,
@@ -44,7 +49,10 @@ function SignUp() {
 
             if (res.ok) {
                 console.log("response", res.ok);
-                showFlash("Signup Successful", "info");
+                showFlash(
+                    "Success! Please verify your Email via the mail sent to your inbox!",
+                    "success",
+                );
                 navigate("/login");
             } else {
                 console.log(data);
@@ -53,11 +61,17 @@ function SignUp() {
         } catch (err) {
             console.error("Error:", err.message);
             showFlash(`error: ${err.message}`, "error");
+        } finally {
+            setProcessing(false);
         }
     };
+    if (processing) {
+        return <Loader />;
+    }
 
     return (
         <>
+            <Logo stylingClass={"logo-navbar"} />
             <div className="login-container-wrapper">
                 <div className="login-container bg-[var(--bg-dark)] flex flex-col">
                     <h2 className="text-3xl font-bold text-left">Sign Up</h2>

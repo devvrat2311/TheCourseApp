@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const crypto = require("crypto");
 
 const authSchema = new mongoose.Schema(
     {
@@ -21,19 +22,30 @@ const authSchema = new mongoose.Schema(
             ],
         },
 
-        passwordHash: {
-            type: String,
-            required: true,
-        },
-
+        //Email Verification
         emailVerificationToken: {
             type: String,
             default: null,
         },
-
         emailVerificationExpires: {
             type: Date,
             default: null,
+        },
+        emailVerified: {
+            type: Boolean,
+            default: false,
+        },
+        emailVerificationAttempts: {
+            type: Number,
+            default: 0,
+            max: 5, //prevent brute force
+        },
+        emailVerifiedAt: Date,
+        emailVerificationLastSent: Date,
+
+        passwordHash: {
+            type: String,
+            required: true,
         },
 
         //Password Reset
@@ -46,6 +58,13 @@ const authSchema = new mongoose.Schema(
             type: Date,
             default: null,
         },
+
+        passwordResetAttempts: {
+            type: Number,
+            default: 0,
+            max: 5, //prevent brute force
+        },
+        passwordResetLastSent: Date,
 
         refreshTokens: [
             {
@@ -85,6 +104,77 @@ const authSchema = new mongoose.Schema(
         timestamps: true,
     },
 );
+
+authSchema.methods.generatePasswordResetToken = function () {
+    // Generate cryptographically secure random token
+    const verificationToken = crypto.randomBytes(32).toString("hex");
+
+    // Hash and store in database
+    this.passwordResetToken = crypto
+        .createHash("sha256")
+        .update(verificationToken)
+        .digest("hex");
+    this.passwordResetExpires = Date.now() + 60 * 60 * 1000; //24 hours
+    // this.emailVerificationAttempts = 0;
+    return verificationToken;
+};
+
+authSchema.methods.verifyPasswordToken = function (token) {
+    //Check if token is expired
+    if (Date.now() > this.passwordResetExpires) {
+        return { valid: false, reason: "Token expired" };
+    }
+
+    //Check max attemps
+    if (this.passwordResetAttempts >= 5) {
+        return { valid: false, reason: "Too many attempts" };
+    }
+
+    const hashedToken = crypto.createHash("sha256").update(token).digest("hex");
+
+    return {
+        valid: hashedToken === this.passwordResetToken,
+        reason:
+            hashedToken === this.passwordResetToken ? "Valid" : "Invalid token",
+    };
+};
+
+// Method to generate verification token
+authSchema.methods.generateEmailVerificationToken = function () {
+    // Generate cryptographically secure random token
+    const verificationToken = crypto.randomBytes(32).toString("hex");
+
+    // Hash and store in database
+    this.emailVerificationToken = crypto
+        .createHash("sha256")
+        .update(verificationToken)
+        .digest("hex");
+    this.emailVerificationExpires = Date.now() + 24 * 60 * 60 * 1000; //24 hours
+    this.emailVerificationAttempts = 0;
+    return verificationToken;
+};
+
+authSchema.methods.verifyEmailToken = function (token) {
+    //Check if token is expired
+    if (Date.now() > this.emailVerificationExpires) {
+        return { valid: false, reason: "Token expired" };
+    }
+
+    //Check max attemps
+    if (this.emailVerificationAttempts >= 5) {
+        return { valid: false, reason: "Too many attempts" };
+    }
+
+    const hashedToken = crypto.createHash("sha256").update(token).digest("hex");
+
+    return {
+        valid: hashedToken === this.emailVerificationToken,
+        reason:
+            hashedToken === this.emailVerificationToken
+                ? "Valid"
+                : "Invalid token",
+    };
+};
 
 // Virtual to check if account is locked
 authSchema.virtual("isLocked").get(function () {

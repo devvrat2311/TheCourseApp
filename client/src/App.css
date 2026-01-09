@@ -152,7 +152,7 @@ main {
 .login-container {
     /*box-shadow: 6px 6px var(--shadow);*/
     background-color: var(--bg);
-    padding: 3rem;
+    padding: 2rem;
     /*border: 4px solid var(--accent);*/
     width: 30rem;
     border-radius: 15px;
@@ -161,7 +161,7 @@ main {
 .input-class {
     outline: none;
     transition: 0.2s all;
-    /*border: 2px solid var(--border);*/
+    /*border: 2px solid var(--fg);*/
     background-color: var(--bg-secondary);
     border-radius: 10px;
 }
@@ -534,6 +534,13 @@ textarea.input-class {
     color: var(--fg);
     border: 2px solid var(--border);
 }
+.flash-persist {
+    box-shadow: 4px 4px var(--accent);
+    background-color: var(--bg);
+    color: var(--fg);
+    border: 2px solid var(--accent);
+    padding: 10px;
+}
 .flash-error {
     box-shadow: 4px 4px var(--error-red);
     background-color: var(--bg);
@@ -552,7 +559,7 @@ textarea.input-class {
 }
 .explore-courses-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(2, 1fr);
     gap: 12px;
 }
 @media (max-width: 1200px) {
@@ -574,6 +581,7 @@ textarea.input-class {
     /*width: 400px;*/
     transition: 0.2s border-color ease-in;
     background: var(--bg-secondary);
+    /*width: 400px;*/
 }
 
 .explore-courses-card h2 {

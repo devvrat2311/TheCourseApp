@@ -73,6 +73,7 @@ class ApiClient {
 
         const response = await fetch(fullUrl, config);
 
+        // console.log("response from api.js frontent fetching tool", response);
         // If request is successful, return response
         if (response.ok) {
             return response;

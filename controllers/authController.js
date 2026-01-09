@@ -3,9 +3,261 @@ const jwt = require("jsonwebtoken");
 const User = require("../models/User");
 const Auth = require("../models/Auth");
 require("dotenv").config();
+const {
+    sendVerificationEmail,
+    sendResetPasswordLink,
+} = require("../services/emailService");
 
 const JWT_SECRET = process.env.JWT_SECRET;
 const JWT_REFRESH_SECRET = process.env.JWT_REFRESH_SECRET;
+
+// const resetPassword = async (req, res) => {
+//     console.log("from resetPassword controller method", req.body);
+//     try {
+//         const
+//     }
+
+// }
+
+const sendPasswordResetMethod = async (req, res) => {
+    console.log("from sendPasswordResetMethod", req.body);
+    try {
+        const userAuthRecord = await Auth.findOne({
+            userEmail: req.body.email,
+        });
+        if (!userAuthRecord) {
+            /*
+            for security, regardless of whether the email exists or not, the system
+            should display a message stating that an email has been sent.
+            This prevents attackers from determining if an email address is valid.
+            */
+            return res.json({
+                success: true,
+                message: "Reset Password Email sent",
+                type: "success",
+            });
+            /*
+            Following section of code is development, when you actually want the realise the
+            errors and not reduce the attack surface
+            */
+            // return res.status(401).json({
+            //     message: "Invalid User, Auth does not exist for this user",
+            //     type: "error",
+            // });
+        }
+
+        console.log(
+            "password reset last sent",
+            userAuthRecord.passwordResetLastSent,
+        );
+        const lastSent = userAuthRecord.passwordResetLastSent || 0;
+        const attempts = userAuthRecord.passwordResetAttempts;
+        if (Date.now() - lastSent < 3600000 && attempts >= 3) {
+            //1 hour
+            const minutesLeft = Math.ceil(
+                (3600000 - (Date.now() - lastSent)) / 60000,
+            );
+            return res.status(429).json({
+                success: false,
+                message: `Please wait ${minutesLeft} minutes before requesting another password reset email`,
+                type: "error",
+            });
+        }
+
+        await sendResetPasswordLink(userAuthRecord);
+        userAuthRecord.passwordResetAttempts = attempts + 1;
+        userAuthRecord.passwordResetLastSent = Date.now();
+        await userAuthRecord.save();
+
+        res.json({
+            success: true,
+            message: "Reset Password Email sent",
+            type: "success",
+        });
+    } catch (err) {
+        res.status(500).json({
+            success: false,
+            message: err.message,
+        });
+    }
+};
+const resetPasswordForgotten = async (req, res) => {
+    try {
+        const { token } = req.params;
+        const { userId } = req.query;
+        const { newPassword } = req.body;
+
+        if (!token) {
+            return res.status(401).json({
+                success: false,
+                error: "Invalid Verification Link",
+            });
+        }
+
+        const authRecord = await Auth.findOne({
+            userId: userId,
+        });
+
+        if (!authRecord) {
+            return res.status(404).json({
+                message: "User Auth data not found",
+            });
+        }
+
+        const validation = authRecord.verifyPasswordToken(token);
+
+        if (!validation.valid) {
+            return res.status(400).json({
+                success: false,
+                error: validation.reason,
+            });
+        }
+
+        // const hashedPassword
+        const passwordHash = await bcrypt.hash(newPassword, 10);
+        console.log(passwordHash);
+        authRecord.passwordHash = passwordHash;
+        authRecord.passwordResetToken = undefined;
+        authRecord.passwordResetExpires = undefined;
+        authRecord.passwordResetAttempts = 0;
+        const result = await authRecord.save();
+        console.log(result);
+
+        res.json({
+            success: true,
+            message: "Password Token Validated and password changed",
+            user: {
+                id: authRecord.userId,
+                email: authRecord.userEmail,
+                newPassword: newPassword,
+            },
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: error.message,
+            extra: "from error control",
+        });
+    }
+};
+const sendVerificationEmailControllerMethod = async (req, res) => {
+    try {
+        const userAuthRecord = await Auth.findOne({
+            userId: req.query.userId,
+        });
+        if (!userAuthRecord) {
+            return res.status(401).json({
+                message: "Invalid User, Auth does not exist for this user",
+            });
+        }
+        if (userAuthRecord.emailVerified) {
+            return res.status(400).json({
+                success: false,
+                error: "Email already verified",
+            });
+        }
+
+        //Check rate limiting (max 3 attempts per hour)
+        const lastSent = userAuthRecord.emailVerificationLastSent || 0;
+        const attempts = userAuthRecord.emailVerificationAttempts;
+        console.log("attempts", attempts);
+        if (Date.now() - lastSent < 3600000 && attempts >= 3) {
+            //1 hour
+            const minutesLeft = Math.ceil(
+                (3600000 - (Date.now() - lastSent)) / 60000,
+            );
+            return res.status(429).json({
+                success: false,
+                error: `Please wait ${minutesLeft} minutes before requesting another verification email`,
+            });
+        }
+
+        await sendVerificationEmail(userAuthRecord);
+        userAuthRecord.emailVerificationAttempts = attempts + 1;
+        userAuthRecord.emailVerificationLastSent = Date.now();
+        const newUserAuthRecord = await userAuthRecord.save();
+        // console.log("saved");
+        // console.log(newUserAuthRecord.emailVerificationAttempts);
+
+        res.json({
+            success: true,
+            message: "Verification Email sent",
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: error.message,
+        });
+    }
+};
+
+const verifyEmail = async (req, res) => {
+    try {
+        const { token } = req.params;
+        const { userId } = req.query;
+
+        if (!token || !userId) {
+            return res.status(401).json({
+                success: false,
+                error: "Invalid Verification Link",
+            });
+        }
+
+        const userAuthRecord = await Auth.findOne({
+            userId: userId,
+        });
+        console.log("hiiiiii", userAuthRecord.userId);
+
+        if (!userAuthRecord) {
+            return res.status(404).json({
+                message: "User Auth data not found",
+            });
+        }
+
+        if (userAuthRecord.emailVerified) {
+            return res.status(400).json({
+                success: false,
+                error: "Email already verified",
+            });
+        }
+
+        // Validate this token
+        const validation = userAuthRecord.verifyEmailToken(token);
+
+        if (!validation.valid) {
+            userAuthRecord.emailVerificationAttempts += 1;
+            await userAuthRecord.save();
+
+            return res.status(400).json({
+                success: false,
+                error: validation.reason,
+            });
+        }
+
+        //Mark email as verified
+        userAuthRecord.emailVerified = true;
+        userAuthRecord.emailVerifiedAt = Date.now();
+        userAuthRecord.emailVerificationToken = undefined;
+        userAuthRecord.emailVerificationExpires = undefined;
+        userAuthRecord.emailVerificationAttempts = 0;
+        await userAuthRecord.save();
+
+        res.json({
+            success: true,
+            message: "Email verified successfully",
+            user: {
+                id: userAuthRecord.userId,
+                email: userAuthRecord.userEmail,
+                emailVerified: userAuthRecord.emailVerified,
+            },
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: error.message,
+        });
+    }
+};
 
 const refreshToken = async (req, res) => {
     try {
@@ -145,7 +397,15 @@ const signUp = async (req, res) => {
             userId: newUser._id,
             passwordHash,
             userEmail: newUser.email,
+            emailVerified: false,
         });
+        await authRecord.save();
+
+        await sendVerificationEmail(authRecord).catch((error) => {
+            console.error("Failed to send verification email: ", error);
+        });
+        authRecord.emailVerificationAttempts += 1;
+        authRecord.emailVerificationLastSent = Date.now();
         await authRecord.save();
 
         res.status(201).json({ message: "User registered successfully" });
@@ -159,11 +419,9 @@ const login = async (req, res) => {
     try {
         const { email, password } = req.body;
         const user = await User.findOne({ email });
-        const userRole = user.role;
-        // console.log("logging user", user.firstName, "\n");
         if (!user)
             return res.status(401).json({ error: "Invalid Credentials" });
-
+        const userRole = user.role;
         const auth = await Auth.findOne({ userId: user._id });
         if (!auth)
             return res.status(401).json({ error: "Auth Data not found" });
@@ -172,6 +430,15 @@ const login = async (req, res) => {
             return res
                 .status(403)
                 .json({ error: "Account is temporarily locked" });
+
+        if (!auth.emailVerified) {
+            return res.status(200).json({
+                success: true,
+                message: "Email not verified",
+                type: "Unverified",
+                userId: auth.userId,
+            });
+        }
 
         const isMatch = await bcrypt.compare(password, auth.passwordHash);
         if (!isMatch) {
@@ -186,6 +453,7 @@ const login = async (req, res) => {
                 userId: user._id,
                 userFullName: user.fullName,
                 role: user.role,
+                emailVerified: auth.emailVerified,
             },
             JWT_SECRET,
             { expiresIn: "1h" },
@@ -208,10 +476,26 @@ const login = async (req, res) => {
 
         await auth.save();
 
-        res.json({ accessToken, refreshToken, userRole });
+        res.status(200).json({
+            success: true,
+            message: "logged in successfully",
+            type: "Verified",
+            accessToken,
+            refreshToken,
+            userRole,
+        });
     } catch (err) {
         res.status(500).json({ error: err.message });
     }
 };
 
-module.exports = { refreshToken, signUp, login, logout };
+module.exports = {
+    refreshToken,
+    signUp,
+    login,
+    logout,
+    sendVerificationEmailControllerMethod,
+    verifyEmail,
+    sendPasswordResetMethod,
+    resetPasswordForgotten,
+};

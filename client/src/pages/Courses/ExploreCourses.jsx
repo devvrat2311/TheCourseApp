@@ -34,7 +34,8 @@ function ExploreCourses() {
                 <h2 className="text-2xl font-bold mb-4 text-left">
                     Explore Courses
                 </h2>
-                <ul className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {/* <ul className="grid grid-cols-1 sm:grid-cols-2 gap-4">*/}
+                <ul className="explore-courses-grid">
                     {courses.map((course) => (
                         <li
                             key={course._id}

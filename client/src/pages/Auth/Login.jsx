@@ -18,21 +18,25 @@ function Login() {
         setError("");
         try {
             const result = await signInUser({ email, password });
+            if (result.type === "Unverified") {
+                showFlash(result.message, "error");
+                navigate(`/not-verified?userId=${result.userId}`);
+            } else {
+                //store token in localstorage
+                localStorage.setItem("accessToken", result.accessToken);
+                localStorage.setItem("refreshToken", result.refreshToken);
 
-            //store token in localstorage
-            localStorage.setItem("accessToken", result.accessToken);
-            localStorage.setItem("refreshToken", result.refreshToken);
-
-            if (result.userRole === "student") {
-                showFlash(`Welcome to your account`, "info");
-                navigate("/dashboard");
-            } else if (result.userRole === "instructor") {
-                showFlash(`Welcome to your account`, "info");
-                navigate("/instructor");
+                //redirect to respective dashboard
+                if (result.userRole === "student") {
+                    showFlash(`Welcome to your account`, "info");
+                    navigate("/dashboard");
+                } else if (result.userRole === "instructor") {
+                    showFlash(`Welcome to your account`, "info");
+                    navigate("/instructor");
+                }
             }
-            //redirect to dashboard
         } catch (err) {
-            showFlash(`Error: ${err.message}`, "info");
+            showFlash(`Error: ${err.message}`, "error");
         }
     };
 
@@ -92,17 +96,23 @@ function Login() {
                         {error && <p className="text-red-500 mt-2">{error}</p>}
 
                         <hr className="border-dashed border-t-2 border-[var(--fg)] mt-6 mb-3"></hr>
-
-                        <div>
-                            <p className="inline">Don't have an account? </p>
-                            <Link
-                                className="inline decoration-1 underline"
-                                to="/signup"
-                            >
-                                Sign Up
-                            </Link>
-                        </div>
                     </form>
+                    <div>
+                        <p className="inline">Don't have an account? </p>
+                        <Link
+                            className="inline decoration-1 underline"
+                            to="/signup"
+                        >
+                            Sign Up
+                        </Link>
+
+                        <Link
+                            className="block decoration-1 underline"
+                            to="/forgot-password"
+                        >
+                            Forgot Password?
+                        </Link>
+                    </div>
                 </div>
             </div>
             <ThemeToggle />

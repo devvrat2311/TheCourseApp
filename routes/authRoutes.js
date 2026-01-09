@@ -5,11 +5,19 @@ const {
     login,
     logout,
     refreshToken,
+    sendVerificationEmailControllerMethod,
+    verifyEmail,
+    sendPasswordResetMethod,
+    resetPasswordForgotten,
 } = require("../controllers/authController");
 
 router.post("/signup", signUp);
 router.post("/login", login);
 router.post("/logout", logout);
 router.post("/refresh", refreshToken);
+router.post("/send-verification", sendVerificationEmailControllerMethod);
+router.get("/verify-email/:token", verifyEmail);
+router.post("/send-password-reset", sendPasswordResetMethod);
+router.post("/verify-password-token/:token", resetPasswordForgotten);
 
 module.exports = router;

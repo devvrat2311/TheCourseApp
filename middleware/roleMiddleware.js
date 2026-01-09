@@ -6,7 +6,7 @@ const verifyStudent = (req, res, next) => {
     } else {
         return res
             .status(403)
-            .json({ message: "This page is meant for Role Student" });
+            .json({ message: "This Route is meant for Role Student" });
     }
 };
 
@@ -16,7 +16,7 @@ const verifyInstructor = (req, res, next) => {
     } else {
         return res
             .status(403)
-            .json({ message: "This page is meant for Role Instructor" });
+            .json({ message: "This Route is meant for Role Instructor" });
     }
 };
 
@@ -26,7 +26,7 @@ const verifyAdmin = (req, res, next) => {
     } else {
         return res
             .status(403)
-            .json({ message: "This page is meant for Role Admin" });
+            .json({ message: "This Route is meant for Role Admin" });
     }
 };
 

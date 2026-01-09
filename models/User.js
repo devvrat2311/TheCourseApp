@@ -1,8 +1,9 @@
 const mongoose = require("mongoose");
+const crypto = require("crypto");
 const ROLES = require("../constants/roles");
 
 const opts = { toJSON: { virtuals: true }, timestamps: true };
-const UserSchema = new mongoose.Schema(
+const userSchema = new mongoose.Schema(
     {
         firstName: {
             type: String,
@@ -142,8 +143,8 @@ const UserSchema = new mongoose.Schema(
     opts,
 );
 
-UserSchema.virtual("fullName").get(function () {
+userSchema.virtual("fullName").get(function () {
     return `${this.firstName} ${this.lastName}`;
 });
 
-module.exports = mongoose.model("User", UserSchema);
+module.exports = mongoose.model("User", userSchema);
