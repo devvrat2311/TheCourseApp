@@ -15,34 +15,47 @@ export default function CompletedQuizContent() {
     const { showFlash } = useFlash();
     const navigate = useNavigate();
 
+    const scrollToTop = () => {
+        window.scrollTo({
+            top: 0,
+            behavior: "smooth",
+        });
+    };
+
     const handleNextSection = async () => {
         setIsAnimating(true);
-        let nextSectionId;
-        let nextModuleId;
+        // let nextSectionId;
+        // let nextModuleId;
         try {
             const response = await api.get(
                 `/courses/${courseId}/${moduleId}/sections/${sectionId}/next`,
             );
             const data = await response.json();
             console.log("data is", data);
-            nextSectionId = data.nextSectionId?.toString();
-            nextModuleId = data.nextModuleId?.toString();
+            // nextSectionId = data.nextSectionId.toString();
+            // nextModuleId = data.nextModuleId?.toString();
             // console.log("these are the next ids", nextSectionId, nextModuleId);
+            //
+            setTimeout(() => {
+                setIsAnimating(false);
+                console.log("Next Next Next");
+                if (data.nextModuleId && data.nextSectionId) {
+                    navigate(
+                        `/student/courses/${courseId}/${data.nextModuleId}/sections/${data.nextSectionId}`,
+                    );
+                    scrollToTop();
+                } else {
+                    navigate(`/student/courses/${courseId}`);
+                    showFlash(
+                        "Congratulations! You completed the course",
+                        "success",
+                    );
+                    scrollToTop();
+                }
+            }, 200);
         } catch (err) {
             console.error("error error error", err.message);
         }
-
-        setTimeout(() => {
-            setIsAnimating(false);
-            console.log("Next Next Next");
-            if (nextModuleId && nextSectionId) {
-                navigate(
-                    `/student/courses/${courseId}/${nextModuleId}/sections/${nextSectionId}`,
-                );
-            } else {
-                showFlash("this is the last section in this course", "info");
-            }
-        }, 200);
     };
 
     useEffect(() => {

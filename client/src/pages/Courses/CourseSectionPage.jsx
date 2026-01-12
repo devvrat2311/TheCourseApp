@@ -36,37 +36,57 @@ function CourseSectionPage() {
     const [isAnimating, setIsAnimating] = useState(false);
     const navigate = useNavigate();
     const { showFlash } = useFlash();
+    // const [nextSectionId, setNextSectionId] = useState(null);
+    // const [nextModuleId, setNextModuleId] = useState(null);
+
+    const scrollToTop = () => {
+        window.scrollTo({
+            top: 0,
+            behavior: "smooth",
+        });
+    };
 
     const handleNextSection = async () => {
         setIsAnimating(true);
-        let nextSectionId;
-        let nextModuleId;
+        // let nextSectionId;
+        // let nextModuleId;
         try {
             const response = await api.get(
                 `/courses/${courseId}/${moduleId}/sections/${selectedSectionId}/next`,
             );
             const data = await response.json();
-            console.log("data is", data);
-            nextSectionId = data.nextSectionId.toString();
-            nextModuleId = data.nextModuleId.toString();
-            console.log("these are the next ids", nextSectionId, nextModuleId);
+            // console.log("data is", data);
+            console.log(
+                "next section id and module is: ",
+                data.nextSectionId,
+                data.nextModuleId,
+            );
+            // nextSectionId = data.nextSectionId?.toString();
+            // setNextSectionId(data.nextSectionId);
+            // nextModuleId = data.nextModuleId?.toString();
+            // setNextModuleId(data.nextModuleId);
+            // console.log("these are the next ids", nextSectionId, nextModuleId);
+
+            setTimeout(() => {
+                setIsAnimating(false);
+                console.log("Next Next Next");
+                if (data.nextModuleId && data.nextSectionId) {
+                    navigate(
+                        `/student/courses/${courseId}/${data.nextModuleId}/sections/${data.nextSectionId}`,
+                    );
+                    setSelectedSectionId(data.nextSectionId);
+                } else {
+                    navigate(`/student/courses/${courseId}`);
+                    showFlash(
+                        "Congratulations! You completed the course",
+                        "success",
+                    );
+                }
+            }, 200);
         } catch (err) {
             console.log(err);
             setError(err.message);
         }
-
-        setTimeout(() => {
-            setIsAnimating(false);
-            console.log("Next Next Next");
-            if (nextModuleId && nextSectionId) {
-                navigate(
-                    `/student/courses/${courseId}/${nextModuleId}/sections/${nextSectionId}`,
-                );
-                setSelectedSectionId(nextSectionId);
-            } else {
-                showFlash("this is the last section in this course", "info");
-            }
-        }, 200);
     };
 
     const handleMarkComplete = async () => {
@@ -117,6 +137,7 @@ function CourseSectionPage() {
                 setError(err.message);
             } finally {
                 setSectionDataLoading(false);
+                scrollToTop();
             }
         };
         fetchCourseSection();

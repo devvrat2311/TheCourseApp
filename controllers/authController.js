@@ -3,10 +3,14 @@ const jwt = require("jsonwebtoken");
 const User = require("../models/User");
 const Auth = require("../models/Auth");
 require("dotenv").config();
+// const {
+//     sendVerificationEmail,
+//     sendResetPasswordLink,
+// } = require("../services/emailService");
 const {
     sendVerificationEmail,
     sendResetPasswordLink,
-} = require("../services/emailService");
+} = require("../services/mailgunEmailService");
 
 const JWT_SECRET = process.env.JWT_SECRET;
 const JWT_REFRESH_SECRET = process.env.JWT_REFRESH_SECRET;
