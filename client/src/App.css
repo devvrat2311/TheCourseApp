@@ -31,7 +31,7 @@ nav {
 
 .nav-content {
     width: 1350px;
-    margin: 0 50px;
+    margin: 0 20px;
 }
 .nav-logo-links {
     display: flex;
@@ -55,7 +55,8 @@ main {
 .main-content {
     width: 100%;
     max-width: 1350px;
-    margin-inline: 50px;
+    margin-inline: 30px;
+    margin-top: 20px;
     display: flex;
     flex: 1;
     /*height: 100vh;*/
@@ -65,6 +66,7 @@ main {
 @media (max-width: 1000px) {
     .main-content {
         flex-direction: column;
+        margin-inline: 10px;
     }
 }
 
@@ -106,21 +108,36 @@ main {
     width: 30rem;
 } */
 .login-container-wrapper {
-    background: linear-gradient(0deg, var(--accent), var(--border));
-    padding: 8px;
+    background: linear-gradient(-45deg, var(--accent), var(--border));
+    padding: 2px;
     border-radius: 20px;
     transition: 0.2s all ease;
+    /*margin-inline: 10rem;*/
+    margin-inline: 10px;
+    min-width: 400px;
+    max-width: 600px;
 }
 
-.certificate-container-wrapper {
+.login-container {
+    /*box-shadow: 6px 6px var(--shadow);*/
+    background-color: var(--bg);
+    padding: 2rem;
+    /*border: 4px solid var(--accent);*/
+    /*width: 30rem;*/
+    border-radius: 18px;
+}
+
+/*.certificate-container-wrapper {
     background: linear-gradient(90deg, var(--accent), var(--border));
     padding: 20px;
     border-radius: 20px;
     transition: 0.2s all ease;
-}
+    display: flex;
+    justify-content: center;
+}*/
 .animated-gradient {
-    padding: 14px;
-    border-radius: 14px;
+    border-radius: 40px;
+    padding: 10px;
     /* border: 2px solid var(--border); */
     background: linear-gradient(
         90deg,
@@ -131,6 +148,25 @@ main {
     );
     background-size: 300% 300%;
     animation: gradientShift 8s ease infinite;
+    display: flex;
+    justify-content: center;
+    max-height: 400px;
+    max-width: 600px;
+}
+
+.animated-gradient-overlay {
+    width: 100%;
+    height: 100%;
+    /* Add your background pattern here */
+    /*background-image: repeating-radial-gradient(
+        #0c0a0a 80%,
+        #2f312f 90%,
+        transparent 90%,
+        #3f4549 90%
+    );*/
+    /*background-size: 65px 65px;*/
+    background-color: var(--bg-secondary);
+    border-radius: 30px;
 }
 
 @keyframes gradientShift {
@@ -143,19 +179,6 @@ main {
     100% {
         background-position: 0% 50%;
     }
-}
-/*.login-container-wrapper:hover,
-.login-container-wrapper.input-class:focus {
-    padding: 10px;
-}*/
-
-.login-container {
-    /*box-shadow: 6px 6px var(--shadow);*/
-    background-color: var(--bg);
-    padding: 2rem;
-    /*border: 4px solid var(--accent);*/
-    width: 30rem;
-    border-radius: 15px;
 }
 
 .input-class {
@@ -559,7 +582,7 @@ textarea.input-class {
 }
 .explore-courses-grid {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(3, 1fr);
     gap: 12px;
 }
 @media (max-width: 1200px) {
@@ -574,7 +597,7 @@ textarea.input-class {
 }
 
 .explore-courses-card {
-    border: 2px solid var(--border);
+    /*border: 2px solid var(--border);*/
     border-radius: 10px;
     padding: 20px;
     text-align: left;

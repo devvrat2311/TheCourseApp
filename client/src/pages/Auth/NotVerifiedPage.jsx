@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useFlash } from "../../contexts/FlashContext";
 import ClickyBtn from "../../components/ClickyBtn";
 import Loader from "../../components/Loader";
+import Logo from "../../components/Logo";
 import ThemeToggle from "../../components/ThemeToggle";
 
 function NotVerifiedPage() {
@@ -44,17 +45,14 @@ function NotVerifiedPage() {
     };
 
     if (emailSending) {
-        return (
-            <div className="login-container-wrapper min-h-screen min-w-screen flex justify-center items-center">
-                <Loader />
-            </div>
-        );
+        return <Loader />;
     }
     return (
         <>
-            <div className="login-container-wrapper min-h-screen min-w-screen flex justify-center items-center">
+            <Logo stylingClass={"logo-navbar"} />
+            <div className="login-container-wrapper min-w-screen ">
                 <div className="flex gap-2 items-center flex-col login-container">
-                    <div className="mb-[40px]">
+                    <div className="font-bold">
                         Kindly Verify Your email and login again
                     </div>
                     <div>

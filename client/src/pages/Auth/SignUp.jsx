@@ -151,7 +151,7 @@ function SignUp() {
 
                         <div className="text-left mb-1 mt-3 flex gap-2">
                             <label
-                                className="font-semibold text-xs text-left mb-1 mt-3"
+                                className="text-xs text-left mb-1 mt-3"
                                 htmlFor="password"
                             >
                                 CONFIRM PASSWORD
@@ -187,13 +187,15 @@ function SignUp() {
                             </div>
                         </ClickyBtn>
 
-                        <hr className="border-t border-gray-300 my-6"></hr>
+                        <hr className="border-t border-[var(--border)] my-6 border-double"></hr>
                     </form>
 
                     <div>
-                        <p className="inline">Already have an account? </p>
+                        <p className="inline text-xs">
+                            Already have an account?{" "}
+                        </p>
                         <Link
-                            className="inline decoration-1 underline"
+                            className="inline text-xs decoration-1 underline underline-offset-2"
                             to="/login"
                         >
                             Log In

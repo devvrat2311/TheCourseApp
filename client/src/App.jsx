@@ -122,22 +122,6 @@ function App() {
                                         />
                                     </Route>
                                 </Route>
-                                <Route
-                                    path="courses/:id/modules/new"
-                                    element={<CreateModule />}
-                                />
-                                <Route
-                                    path="courses/:courseId/modules/:moduleId/sections/new"
-                                    element={<CreateSection />}
-                                />
-                                <Route
-                                    path="courses/:courseId/modules/:moduleId/sections/:sectionId/content/new"
-                                    element={<CreateContentBlock />}
-                                />
-                                <Route
-                                    path="courses/:courseId/modules/:moduleId/sections/:sectionId/quiz/new"
-                                    element={<CreateQuizQuestion />}
-                                />
                             </Route>
                             <Route
                                 path="/student"

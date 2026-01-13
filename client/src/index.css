@@ -22,6 +22,7 @@
     --border: #cbd5e1;
     --shadow: #6dc7d1;
     --accent: #6dc7d1ac;
+    --accent-deeper: #33a8b5;
     --success-green: #00bc7d;
     --success-green-lighter: #00bc7d30;
     --error-red: #ec003f;
@@ -39,6 +40,7 @@
     --border: #4a5567;
     --shadow: #59b9c7;
     --accent: #59b9c7;
+    --accent-deeper: #59b9c7;
     --success-green: #00bc7d;
     --success-green-lighter: #00bc7d30;
     --error-red: #ec003f;

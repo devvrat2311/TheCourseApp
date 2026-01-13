@@ -42,7 +42,7 @@ function Login() {
 
     return (
         <>
-            <Logo stylingClass={"logo-login"} />
+            <Logo stylingClass={"logo-navbar"} />
             <div className="login-container-wrapper">
                 <div className="login-container bg-[var(--bg-dark)] border-[var(--shadow-dark)] flex flex-col">
                     <h2 className="text-3xl font-bold text-left mb-2">Login</h2>
@@ -95,22 +95,23 @@ function Login() {
                         </ClickyBtn>
                         {error && <p className="text-red-500 mt-2">{error}</p>}
 
-                        <hr className="border-dashed border-t-2 border-[var(--fg)] mt-6 mb-3"></hr>
+                        <hr className="border-dashed border-t-1 border-[var(--border)] mt-6 mb-3"></hr>
                     </form>
-                    <div>
-                        <p className="inline">Don't have an account? </p>
+                    <div className="">
                         <Link
-                            className="inline decoration-1 underline"
-                            to="/signup"
-                        >
-                            Sign Up
-                        </Link>
-
-                        <Link
-                            className="block decoration-1 underline"
+                            className="mb-3 block decoration-1 underline text-xs underline-offset-2"
                             to="/forgot-password"
                         >
                             Forgot Password?
+                        </Link>
+                        <p className="text-xs inline">
+                            Don't have an account?{" "}
+                        </p>
+                        <Link
+                            className="text-xs decoration-1 underline underline-offset-2"
+                            to="/signup"
+                        >
+                            Sign Up
                         </Link>
                     </div>
                 </div>

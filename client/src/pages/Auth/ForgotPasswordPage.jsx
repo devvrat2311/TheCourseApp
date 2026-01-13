@@ -51,51 +51,48 @@ function ForgotPasswordPage() {
     }
     return (
         <>
-            <div className="z-0">
-                <Logo stylingClass={"logo-login"} />
-                <div className="login-container-wrapper">
-                    <div className="login-container flex gap-2 flex-col">
-                        <p className="text-left text-xs">
-                            <span className="block text-xl font-bold">
-                                Forgot password?
-                            </span>
-                            Submit your email below to recieve an email with a
-                            password reset link
-                        </p>
-                        <form
-                            onSubmit={sendVerificationMail}
-                            className="pt-2 flex flex-col gap-2"
+            <Logo stylingClass={"logo-navbar"} />
+            <div className="login-container-wrapper">
+                <div className="login-container flex gap-2 flex-col">
+                    <p className="text-left text-xl">Forgot password?</p>
+                    <p className="max-w-[300px] font-bold bg-[var(--bg-secondary)] p-2 rounded text-left text-xs wrap-break-word">
+                        Submit your email below to recieve an email with a
+                        password reset link
+                    </p>
+
+                    <form
+                        onSubmit={sendVerificationMail}
+                        className="pt-2 flex flex-col gap-2"
+                    >
+                        <label
+                            htmlFor="userEmail"
+                            className="text-xs text-left mb-1 mt-3"
                         >
-                            <label
-                                htmlFor="userEmail"
-                                className="text-xs text-left mb-1 mt-3"
-                            >
-                                Email
-                            </label>
-                            <input
-                                name="userEmail"
-                                type="email"
-                                className="input-class p-2"
-                                ref={emailRef}
-                                placeholder="email"
-                                required
-                            />
-                            <ClickyBtn
-                                stylingClass={"back-btn center-btn"}
-                                buttonType={"submit"}
-                            >
-                                <div className="flex gap-2 items-center px-[3rem] py-[0.4rem]">
-                                    <p>Send Password Reset Mail</p>
-                                </div>
-                            </ClickyBtn>
-                        </form>
-                        <Link
-                            className="text-xs underline underline-offset-3"
-                            to={"/login"}
+                            Email
+                        </label>
+                        <input
+                            name="userEmail"
+                            type="email"
+                            className="input-class p-2"
+                            ref={emailRef}
+                            placeholder="email"
+                            required
+                        />
+                        <ClickyBtn
+                            stylingClass={"back-btn center-btn"}
+                            buttonType={"submit"}
                         >
-                            &#8592; Back to Login
-                        </Link>
-                    </div>
+                            <div className="flex gap-2 items-center px-[3rem] py-[0.4rem]">
+                                <p>Send Password Reset Mail</p>
+                            </div>
+                        </ClickyBtn>
+                    </form>
+                    <Link
+                        className="mt-4 text-xs underline underline-offset-3"
+                        to={"/login"}
+                    >
+                        &#8592; Back to Login
+                    </Link>
                 </div>
             </div>
             <ThemeToggle />

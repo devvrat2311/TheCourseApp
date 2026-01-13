@@ -96,11 +96,11 @@ function StudentDashboard() {
                             No courses completed yet.
                         </p>
                     ) : (
-                        <ul className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <ul className="explore-courses-grid">
                             {completedCourses.map((item) => (
                                 <li
                                     key={item.courseId._id}
-                                    className="explore-courses-card border p-4 rounded shadow"
+                                    className="explore-courses-card p-4 rounded shadow"
                                 >
                                     <h3 className="text-lg font-semibold mb-2">
                                         {item.courseId.title}

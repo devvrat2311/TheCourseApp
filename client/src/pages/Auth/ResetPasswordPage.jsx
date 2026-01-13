@@ -110,8 +110,13 @@ function ResetPasswordPage() {
                         </>
                     ) : (
                         <>
-                            <p>Password Changed Successfully</p>
-                            <Link to={"/login"}>Go to Login</Link>
+                            <p>Password Changed Successfully!</p>
+                            <Link
+                                to={"/login"}
+                                className="text-xs underline underline-offset-2"
+                            >
+                                Go to Login
+                            </Link>
                         </>
                     )}
                 </div>

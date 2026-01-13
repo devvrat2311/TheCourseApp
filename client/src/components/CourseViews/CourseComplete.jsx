@@ -6,7 +6,8 @@ function CourseComplete({ course }) {
         <>
             <div className="main-content ">
                 <div className="animated-gradient  w-full">
-                    <div className="flex-col text-left bg-[var(--bg)] h-full p-6 rounded-[9px]">
+                    {/* <div className="flex-col text-left bg-[var(--bg)] h-full p-6 rounded-[9px]">*/}
+                    <div className="animated-gradient-overlay">
                         <p className="text-2xl mb-4">{course.certificate}</p>
                         <p className="">
                             Course Description: {course.description}

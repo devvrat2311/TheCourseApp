@@ -123,7 +123,21 @@ const sendResetPasswordLink = async (userAuthRecord) => {
             <p>You can change your password by clicking the link below</p>
 
             <div style="text-align: center;">
-              <a href="${signedUrl}" class="button">Reset Account Password</a>
+            <a href="https://${signedUrl}"
+               target="_blank"
+               style="
+                 display:inline-block;
+                 padding:12px 24px;
+                 font-family: Arial, sans-serif;
+                 font-size:16px;
+                 color:#ffffff;
+                 background-color:#2563eb;
+                 text-decoration:none;
+                 border-radius:6px;
+                 font-weight:bold;
+               ">
+               Verify Email Address
+            </a>
             </div>
 
             <div class="verification-box">
@@ -309,9 +323,24 @@ const sendVerificationEmail = async (userAuthRecord) => {
             <h2>Hi ${userEmail || "there"},</h2>
             <p>Thank you for signing up for CourseApp! To complete your registration and access all features, please verify your email address by clicking the button below:</p>
 
-            <div style="text-align: center;">
-              <a href="${signedUrl}" class="button">Verify Email Address</a>
+            <div style="text-align:center; margin: 20px 0;">
+              <a href="https://${signedUrl}"
+                 target="_blank"
+                 style="
+                   display:inline-block;
+                   padding:12px 24px;
+                   font-family: Arial, sans-serif;
+                   font-size:16px;
+                   color:#ffffff;
+                   background-color:#2563eb;
+                   text-decoration:none;
+                   border-radius:6px;
+                   font-weight:bold;
+                 ">
+                 Verify Email Address
+              </a>
             </div>
+
 
             <div class="verification-box">
               <p style="margin: 0; color: #666;">
