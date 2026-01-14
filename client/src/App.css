@@ -642,7 +642,7 @@ textarea.input-class {
     width: 200px;
     background-color: var(--bg);
 }
-@media (hover: none) and (pointer: coarse) {
+/*@media (hover: none) and (pointer: coarse) {
     .user-menu {
         transition:
             0.3s opacity cubic-bezier(0.4, 0, 1, 1),
@@ -651,16 +651,16 @@ textarea.input-class {
     .user-menu-open {
         opacity: 100%;
         pointer-events: auto;
-        /*transform: translateY(0px);*/
+        transform: translateY(0px);
         transform: translateX(0px);
     }
     .user-menu-closed {
         opacity: 0;
         pointer-events: none;
-        /*transform: translateY(-10px);*/
+        transform: translateY(-10px);
         transform: translateX(100%);
     }
-}
+}*/
 .user-menu-open {
     opacity: 100%;
     pointer-events: auto;
