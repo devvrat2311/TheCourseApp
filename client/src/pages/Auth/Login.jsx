@@ -15,7 +15,6 @@ function Login() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        setError("");
         try {
             const result = await signInUser({ email, password });
             if (result.type === "Unverified") {
@@ -29,7 +28,7 @@ function Login() {
                 //redirect to respective dashboard
                 if (result.userRole === "student") {
                     showFlash(`Welcome to your account`, "info");
-                    navigate("/dashboard");
+                    navigate("/student/dashboard");
                 } else if (result.userRole === "instructor") {
                     showFlash(`Welcome to your account`, "info");
                     navigate("/instructor");

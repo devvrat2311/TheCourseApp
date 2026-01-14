@@ -238,7 +238,7 @@ textarea.input-class {
     display: flex;
     gap: 1rem;
     align-items: center;
-    padding-inline: 24px;
+    /*padding-inline: 24px;*/
 }
 @media (max-width: 600px) {
     .mobile-dropdown-topsection {
@@ -535,20 +535,37 @@ textarea.input-class {
     border: 2px solid var(--border);
     background-color: var(--bg);
 }
-
-.flash-message {
+.flash-message-div {
+    /*width: 100%;*/
+    width: 100%;
+    /*border: 2px solid;*/
     position: fixed;
     top: 10px;
-    left: 50%;
-    transform: translateX(-50%);
+    /*left: 10px;
+    right: 10px;*/
+    z-index: 1001;
+    padding: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.flash-message {
+    max-width: 500px;
     padding: 10px;
     transition: 0.3s all ease;
     display: flex;
     justify-content: space-between;
     gap: 2rem;
-    z-index: 1001;
     border-radius: 10px;
-    font-size: 14px;
+    font-size: 10px;
+    font-weight: bold;
+}
+
+@media (min-width: 500px) {
+    .flash-message {
+        font-size: 14px;
+    }
 }
 
 .flash-info {
@@ -638,7 +655,7 @@ textarea.input-class {
     padding: 10px;
     display: flex;
     flex-direction: column;
-    gap: 10fg;
+    gap: 10px;
     width: 200px;
     background-color: var(--bg);
 }

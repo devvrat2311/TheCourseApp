@@ -42,7 +42,7 @@ function ExploreCourses() {
                             className="explore-courses-card shadow"
                         >
                             <div>
-                                <h2 className="text-lg font-semibold">
+                                <h2 className="text-xl font-semibold">
                                     {course.title}
                                 </h2>
                                 <p className="text-sm text-shadow-white">

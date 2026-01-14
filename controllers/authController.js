@@ -447,7 +447,9 @@ const login = async (req, res) => {
         const isMatch = await bcrypt.compare(password, auth.passwordHash);
         if (!isMatch) {
             await auth.incLoginAttempts();
-            return res.status(401).json({ error: "Invaild Credentials" });
+            return res
+                .status(401)
+                .json({ error: "Email or Password is Incorrect" });
         }
 
         await auth.resetLoginAttempts();

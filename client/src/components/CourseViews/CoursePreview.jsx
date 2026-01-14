@@ -30,25 +30,27 @@ function CoursePreview({ course }) {
             <div className="main-content flex flex-col">
                 <BackButton2 locationURL={from} />
                 <div className="flex flex-col h-full w-full m-3 p-2">
-                    <h2 className="text-3xl font-bold text-left mt-2 mb-2">
+                    <h2 className="text-5xl font-bold text-left mt-2 mb-2">
                         {course.title}
                     </h2>
-                    <p className="text-left mt-2 mb-2 font-semibold">
-                        {course.description}
-                    </p>
-                    <div>
-                        <p className="text-left mt-6 mb-2">
-                            Things you'll learn in this course
-                        </p>
-                    </div>
-                    <div className="module-info text-left text-xl h-[30vh] mt-2 mb-2 border-2 border-[var(--border)] rounded-xl p-3 flex flex-col justify-baseline items-baseline">
-                        {/* {course.modules.map((module, index) => {
+                    <p className="text-left mt-2 mb-2 ">{course.description}</p>
+                    <div className="module-info text-left bg-[var(--bg-secondary)] mt-2 mb-2 border-2 border-[var(--border)] rounded-xl p-3 flex flex-col justify-baseline items-baseline">
+                        <h2 className="text-xl font-bold text-[var(--accent)] mb-4">
+                            Modules in this course and what they will teach you
+                        </h2>
+                        {course.learningObjectives.map((module, index) => {
                             return (
                                 <div key={index}>
-                                    {module.learningObjective}
+                                    <p className="font-semibold">
+                                        <span className="mr-2">
+                                            {index + 1}
+                                        </span>
+                                        {module.name}
+                                    </p>
+                                    <p>{module.learningObjective}</p>
                                 </div>
                             );
-                        })}*/}
+                        })}
                     </div>
                     <ClickyBtn
                         clickFunction={handleEnroll}

@@ -125,7 +125,6 @@ function App() {
                             </Route>
                             <Route
                                 path="/student"
-                                // path="/"
                                 element={
                                     <PrivateRoute role={"student"}>
                                         <Layout />

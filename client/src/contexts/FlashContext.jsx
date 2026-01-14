@@ -14,7 +14,7 @@ export function FlashProvider({ children }) {
         if (!(flashType === "persist")) {
             setTimeout(() => {
                 setFlashMessage("");
-            }, 3000);
+            }, 10000);
         }
     };
 
