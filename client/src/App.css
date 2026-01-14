@@ -601,18 +601,12 @@ textarea.input-class {
     border-radius: 10px;
     padding: 20px;
     text-align: left;
-    /*width: 400px;*/
     transition: 0.2s border-color ease-in;
     background: var(--bg-secondary);
-    /*width: 400px;*/
-}
-
-.explore-courses-card h2 {
-    margin-bottom: 10px;
-}
-
-.explore-courses-card p {
-    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 200px;
 }
 
 .user-icon-navbar {
@@ -634,6 +628,7 @@ textarea.input-class {
 
 .user-menu {
     transition: 0.2s all ease;
+    z-index: 10;
     position: absolute;
     top: 100%;
     right: 0;
@@ -647,15 +642,36 @@ textarea.input-class {
     width: 200px;
     background-color: var(--bg);
 }
+@media (hover: none) and (pointer: coarse) {
+    .user-menu {
+        transition:
+            0.3s opacity cubic-bezier(0.4, 0, 1, 1),
+            0.6s transform cubic-bezier(0, 0, 0.2, 1);
+    }
+    .user-menu-open {
+        opacity: 100%;
+        pointer-events: auto;
+        /*transform: translateY(0px);*/
+        transform: translateX(0px);
+    }
+    .user-menu-closed {
+        opacity: 0;
+        pointer-events: none;
+        /*transform: translateY(-10px);*/
+        transform: translateX(100%);
+    }
+}
 .user-menu-open {
     opacity: 100%;
     pointer-events: auto;
     transform: translateY(0px);
+    /*transform: translateX(0px);*/
 }
 .user-menu-closed {
     opacity: 0;
     pointer-events: none;
     transform: translateY(-10px);
+    /*transform: translateX(100%);*/
 }
 
 .courses-grid {
