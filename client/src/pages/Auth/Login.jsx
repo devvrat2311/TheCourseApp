@@ -15,6 +15,7 @@ function Login() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setError("");
         try {
             const result = await signInUser({ email, password });
             if (result.type === "Unverified") {
