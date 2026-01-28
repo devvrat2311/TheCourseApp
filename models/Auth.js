@@ -104,6 +104,7 @@ const authSchema = new mongoose.Schema(
         timestamps: true,
     },
 );
+// authSchema.methods.
 
 authSchema.methods.generatePasswordResetToken = function () {
     // Generate cryptographically secure random token

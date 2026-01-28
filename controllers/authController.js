@@ -358,6 +358,7 @@ const logout = async (req, res) => {
         }
 
         authDoc.refreshTokens = authDoc.refreshTokens.filter(
+            //removes the refreshToken for this session from the array
             (rt) => rt.token !== refreshToken,
         );
 
@@ -365,6 +366,36 @@ const logout = async (req, res) => {
         // console.log("From logout controller method authDoc.save():", resp);
 
         res.status(200).json({ message: "Logged out successfully" });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: "Server Error", error: err.message });
+    }
+};
+
+const checkLoggedIn = async (req, res) => {
+    const refreshToken = req.body.refreshToken;
+    console.log("From checkLoggedIn controller method:", refreshToken);
+
+    if (!refreshToken) {
+        return res.status(400).json({ message: "Refresh token required" });
+    }
+
+    try {
+        const authDoc = await Auth.findOne({
+            "refreshTokens.token": refreshToken,
+        });
+
+        if (!authDoc) {
+            return res.status(200).json({
+                loggedIn: false,
+                message: "User not logged in",
+            });
+        } else {
+            res.status(200).json({
+                loggedIn: true,
+                message: "User is logged in",
+            });
+        }
     } catch (err) {
         console.error(err);
         res.status(500).json({ message: "Server Error", error: err.message });
@@ -504,4 +535,5 @@ module.exports = {
     verifyEmail,
     sendPasswordResetMethod,
     resetPasswordForgotten,
+    checkLoggedIn,
 };

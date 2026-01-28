@@ -1,7 +1,9 @@
 const ROLES = require("../constants/roles");
 
 const verifyStudent = (req, res, next) => {
+    console.log("verify Student called");
     if (req.user.role === ROLES.STUDENT) {
+        console.log("verify Student passed");
         next();
     } else {
         return res
@@ -11,7 +13,9 @@ const verifyStudent = (req, res, next) => {
 };
 
 const verifyInstructor = (req, res, next) => {
+    console.log("verify Instructor called");
     if (req.user.role === ROLES.INSTRUCTOR) {
+        console.log("verify Instructor passed");
         next();
     } else {
         return res
@@ -21,7 +25,9 @@ const verifyInstructor = (req, res, next) => {
 };
 
 const verifyAdmin = (req, res, next) => {
+    console.log("verify Admin called");
     if (req.user.role === ROLES.ADMIN) {
+        console.log("verify Admin passed");
         next();
     } else {
         return res

@@ -3,10 +3,13 @@ import api from "../utils/api";
 import { LogOut } from "lucide-react";
 import ClickyBtn from "./ClickyBtn";
 
-function LogoutBtn() {
+function LogoutBtn({ onLogout }) {
     const navigate = useNavigate();
 
     const handleLogout = async () => {
+        if (onLogout) {
+            onLogout();
+        }
         const refreshToken = localStorage.getItem("refreshToken");
 
         if (!refreshToken) {

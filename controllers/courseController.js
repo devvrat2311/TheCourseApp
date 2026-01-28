@@ -2,6 +2,52 @@ const Course = require("../models/Course");
 const User = require("../models/User");
 const mongoose = require("mongoose");
 
+const editContentBlock = async (req, res) => {
+    const { courseId, moduleId, sectionId } = req.params;
+    const { index, type, text } = req.body;
+    console.log("index found", index + 1);
+
+    try {
+        const course = await Course.findById(courseId);
+        if (!course) {
+            return res.status(404).json({ message: "Course not found" });
+        }
+        // const courseTitle = course.title;
+
+        const module = course.modules.id(moduleId);
+        if (!module) {
+            return res.status(404).json({ message: "Module not found" });
+        }
+        // const moduleTitle = module.title;
+
+        const section = module.sections.id(sectionId);
+        if (!section) {
+            return res.status(404).json({ message: "Section not found" });
+        }
+        const contentBlock = section.content[index];
+        console.log("contentBlock", contentBlock);
+
+        contentBlock.text = text;
+        await course.save();
+        res.status(200).json({
+            message: "ContentBlock updated successfully",
+        });
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+    // res.json({
+    //     infoObj: {
+    //         courseId,
+    //         moduleId,
+    //         sectionId,
+    //     },
+    //     text,
+    //     index,
+    //     type,
+    //     message: "cood cood",
+    // });
+};
+
 const createQuizQuestion = async (req, res) => {
     const { courseId, moduleId, sectionId } = req.params;
     console.log("req.body is: ", req.body);
@@ -1027,4 +1073,5 @@ module.exports = {
     getContentForSection,
     createContentBlock,
     createQuizQuestion,
+    editContentBlock,
 };

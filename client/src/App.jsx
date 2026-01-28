@@ -37,6 +37,7 @@ import EditSection from "./pages/Instructor/EditSection";
 import CreateContentBlock from "./pages/Instructor/CreateContentBlock";
 import CreateQuizQuestion from "./pages/Instructor/CreateQuizQuestion";
 import EditCourseLayout from "./pages/Instructor/EditCourseLayout";
+import EditContentBlock from "./pages/Instructor/EditContentBlock";
 
 function App() {
     return (
@@ -119,6 +120,10 @@ function App() {
                                         <Route
                                             path="new-quiz"
                                             element={<CreateQuizQuestion />}
+                                        />
+                                        <Route
+                                            path="edit-content"
+                                            element={<EditContentBlock />}
                                         />
                                     </Route>
                                 </Route>

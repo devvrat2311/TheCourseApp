@@ -1,23 +1,74 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { signInUser } from "../../utils/auth";
 import { useFlash } from "../../contexts/FlashContext";
 import Logo from "../../components/Logo";
 import ThemeToggle from "../../components/ThemeToggle";
 import ClickyBtn from "../../components/ClickyBtn";
+import { jwtDecode } from "jwt-decode";
+import LogoutBtn from "../../components/LogoutBtn";
+import { CircleUser } from "lucide-react";
 
 function Login() {
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
+    // const [email, setEmail] = useState("");
+    const emailRef = useRef();
+    // const [password, setPassword] = useState("");
+    const passwordRef = useRef();
     const [error, setError] = useState("");
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [loggedInName, setLoggedInName] = useState("");
+    const [loggedInRole, setLoggedInRole] = useState("");
     const navigate = useNavigate();
     const { showFlash } = useFlash();
+    console.log("rendering login page");
+
+    useEffect(() => {
+        const checkLoggedIn = async () => {
+            const refreshToken = localStorage.getItem("refreshToken");
+            if (!refreshToken) {
+                return;
+            }
+            try {
+                const response = await fetch(`/api/v1/auth/check-logged-in`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        refreshToken: localStorage.getItem("refreshToken"),
+                    }),
+                });
+                const data = await response.json();
+                console.log(data);
+                setIsLoggedIn(data.loggedIn);
+                if (isLoggedIn) {
+                    const decodedToken = jwtDecode(
+                        localStorage.getItem("accessToken"),
+                    );
+                    setLoggedInName(decodedToken.userFullName);
+                    setLoggedInRole(decodedToken.role);
+                } else {
+                    setLoggedInName("");
+                    setLoggedInRole("");
+                }
+            } catch (err) {
+                console.log(err);
+                showFlash(err, "error");
+            }
+        };
+        checkLoggedIn();
+    }, [isLoggedIn]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         setError("");
+        const emailData = emailRef.current.value;
+        const passwordData = passwordRef.current.value;
         try {
-            const result = await signInUser({ email, password });
+            const result = await signInUser({
+                email: emailData,
+                password: passwordData,
+            });
             if (result.type === "Unverified") {
                 showFlash(result.message, "error");
                 navigate(`/not-verified?userId=${result.userId}`);
@@ -39,6 +90,28 @@ function Login() {
             showFlash(`Error: ${err.message}`, "error");
         }
     };
+
+    if (isLoggedIn) {
+        return (
+            <div className="text-left border-2 p-4 border-[var(--border)] rounded-xl">
+                <div className="p-2 rounded-xl bg-[var(--bg-secondary)]">
+                    <p>You're already logged in as </p>
+                    <p className="font-bold text-xl">{loggedInName}</p>
+                </div>
+                <div className="flex gap-2 mt-2 justify-between">
+                    <Link to={`/${loggedInRole}`}>
+                        <button className="duration-200 transition-all text-xs cursor-pointer hover:bg-[var(--bg-secondary)] rounded-[5px] py-2 px-1 ">
+                            <div className="flex gap-2 font-semibold items-center">
+                                <CircleUser size={"16px"} />
+                                <p>Go to Account</p>
+                            </div>
+                        </button>
+                    </Link>
+                    <LogoutBtn onLogout={() => setIsLoggedIn(false)} />
+                </div>
+            </div>
+        );
+    }
 
     return (
         <>
@@ -63,8 +136,9 @@ function Login() {
                             name="email"
                             type="email"
                             placeholder="your@email.com"
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
+                            // value={email}
+                            // onChange={(e) => setEmail(e.target.value)}
+                            ref={emailRef}
                             required
                         />
 
@@ -80,8 +154,9 @@ function Login() {
                             placeholder="password"
                             name="password"
                             type="password"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
+                            // value={password}
+                            // onChange={(e) => setPassword(e.target.value)}
+                            ref={passwordRef}
                             required
                         />
 

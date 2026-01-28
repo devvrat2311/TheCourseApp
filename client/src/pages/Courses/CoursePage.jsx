@@ -16,6 +16,7 @@ function CoursePage() {
     const [error, setError] = useState(null);
 
     useEffect(() => {
+        console.log("running effect");
         const fetchCourse = async () => {
             try {
                 const response = await api.get(`/courses/${courseId}`, {

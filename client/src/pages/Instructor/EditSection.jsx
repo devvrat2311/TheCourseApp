@@ -19,6 +19,32 @@ import TeX from "@matejmazur/react-katex";
 import ClickyBtn from "../../components/ClickyBtn";
 import { DiamondPlus, Pencil } from "lucide-react";
 
+const ContentBlockWrapper = ({
+    children,
+    index,
+    type,
+    className = "",
+    hasEditButton = true,
+    navigateFunction,
+}) => {
+    return (
+        <div className={`relative ${className}`}>
+            {hasEditButton && (
+                <button
+                    onClick={() => navigateFunction(index, type)}
+                    className="cursor-pointer p-1 rounded-full absolute left-[-0.3rem]"
+                >
+                    <Pencil
+                        className="text-[var(--border)] hover:text-[var(--accent)] duration-200 transition-all"
+                        size={16}
+                    />
+                </button>
+            )}
+            {children}
+        </div>
+    );
+};
+
 function EditSection() {
     const { courseId, moduleId, sectionId } = useParams();
     const { setCourseTitle, setModuleTitle, setSectionTitle, setLocationURL } =
@@ -82,6 +108,17 @@ function EditSection() {
         );
     };
 
+    const navigateToEditContentBlock = (index, type) => {
+        navigate(
+            `/instructor/courses/${courseId}/modules/${moduleId}/sections/${sectionId}/edit/edit-content?index=${index}&type=${type}`,
+            {
+                state: {
+                    from: location.pathname,
+                },
+            },
+        );
+    };
+
     return (
         <>
             <Outlet />
@@ -90,79 +127,134 @@ function EditSection() {
                     {contentType === "normal" ? (
                         <>
                             {content.map((contentBlock, index) => {
-                                switch (contentBlock.type) {
-                                    case "heading":
-                                        return (
-                                            <h2
-                                                key={index}
-                                                className="section-heading font-bold text-2xl ml-6 mt-5"
-                                            >
-                                                {contentBlock.text}
-                                            </h2>
-                                        );
-                                    case "subheading":
-                                        return (
-                                            <h2
-                                                key={index}
-                                                className="section-subheading text-xl text-[var(--accent)] font-bold ml-6 mt-5"
-                                            >
-                                                {contentBlock.text}
-                                            </h2>
-                                        );
-                                    case "paragraph":
-                                        return (
-                                            <h2
-                                                key={index}
-                                                className="section-paragraph ml-6 mt-2"
-                                            >
-                                                {contentBlock.text}
-                                            </h2>
-                                        );
-                                    case "bullet":
-                                        return (
-                                            <p
-                                                key={index}
-                                                className="section-bullet ml-10 mt-5 mr-6"
-                                            >
-                                                {contentBlock.text}
-                                            </p>
-                                        );
-
-                                    case "image":
-                                        return (
-                                            <img
-                                                key={index}
-                                                src={contentBlock.src}
-                                                alt={contentBlock.alt}
-                                                className="section-image ml-5"
-                                            />
-                                        );
-                                    case "code":
-                                        return (
-                                            <div
-                                                key={index}
-                                                className="section-code ml-6 mt-5 mr-6"
-                                            >
-                                                <pre>
-                                                    <code
-                                                        className={`language-${contentBlock.language}`}
+                                {
+                                    console.log(contentBlock);
+                                    switch (contentBlock.type) {
+                                        case "heading":
+                                            return (
+                                                <ContentBlockWrapper
+                                                    key={index}
+                                                    index={index}
+                                                    type={contentBlock.type}
+                                                    className="section-heading mt-5"
+                                                    navigateFunction={
+                                                        navigateToEditContentBlock
+                                                    }
+                                                >
+                                                    <h2
+                                                        key={index}
+                                                        className="font-bold text-2xl ml-6"
                                                     >
-                                                        {contentBlock.code}
-                                                    </code>
-                                                </pre>
-                                            </div>
-                                        );
-                                    case "latex":
-                                        return (
-                                            <div
-                                                key={index}
-                                                className="latex-code ml-6 mt-5 mr-6"
-                                            >
-                                                <TeX>{contentBlock.text}</TeX>
-                                            </div>
-                                        );
-                                    default:
-                                        return null;
+                                                        {contentBlock.text}
+                                                    </h2>
+                                                </ContentBlockWrapper>
+                                            );
+                                        case "subheading":
+                                            return (
+                                                <ContentBlockWrapper
+                                                    key={index}
+                                                    index={index}
+                                                    type={contentBlock.type}
+                                                    className="section-subheading mt-4"
+                                                    navigateFunction={
+                                                        navigateToEditContentBlock
+                                                    }
+                                                >
+                                                    <h2
+                                                        key={index}
+                                                        className="text-xl text-[var(--accent)] font-bold ml-6"
+                                                    >
+                                                        {contentBlock.text}
+                                                    </h2>
+                                                </ContentBlockWrapper>
+                                            );
+                                        case "paragraph":
+                                            return (
+                                                <ContentBlockWrapper
+                                                    key={index}
+                                                    index={index}
+                                                    type={contentBlock.type}
+                                                    className="section-paragraph mt-2"
+                                                    navigateFunction={
+                                                        navigateToEditContentBlock
+                                                    }
+                                                >
+                                                    <h2
+                                                        key={index}
+                                                        className="ml-6"
+                                                    >
+                                                        {contentBlock.text}
+                                                    </h2>
+                                                </ContentBlockWrapper>
+                                            );
+                                        case "bullet":
+                                            return (
+                                                <ContentBlockWrapper
+                                                    key={index}
+                                                    index={index}
+                                                    type={contentBlock.type}
+                                                    className="mt-5"
+                                                    navigateFunction={
+                                                        navigateToEditContentBlock
+                                                    }
+                                                >
+                                                    <p
+                                                        key={index}
+                                                        className="section-bullet ml-10 mr-6"
+                                                    >
+                                                        {contentBlock.text}
+                                                    </p>
+                                                </ContentBlockWrapper>
+                                            );
+
+                                        case "image":
+                                            return (
+                                                <ContentBlockWrapper
+                                                    key={index}
+                                                    index={index}
+                                                    type={contentBlock.type}
+                                                    className="mt-5"
+                                                    navigateFunction={
+                                                        navigateToEditContentBlock
+                                                    }
+                                                >
+                                                    <img
+                                                        key={index}
+                                                        src={contentBlock.src}
+                                                        alt={contentBlock.alt}
+                                                        className="section-image ml-5"
+                                                    />
+                                                </ContentBlockWrapper>
+                                            );
+                                        case "code":
+                                            return (
+                                                <div
+                                                    key={index}
+                                                    className="section-code ml-6 mt-5 mr-6"
+                                                >
+                                                    <pre>
+                                                        <code
+                                                            className={`language-${contentBlock.language}`}
+                                                        >
+                                                            {contentBlock.code}
+                                                        </code>
+                                                    </pre>
+                                                </div>
+                                            );
+                                        case "latex":
+                                            return (
+                                                <div
+                                                    key={index}
+                                                    className="latex-code ml-6 mt-5 mr-6"
+                                                >
+                                                    <TeX>
+                                                        {contentBlock.text}
+                                                    </TeX>
+                                                </div>
+                                            );
+                                        default:
+                                            return null;
+                                    }
                                 }
                             })}
 

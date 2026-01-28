@@ -112,6 +112,7 @@ function CourseSectionPage() {
     };
     useEffect(() => {
         //get current Section
+        console.log("Rendering fetchcoursesection effect");
         const fetchCourseSection = async () => {
             try {
                 const response = await api.get(
@@ -144,10 +145,12 @@ function CourseSectionPage() {
     }, [courseId, moduleId, selectedSectionId]);
 
     useEffect(() => {
+        console.log("Rendering setSelectedSectionId effect");
         setSelectedSectionId(sectionId);
     }, [sectionId]);
 
     useEffect(() => {
+        console.log("Rendering fetchAllSections effect");
         const fetchAllSections = async () => {
             try {
                 const response = await api.get(

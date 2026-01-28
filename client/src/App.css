@@ -539,27 +539,30 @@ textarea.input-class {
     /*width: 100%;*/
     width: 100%;
     /*border: 2px solid;*/
-    position: fixed;
-    top: 10px;
     /*left: 10px;
     right: 10px;*/
-    z-index: 1001;
     padding: 10px;
     display: flex;
     justify-content: center;
+    z-index: -1;
     align-items: center;
 }
 
 .flash-message {
+    position: fixed;
+    top: 10px;
     max-width: 500px;
     padding: 10px;
+    margin-inline: 20px;
+    width: 90vw;
     transition: 0.3s all ease;
     display: flex;
     justify-content: space-between;
     gap: 2rem;
     border-radius: 10px;
-    font-size: 10px;
+    font-size: 14px;
     font-weight: bold;
+    z-index: 1001;
 }
 
 @media (min-width: 500px) {
@@ -655,7 +658,7 @@ textarea.input-class {
     padding: 10px;
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    /*gap: 10px;*/
     width: 200px;
     background-color: var(--bg);
 }

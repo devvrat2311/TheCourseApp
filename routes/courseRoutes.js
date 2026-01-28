@@ -1,7 +1,10 @@
 const express = require("express");
 const router = express.Router();
 const { verifyToken } = require("../middleware/auth");
-const { verifyStudent } = require("../middleware/roleMiddleware");
+const {
+    verifyStudent,
+    verifyInstructor,
+} = require("../middleware/roleMiddleware");
 const {
     enrollInCourse,
     getAllCourses,
@@ -21,65 +24,83 @@ const {
     createFreshSection,
     getContentForSection,
     createContentBlock,
+    editContentBlock,
     createQuizQuestion,
+    editQuizQuestion,
+    reorderModules,
+    reorderSections,
+    reorderContentBlocks,
+    reorderQuizQuestions,
 } = require("../controllers/courseController");
 
 router.use(verifyToken);
 
 //instructor endpoints
-router.post("/create", createCourse);
-router.get("/my-created-courses", getMyCreatedCourses);
-router.get("/:id/modules", getModulesForCreatedCourse);
-router.post("/:id/modules/create", createModule);
-router.get("/:courseId/modules/:moduleId/sections", getSectionsForModule);
-router.post("/:courseId/modules/:moduleId/sections/create", createFreshSection);
+router.post("/create", verifyInstructor, createCourse);
+router.get("/my-created-courses", verifyInstructor, getMyCreatedCourses);
+router.get("/:id/modules", verifyInstructor, getModulesForCreatedCourse);
+router.post("/:id/modules/create", verifyInstructor, createModule);
+router.get(
+    "/:courseId/modules/:moduleId/sections",
+    verifyInstructor,
+    getSectionsForModule,
+);
+router.post(
+    "/:courseId/modules/:moduleId/sections/create",
+    verifyInstructor,
+    createFreshSection,
+);
 router.get(
     "/:courseId/modules/:moduleId/sections/:sectionId/children",
+    verifyInstructor,
     getContentForSection,
 );
 router.post(
     "/:courseId/modules/:moduleId/sections/:sectionId/content",
+    verifyInstructor,
     createContentBlock,
 );
 router.post(
     "/:courseId/modules/:moduleId/sections/:sectionId/quiz-questions",
+    verifyInstructor,
     createQuizQuestion,
 );
-// router.post(
-//     "/:courseId/modules/:moduleId/sections/:sectionId/content",
-//     async (req, res) => {
-//         console.log("wreck dat body", req.body);
-//         res.send(req.body);
-//     },
-// );
-// router.post("example", async (req, res) => {
-//     console.log(req.body);
-//     res.send({ message: "hello" });
-// });
-// router.post(
-//     "/:courseId/modules/:moduleId/sections/create",
-//     async (req, res) => {
-//         console.log("wreck dat body", req.body);
-//         res.send(req.body);
-//     },
-// );
+router.patch(
+    "/:courseId/modules/:moduleId/sections/:sectionId/content/edit-content",
+    verifyInstructor,
+    editContentBlock,
+);
 
 //students endpoints
-router.get("/my-courses", getMyCourses);
-router.get("/", getAllCourses);
-router.get("/:id", getCourseById);
-router.post("/:id/enroll", enrollInCourse);
-router.get("/:courseId/:moduleId/sections/:sectionId", getSectionById);
-router.get("/:courseId/:moduleId", getAllSections);
+router.get("/my-courses", verifyStudent, getMyCourses);
+router.get("/", verifyStudent, getAllCourses);
+router.get("/:id", verifyStudent, getCourseById);
+router.post("/:id/enroll", verifyStudent, enrollInCourse);
+router.get(
+    "/:courseId/:moduleId/sections/:sectionId",
+    verifyStudent,
+    getSectionById,
+);
+router.get("/:courseId/:moduleId", verifyStudent, getAllSections);
 router.post(
     "/:courseId/:moduleId/sections/:sectionId/complete",
+    verifyStudent,
     markSectionComplete,
 );
-router.post("/:courseId/:moduleId/sections/:sectionId/submit-quiz", submitQuiz);
+router.post(
+    "/:courseId/:moduleId/sections/:sectionId/submit-quiz",
+    verifyStudent,
+    submitQuiz,
+);
 router.get(
     "/:courseId/:moduleId/sections/:sectionId/completed-quiz",
+    verifyStudent,
     getCompletedQuizDetails,
 );
-router.get("/:courseId/:moduleId/sections/:sectionId/next", returnNextSection);
+router.get(
+    "/:courseId/:moduleId/sections/:sectionId/next",
+    verifyStudent,
+    returnNextSection,
+);
 
 module.exports = router;
