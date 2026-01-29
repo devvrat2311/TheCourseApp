@@ -4,7 +4,7 @@ const mongoose = require("mongoose");
 
 const editContentBlock = async (req, res) => {
     const { courseId, moduleId, sectionId } = req.params;
-    const { index, type, text } = req.body;
+    const { index, type, text, src, code } = req.body;
     console.log("index found", index + 1);
 
     try {
@@ -27,7 +27,26 @@ const editContentBlock = async (req, res) => {
         const contentBlock = section.content[index];
         console.log("contentBlock", contentBlock);
 
-        contentBlock.text = text;
+        switch (type) {
+            case "heading":
+            case "subheading":
+            case "paragraph":
+            case "bullet":
+            case "latex":
+                console.log("text");
+                contentBlock.text = text;
+                break;
+            case "image":
+                console.log("image");
+                contentBlock.src = src;
+                break;
+            case "code":
+                console.log("code");
+                contentBlock.code = code;
+                break;
+            default:
+                break;
+        }
         await course.save();
         res.status(200).json({
             message: "ContentBlock updated successfully",

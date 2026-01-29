@@ -14,6 +14,7 @@ import "prism-themes/themes/prism-nord.css";
 import "prismjs/components/prism-javascript";
 import "prismjs/components/prism-python";
 import "prismjs/components/prism-c";
+import "prismjs/components/prism-cpp";
 import "katex/dist/katex.min.css";
 import TeX from "@matejmazur/react-katex";
 import ClickyBtn from "../../components/ClickyBtn";
@@ -23,6 +24,7 @@ const ContentBlockWrapper = ({
     children,
     index,
     type,
+    content,
     className = "",
     hasEditButton = true,
     navigateFunction,
@@ -31,7 +33,7 @@ const ContentBlockWrapper = ({
         <div className={`relative ${className}`}>
             {hasEditButton && (
                 <button
-                    onClick={() => navigateFunction(index, type)}
+                    onClick={() => navigateFunction(index, type, content)}
                     className="cursor-pointer p-1 rounded-full absolute left-[-0.3rem]"
                 >
                     <Pencil
@@ -108,12 +110,14 @@ function EditSection() {
         );
     };
 
-    const navigateToEditContentBlock = (index, type) => {
+    const navigateToEditContentBlock = (index, type, content) => {
+        const encodedContent = encodeURIComponent(content);
         navigate(
-            `/instructor/courses/${courseId}/modules/${moduleId}/sections/${sectionId}/edit/edit-content?index=${index}&type=${type}`,
+            `/instructor/courses/${courseId}/modules/${moduleId}/sections/${sectionId}/edit/edit-content?index=${index}&type=${type}&content=${encodedContent}`,
             {
                 state: {
                     from: location.pathname,
+                    content: content,
                 },
             },
         );
@@ -136,6 +140,7 @@ function EditSection() {
                                                     key={index}
                                                     index={index}
                                                     type={contentBlock.type}
+                                                    content={contentBlock.text}
                                                     className="section-heading mt-5"
                                                     navigateFunction={
                                                         navigateToEditContentBlock
@@ -155,6 +160,7 @@ function EditSection() {
                                                     key={index}
                                                     index={index}
                                                     type={contentBlock.type}
+                                                    content={contentBlock.text}
                                                     className="section-subheading mt-4"
                                                     navigateFunction={
                                                         navigateToEditContentBlock
@@ -174,6 +180,7 @@ function EditSection() {
                                                     key={index}
                                                     index={index}
                                                     type={contentBlock.type}
+                                                    content={contentBlock.text}
                                                     className="section-paragraph mt-2"
                                                     navigateFunction={
                                                         navigateToEditContentBlock
@@ -193,6 +200,7 @@ function EditSection() {
                                                     key={index}
                                                     index={index}
                                                     type={contentBlock.type}
+                                                    content={contentBlock.text}
                                                     className="mt-5"
                                                     navigateFunction={
                                                         navigateToEditContentBlock
@@ -213,6 +221,7 @@ function EditSection() {
                                                     key={index}
                                                     index={index}
                                                     type={contentBlock.type}
+                                                    content={contentBlock.text}
                                                     className="mt-5"
                                                     navigateFunction={
                                                         navigateToEditContentBlock
@@ -228,29 +237,53 @@ function EditSection() {
                                             );
                                         case "code":
                                             return (
-                                                <div
+                                                <ContentBlockWrapper
                                                     key={index}
-                                                    className="section-code ml-6 mt-5 mr-6"
+                                                    index={index}
+                                                    type={contentBlock.type}
+                                                    content={contentBlock.code}
+                                                    className="mt-5"
+                                                    navigateFunction={
+                                                        navigateToEditContentBlock
+                                                    }
                                                 >
-                                                    <pre>
-                                                        <code
-                                                            className={`language-${contentBlock.language}`}
-                                                        >
-                                                            {contentBlock.code}
-                                                        </code>
-                                                    </pre>
-                                                </div>
+                                                    <div
+                                                        key={index}
+                                                        className="section-code ml-6 mt-5 mr-6"
+                                                    >
+                                                        <pre>
+                                                            <code
+                                                                className={`language-${contentBlock.language}`}
+                                                            >
+                                                                {
+                                                                    contentBlock.code
+                                                                }
+                                                            </code>
+                                                        </pre>
+                                                    </div>
+                                                </ContentBlockWrapper>
                                             );
                                         case "latex":
                                             return (
-                                                <div
+                                                <ContentBlockWrapper
                                                     key={index}
-                                                    className="latex-code ml-6 mt-5 mr-6"
+                                                    index={index}
+                                                    type={contentBlock.type}
+                                                    content={contentBlock.text}
+                                                    className="mt-5"
+                                                    navigateFunction={
+                                                        navigateToEditContentBlock
+                                                    }
                                                 >
-                                                    <TeX>
-                                                        {contentBlock.text}
-                                                    </TeX>
-                                                </div>
+                                                    <div
+                                                        key={index}
+                                                        className="latex-code ml-6 mt-5 mr-6"
+                                                    >
+                                                        <TeX>
+                                                            {contentBlock.text}
+                                                        </TeX>
+                                                    </div>
+                                                </ContentBlockWrapper>
                                             );
                                         default:
                                             return null;

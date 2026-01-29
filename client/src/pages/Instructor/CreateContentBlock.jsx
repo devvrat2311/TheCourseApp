@@ -180,7 +180,7 @@ function CreateContentBlock() {
                         />
                         <input
                             type="text"
-                            placeholder="Language (js, python, etc."
+                            placeholder="available languages - javascript, python, cpp, c"
                             value={formData.language || ""}
                             className="input-class p-2 w-full mb-[20px]"
                             onChange={(e) => {

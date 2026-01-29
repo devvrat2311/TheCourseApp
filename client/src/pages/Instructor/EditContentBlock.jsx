@@ -1,5 +1,10 @@
-import { useState } from "react";
-import { useNavigate, useParams, useSearchParams } from "react-router-dom";
+import { useState, useEffect } from "react";
+import {
+    useNavigate,
+    useParams,
+    useSearchParams,
+    useLocation,
+} from "react-router-dom";
 import { Maximize2, Minimize2 } from "lucide-react";
 import ClickyBtn from "../../components/ClickyBtn";
 import api from "../../utils/api";
@@ -7,12 +12,36 @@ import api from "../../utils/api";
 function EditContentBlock() {
     const navigate = useNavigate();
     const { courseId, moduleId, sectionId } = useParams();
+
     const [params] = useSearchParams();
     const index = params.get("index");
     const type = params.get("type");
-    console.log("index and type", index, type);
+    // const content = params.get("content");
+    const { content } = useLocation().state;
+    // console.log("index and type", index, type);
+
     const [maximize, setMaximize] = useState(false);
     const [formData, setFormData] = useState({});
+
+    useEffect(() => {
+        switch (type) {
+            case "heading":
+            case "subheading":
+            case "paragraph":
+            case "bullet":
+            case "latex":
+                setFormData({ ...formData, text: content });
+                break;
+            case "image":
+                setFormData({ ...formData, src: content });
+                break;
+            case "code":
+                setFormData({ ...formData, code: content });
+                break;
+            default:
+                break;
+        }
+    }, []);
 
     const toggleMaximize = () => {
         setMaximize(!maximize);
@@ -24,6 +53,10 @@ function EditContentBlock() {
 
         try {
             const dataToSend = { ...formData, type, index };
+            console.log(
+                "dataToSend from line 50 in EditContentBlock",
+                dataToSend,
+            );
 
             console.log("sending from frondend", dataToSend);
             const res = await api.patch(
@@ -57,7 +90,6 @@ function EditContentBlock() {
                         onChange={(e) =>
                             setFormData({ ...formData, text: e.target.value })
                         }
-                        placeholder="Enter Text..."
                         onInput={(e) => {
                             e.target.style.height = "auto";
                             e.target.style.height =
@@ -186,7 +218,7 @@ function EditContentBlock() {
                         />
                         <input
                             type="text"
-                            placeholder="Language (js, python, etc."
+                            placeholder="available languages - javascript, python, cpp, c"
                             value={formData.language || ""}
                             className="input-class p-2 w-full mb-[20px]"
                             onChange={(e) => {
