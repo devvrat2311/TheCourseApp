@@ -102,7 +102,7 @@ function EditModule() {
                             ? "No sections found"
                             : sections.map((section, index) => (
                                   <div key={index}>
-                                      <div className="flex items-baseline justify-between border-2 mt-2 p-1 rounded-xl border-[var(--border)] w-[350px]">
+                                      <div className="flex items-baseline justify-between border-2 mt-2 p-1 rounded-xl border-[var(--border)]">
                                           <div className="flex items-baseline w-full gap-2 h-fit">
                                               <p className="text-[18px] font-bold text-[var(--border)]">
                                                   {returnDoubleDigit(index + 1)}

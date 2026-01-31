@@ -59,7 +59,6 @@ function CreateContentBlock() {
                         }}
                         rows={1}
                         className="input-class p-2 w-full mb-[20px]"
-                        // rows={3}
                     />
                 );
 

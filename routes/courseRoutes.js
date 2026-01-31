@@ -66,9 +66,14 @@ router.post(
     createQuizQuestion,
 );
 router.patch(
-    "/:courseId/modules/:moduleId/sections/:sectionId/content/edit-content",
+    "/:courseId/modules/:moduleId/sections/:sectionId/content",
     verifyInstructor,
     editContentBlock,
+);
+router.patch(
+    "/:courseId/modules/:moduleId/sections/:sectionId/quiz-questions",
+    verifyInstructor,
+    editQuizQuestion,
 );
 
 //students endpoints

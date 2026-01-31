@@ -4,8 +4,8 @@ const mongoose = require("mongoose");
 
 const editContentBlock = async (req, res) => {
     const { courseId, moduleId, sectionId } = req.params;
-    const { index, type, text, src, code } = req.body;
-    console.log("index found", index + 1);
+    const { index, type, text, src, code, alt, language } = req.body;
+    // console.log("index found", index + 1);
 
     try {
         const course = await Course.findById(courseId);
@@ -25,7 +25,7 @@ const editContentBlock = async (req, res) => {
             return res.status(404).json({ message: "Section not found" });
         }
         const contentBlock = section.content[index];
-        console.log("contentBlock", contentBlock);
+        // console.log("contentBlock", contentBlock);
 
         switch (type) {
             case "heading":
@@ -33,16 +33,18 @@ const editContentBlock = async (req, res) => {
             case "paragraph":
             case "bullet":
             case "latex":
-                console.log("text");
+                // console.log("text");
                 contentBlock.text = text;
                 break;
             case "image":
-                console.log("image");
+                // console.log("image");
                 contentBlock.src = src;
+                contentBlock.alt = alt;
                 break;
             case "code":
-                console.log("code");
+                // console.log("code");
                 contentBlock.code = code;
+                contentBlock.language = language;
                 break;
             default:
                 break;
@@ -54,22 +56,48 @@ const editContentBlock = async (req, res) => {
     } catch (err) {
         res.status(500).json({ message: err.message });
     }
-    // res.json({
-    //     infoObj: {
-    //         courseId,
-    //         moduleId,
-    //         sectionId,
-    //     },
-    //     text,
-    //     index,
-    //     type,
-    //     message: "cood cood",
-    // });
+};
+
+const editQuizQuestion = async (req, res) => {
+    const { courseId, moduleId, sectionId } = req.params;
+    // console.log("req.body from editQuizQuestion is: ", req.body);
+
+    try {
+        const course = await Course.findById(courseId);
+        if (!course) {
+            return res.status(404).json({ message: "Course not found" });
+        }
+        // const courseTitle = course.title;
+
+        const module = course.modules.id(moduleId);
+        if (!module) {
+            return res.status(404).json({ message: "Module not found" });
+        }
+        // const moduleTitle = module.title;
+
+        const section = module.sections.id(sectionId);
+        if (!section) {
+            return res.status(404).json({ message: "Section not found" });
+        }
+        // const sectionTitle = section.title;
+        const question = section.quiz[req.body.index];
+        question.question = req.body.questionData.question;
+        question.options = req.body.questionData.options;
+        question.correctAnswer = req.body.questionData.correctAnswer;
+        await course.save();
+
+        return res
+            .status(201)
+            .json({ message: "Successfully modified the course" });
+    } catch (err) {
+        console.log(err);
+        return res.status(500).json({ message: "Server Error", error: err });
+    }
 };
 
 const createQuizQuestion = async (req, res) => {
     const { courseId, moduleId, sectionId } = req.params;
-    console.log("req.body is: ", req.body);
+    // console.log("req.body is: ", req.body);
 
     try {
         const course = await Course.findById(courseId);
@@ -103,7 +131,7 @@ const createQuizQuestion = async (req, res) => {
 
 const createContentBlock = async (req, res) => {
     const { courseId, moduleId, sectionId } = req.params;
-    console.log("req.body is: ", req.body);
+    // console.log("req.body is: ", req.body);
 
     try {
         const course = await Course.findById(courseId);
@@ -158,10 +186,10 @@ const getContentForSection = async (req, res) => {
         const sectionTitle = section.title;
 
         if (section.sectionType === "normal") {
-            console.log(
-                "From getContentForSection controller method",
-                section.content,
-            );
+            // console.log(
+            //     "From getContentForSection controller method",
+            //     section.content,
+            // );
             return res.status(200).json({
                 content: section.content,
                 contentType: section.sectionType,
@@ -172,10 +200,10 @@ const getContentForSection = async (req, res) => {
                 },
             });
         } else if (section.sectionType === "quiz") {
-            console.log(
-                "From getContentForSection controller method",
-                section.quiz,
-            );
+            // console.log(
+            //     "From getContentForSection controller method",
+            //     section.quiz,
+            // );
             return res.status(200).json({
                 content: section.quiz,
                 contentType: section.sectionType,
@@ -244,15 +272,15 @@ const getSectionsForModule = async (req, res) => {
             },
         ]);
 
-        console.log(result[0]);
-        console.log("course title", result[0].title);
+        // console.log(result[0]);
+        // console.log("course title", result[0].title);
         const sectionDetails = {
             courseTitle: result[0]?.title,
             moduleTitle: result[0]?.modules.title,
         };
-        console.log("sectionDetails", sectionDetails);
+        // console.log("sectionDetails", sectionDetails);
         const sections = result[0]?.modules.sections;
-        console.log("sections", sections);
+        // console.log("sections", sections);
         if (!sections)
             return res.status(404).json({ message: "Sections Data Not Found" });
 
@@ -316,7 +344,7 @@ const getMyCreatedCourses = async (req, res) => {
                 createdAt: 1,
             },
         );
-        console.log(myCreatedCoursesProper);
+        // console.log(myCreatedCoursesProper);
 
         return res.status(200).json(myCreatedCoursesProper);
     } catch (err) {
@@ -465,7 +493,7 @@ const returnNextSection = async (req, res) => {
             prevModuleId = currentModule._id;
         }
 
-        console.log(currentModuleIndex);
+        // console.log(currentModuleIndex);
         return res.status(200).json({
             prevModuleId,
             prevSectionId,
@@ -522,7 +550,7 @@ const markSectionComplete = async (req, res) => {
                     enrolledCourse.completedSections.length - 1
                 ];
         }
-        console.log("from markSectionComplete, moduleEntry is", moduleEntry);
+        // console.log("from markSectionComplete, moduleEntry is", moduleEntry);
 
         const module = course.modules.find(
             (module) => module._id.toString() === moduleId,
@@ -549,7 +577,7 @@ const markSectionComplete = async (req, res) => {
             allModulesCompleted &&
             !user.studentProfile.completedCourses.includes(courseId)
         ) {
-            console.log("all modules is completed now from markSection");
+            // console.log("all modules is completed now from markSection");
             user.studentProfile.completedCourses.push(courseId);
             await user.save();
         }
@@ -592,7 +620,7 @@ function checkAnswers(correctAnswers, answers) {
             score++;
         }
     }
-    console.log("score: ", score, "/", correctAnswers.length);
+    // console.log("score: ", score, "/", correctAnswers.length);
     return score;
 }
 
@@ -600,7 +628,7 @@ const submitQuiz = async (req, res) => {
     const { courseId, moduleId, sectionId } = req.params;
     const userId = req.user.userId;
     const { answers } = req.body;
-    console.log(answers);
+    // console.log(answers);
 
     try {
         const course = await Course.findById(courseId);
@@ -619,7 +647,7 @@ const submitQuiz = async (req, res) => {
         const section = currentModule.sections.find(
             (section) => section._id.toString() === sectionId,
         );
-        console.log("section is: ", section);
+        // console.log("section is: ", section);
         if (!section || !section.quiz || section.quiz.length === 0) {
             return res
                 .status(400)
@@ -630,16 +658,16 @@ const submitQuiz = async (req, res) => {
             question: q.question,
             answer: q.correctAnswer,
         }));
-        console.log("Correct Answers", correctAnswers);
-        console.log("Answers Match?", answersMatch(correctAnswers, answers));
-        console.log("Check Answers", checkAnswers(correctAnswers, answers));
+        // console.log("Correct Answers", correctAnswers);
+        // console.log("Answers Match?", answersMatch(correctAnswers, answers));
+        // console.log("Check Answers", checkAnswers(correctAnswers, answers));
 
         const score = checkAnswers(correctAnswers, answers);
         const passingPercentage = 80;
         const passingMarks = (passingPercentage * correctAnswers.length) / 100;
-        console.log("passing marks", passingMarks);
+        // console.log("passing marks", passingMarks);
         const passed = score >= correctAnswers.length;
-        console.log("passed ? ", passed ? "yes" : "no");
+        // console.log("passed ? ", passed ? "yes" : "no");
 
         const enrolledCourse = user.studentProfile.enrolledCourses.find(
             (c) => c.courseId.toString() === courseId,
@@ -717,7 +745,7 @@ const submitQuiz = async (req, res) => {
             allModulesCompleted &&
             !user.studentProfile.completedCourses.includes(courseId)
         ) {
-            console.log("all modules completed from quizzes");
+            // console.log("all modules completed from quizzes");
             user.studentProfile.completedCourses.push(courseId);
             await user.save();
         }
@@ -857,7 +885,7 @@ const getSectionById = async (req, res) => {
     const courseId = req.params.courseId;
     const moduleId = req.params.moduleId;
     const sectionId = req.params.sectionId;
-    console.log("sectionId from getSectionById", sectionId);
+    // console.log("sectionId from getSectionById", sectionId);
     const userId = req.user.userId;
     let isSectionCompleted;
 
@@ -1093,4 +1121,5 @@ module.exports = {
     createContentBlock,
     createQuizQuestion,
     editContentBlock,
+    editQuizQuestion,
 };

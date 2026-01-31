@@ -33,10 +33,18 @@ function EditContentBlock() {
                 setFormData({ ...formData, text: content });
                 break;
             case "image":
-                setFormData({ ...formData, src: content });
+                setFormData({
+                    ...formData,
+                    src: content.src,
+                    alt: content.alt,
+                });
                 break;
             case "code":
-                setFormData({ ...formData, code: content });
+                setFormData({
+                    ...formData,
+                    code: content.code,
+                    language: content.language,
+                });
                 break;
             default:
                 break;
@@ -60,7 +68,7 @@ function EditContentBlock() {
 
             console.log("sending from frondend", dataToSend);
             const res = await api.patch(
-                `/courses/${courseId}/modules/${moduleId}/sections/${sectionId}/content/edit-content`,
+                `/courses/${courseId}/modules/${moduleId}/sections/${sectionId}/content/`,
                 dataToSend,
             );
             // const res = await api.post("/course/example", dataToSend);
@@ -95,9 +103,13 @@ function EditContentBlock() {
                             e.target.style.height =
                                 e.target.scrollHeight + "px";
                         }}
-                        rows={1}
+                        rows={3}
                         className="input-class p-2 w-full mb-[20px]"
-                        // rows={3}
+                        onFocus={(e) => {
+                            e.target.style.height = "auto";
+                            e.target.style.height =
+                                e.target.scrollHeight + "px";
+                        }}
                     />
                 );
 
@@ -109,7 +121,7 @@ function EditContentBlock() {
                             setFormData({ ...formData, text: e.target.value })
                         }
                         placeholder="Enter items, separated by commas"
-                        rows={4}
+                        rows={3}
                         onInput={(e) => {
                             e.target.style.height = "auto";
                             e.target.style.height =
@@ -215,6 +227,11 @@ function EditContentBlock() {
                             placeholder="Paste your code here"
                             rows={6}
                             className="input-class p-2 w-full mb-[20px]"
+                            onFocus={(e) => {
+                                e.target.style.height = "auto";
+                                e.target.style.height =
+                                    e.target.scrollHeight + "px";
+                            }}
                         />
                         <input
                             type="text"
@@ -243,6 +260,11 @@ function EditContentBlock() {
                             })
                         }
                         onInput={(e) => {
+                            e.target.style.height = "auto";
+                            e.target.style.height =
+                                e.target.scrollHeight + "px";
+                        }}
+                        onFocus={(e) => {
                             e.target.style.height = "auto";
                             e.target.style.height =
                                 e.target.scrollHeight + "px";
@@ -284,7 +306,7 @@ function EditContentBlock() {
             }}
         >
             <div
-                className={`create-course ${maximize ? "maximize" : ""} relative`}
+                className={`create-course small-fit ${maximize ? "maximize" : ""} relative`}
                 onClick={(e) => e.stopPropagation()}
             >
                 <div className="popup-form-title flex justify-between">
@@ -307,8 +329,6 @@ function EditContentBlock() {
                     >
                         <div className="flex-1">
                             <div className="form-body mt-[30px]">
-                                <p>index = {index}</p>
-                                <p>type = {type}</p>
                                 {renderFields()}
                             </div>
                         </div>

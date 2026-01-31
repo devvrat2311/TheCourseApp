@@ -9,8 +9,8 @@ import {
 import { useState, useEffect } from "react";
 import api from "../../utils/api";
 import Prism from "prismjs";
-import "prism-themes/themes/prism-nord.css";
-// import "prismjs/themes/prism-tomorrow.css";
+// import "prism-themes/themes/prism-nord.css";
+import "prismjs/themes/prism-tomorrow.css";
 import "prismjs/components/prism-javascript";
 import "prismjs/components/prism-python";
 import "prismjs/components/prism-c";
@@ -18,7 +18,34 @@ import "prismjs/components/prism-cpp";
 import "katex/dist/katex.min.css";
 import TeX from "@matejmazur/react-katex";
 import ClickyBtn from "../../components/ClickyBtn";
-import { DiamondPlus, Pencil } from "lucide-react";
+import { CircleDashed, DiamondPlus, Pencil, CheckCircle2 } from "lucide-react";
+
+const QuizQuestionWrapper = ({
+    children,
+    index,
+    content,
+    className = "",
+    hasEditButton = true,
+    navigateFunction,
+}) => {
+    return (
+        <div className={`relative ${className}`}>
+            {hasEditButton && (
+                <button
+                    onClick={() => navigateFunction(index, content)}
+                    className="flex gap-1 cursor-pointer p-1 rounded-t-[10px] absolute left-[-0rem] top-[-0.3rem] hover:bg-[var(--bg)] duration-150 transition-colors"
+                >
+                    <Pencil
+                        className="text-[var(--border)] hover:text-[var(--accent)] duration-200 transition-all"
+                        size={14}
+                    />
+                    <p className="text-xs">edit question</p>
+                </button>
+            )}
+            {children}
+        </div>
+    );
+};
 
 const ContentBlockWrapper = ({
     children,
@@ -100,6 +127,16 @@ function EditSection() {
     if (loading) return <p>Loading Sections...</p>;
     if (error) return <p>ERROR: {error}</p>;
     if (!content) return <p>No sections found for this module</p>;
+    const navigateToCreateQuestion = () => {
+        navigate(
+            `/instructor/courses/${courseId}/modules/${moduleId}/sections/${sectionId}/edit/new-quiz`,
+            {
+                state: {
+                    from: location.pathname,
+                },
+            },
+        );
+    };
 
     const navigateToCreateContentBlock = () => {
         navigate(
@@ -111,9 +148,20 @@ function EditSection() {
     };
 
     const navigateToEditContentBlock = (index, type, content) => {
-        const encodedContent = encodeURIComponent(content);
         navigate(
-            `/instructor/courses/${courseId}/modules/${moduleId}/sections/${sectionId}/edit/edit-content?index=${index}&type=${type}&content=${encodedContent}`,
+            `/instructor/courses/${courseId}/modules/${moduleId}/sections/${sectionId}/edit/edit-content?index=${index}&type=${type}`,
+            {
+                state: {
+                    from: location.pathname,
+                    content: content,
+                },
+            },
+        );
+    };
+
+    const navigateToEditQuizQuestion = (index, content) => {
+        navigate(
+            `/instructor/courses/${courseId}/modules/${moduleId}/sections/${sectionId}/edit/edit-quiz-question?index=${index}`,
             {
                 state: {
                     from: location.pathname,
@@ -181,14 +229,14 @@ function EditSection() {
                                                     index={index}
                                                     type={contentBlock.type}
                                                     content={contentBlock.text}
-                                                    className="section-paragraph mt-2"
+                                                    className="mt-2"
                                                     navigateFunction={
                                                         navigateToEditContentBlock
                                                     }
                                                 >
                                                     <h2
                                                         key={index}
-                                                        className="ml-6"
+                                                        className="section-paragraph ml-6"
                                                     >
                                                         {contentBlock.text}
                                                     </h2>
@@ -221,7 +269,10 @@ function EditSection() {
                                                     key={index}
                                                     index={index}
                                                     type={contentBlock.type}
-                                                    content={contentBlock.text}
+                                                    content={{
+                                                        src: contentBlock.src,
+                                                        alt: contentBlock.alt,
+                                                    }}
                                                     className="mt-5"
                                                     navigateFunction={
                                                         navigateToEditContentBlock
@@ -241,15 +292,19 @@ function EditSection() {
                                                     key={index}
                                                     index={index}
                                                     type={contentBlock.type}
-                                                    content={contentBlock.code}
-                                                    className="mt-5"
+                                                    content={{
+                                                        code: contentBlock.code,
+                                                        language:
+                                                            contentBlock.language,
+                                                    }}
+                                                    className="section-code mt-5"
                                                     navigateFunction={
                                                         navigateToEditContentBlock
                                                     }
                                                 >
                                                     <div
                                                         key={index}
-                                                        className="section-code ml-6 mt-5 mr-6"
+                                                        className="ml-6 mt-5 mr-6"
                                                     >
                                                         <pre>
                                                             <code
@@ -305,46 +360,66 @@ function EditSection() {
                                 />
                                 Create New Content Block
                             </ClickyBtn>
-                            {/* <button className="border-1 rounded-[5px] mt-2 ml-5 p-0 w-fit">
-                                <Link
-                                    to={`/instructor/courses/${courseId}/modules/${moduleId}/sections/${sectionId}/edit/new-content`}
-                                    className="p-4 text-xs"
-                                >
-                                    Create New Content Block +
-                                </Link>
-                            </button>*/}
                         </>
                     ) : (
                         <>
                             {content.map((question, index) => {
                                 return (
-                                    <div key={index}>
-                                        <p>
-                                            Q{index + 1} {question.question}
-                                        </p>
-                                        {question.options.map(
-                                            (option, optionIndex) => {
-                                                return (
-                                                    <div
-                                                        key={optionIndex}
-                                                        className={`rounded w-fit p-1 ${option === question.correctAnswer ? "bg-[var(--success-green)]" : "bg-[var(--bg)]"}`}
-                                                    >
-                                                        {option}
-                                                    </div>
-                                                );
-                                            },
-                                        )}
-                                    </div>
+                                    <QuizQuestionWrapper
+                                        key={index}
+                                        index={index}
+                                        content={question}
+                                        className="mt-5 mb-2"
+                                        navigateFunction={
+                                            navigateToEditQuizQuestion
+                                        }
+                                    >
+                                        <div
+                                            key={index}
+                                            className="flex flex-col gap-2 mt-4"
+                                        >
+                                            <p className="">
+                                                Q{index + 1} {question.question}
+                                            </p>
+                                            {question.options.map(
+                                                (option, optionIndex) => {
+                                                    return (
+                                                        <div
+                                                            key={optionIndex}
+                                                            className={`flex gap-[10px] justify-center text-xs rounded-xl w-fit p-1 ${option === question.correctAnswer ? "bg-[var(--success-green-lighter)]" : ""}`}
+                                                        >
+                                                            {option ===
+                                                            question.correctAnswer ? (
+                                                                <CheckCircle2
+                                                                    size={16}
+                                                                />
+                                                            ) : (
+                                                                <CircleDashed
+                                                                    size={14}
+                                                                />
+                                                            )}
+                                                            <p>{option}</p>
+                                                        </div>
+                                                    );
+                                                },
+                                            )}
+                                        </div>
+                                    </QuizQuestionWrapper>
                                 );
                             })}
-                            <button className="p-0 w-fit">
-                                <Link
-                                    to={`/instructor/courses/${courseId}/modules/${moduleId}/sections/${sectionId}/edit/new-quiz`}
-                                    className="border-1 p-1"
-                                >
-                                    Create New Quiz Question
-                                </Link>
-                            </button>
+
+                            <ClickyBtn
+                                clickFunction={() => navigateToCreateQuestion()}
+                                stylingClass={
+                                    "back-btn gap-1 px-[1rem] py-[0.4rem] items-center ml-1 mt-5 text-xs"
+                                }
+                            >
+                                <DiamondPlus
+                                    className="text-[var(--accent)]"
+                                    size={22}
+                                />
+                                Create New Quiz Question
+                            </ClickyBtn>
                         </>
                     )}
                 </div>

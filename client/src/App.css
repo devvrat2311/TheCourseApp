@@ -66,7 +66,11 @@ main {
 @media (max-width: 1000px) {
     .main-content {
         flex-direction: column;
-        margin-inline: 10px;
+        margin-inline: 0;
+    }
+    .course-location {
+        font-size: 14px;
+        flex-direction: column;
     }
 }
 
@@ -195,9 +199,9 @@ main {
 }
 textarea.input-class {
     resize: none;
-    overflow-y: hidden;
+    /*overflow-y: hidden;*/
     min-height: 40px;
-    max-height: 200px;
+    max-height: 500px;
     box-sizing: border-box;
 }
 
@@ -518,15 +522,20 @@ textarea.input-class {
     list-style-type: disc;
 }
 .section-code pre {
-    border: 2px solid var(--accent);
-    border-radius: 20px;
-    padding: 24px;
+    border: 2px solid var(--border);
+    border-radius: 10px;
     background-color: var(--bg);
+    max-width: 80%;
+}
+.section-paragraph,
+.section-heading,
+.section-subheading {
+    word-break: break-word;
 }
 .section-image {
     max-height: 500px;
     /*width: inherit;*/
-    width: 90%;
+    width: 70%;
     margin-block: 30px;
     /*align-self: center;*/
     padding: 14px;
@@ -767,8 +776,9 @@ textarea.input-class {
     box-shadow: 6px 6px var(--accent);
     /*width: 400px;*/
     position: relative;
-    height: 600px;
-    width: 600px;
+    height: auto;
+    width: auto;
+    min-width: 90%;
     transition:
         height 0.3s cubic-bezier(0.34, 1.56, 0.64, 1),
         width 0.4s cubic-bezier(0.22, 1, 0.36, 1) 0.1s;
@@ -785,6 +795,11 @@ textarea.input-class {
         height 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
         width 0.5s cubic-bezier(0.22, 1, 0.36, 1) 0.15s;*/
     border: 2px solid var(--accent);
+}
+.create-course.small-fit {
+    width: auto;
+    min-width: 400px;
+    height: auto;
 }
 .create-course.maximize {
     width: 90%;
@@ -890,11 +905,10 @@ textarea.input-class {
 }
 
 .scrollable-list {
-    border: 2px solid var(--border);
+    /*border: 2px solid var(--border);*/
     padding: 12px;
-    padding-right: 60px;
     border-radius: 14px 0 0 14px;
-    width: fit-content;
+    width: auto;
     height: 400px;
     overflow-y: scroll;
     background-color: var(--bg);

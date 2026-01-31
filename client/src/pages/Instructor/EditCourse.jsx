@@ -94,7 +94,7 @@ function EditCourse() {
                             ? "No modules found"
                             : modules.map((module, index) => (
                                   <div key={index}>
-                                      <div className="flex flex-col items-baseline justify-between border-2 mt-2 p-3 rounded-xl border-[var(--border)] w-[350px]">
+                                      <div className="module-card flex flex-col items-baseline justify-between border-2 mt-2 p-3 rounded-xl border-[var(--border)] w-full">
                                           <div className="flex items-start w-full justify-between">
                                               <p className="text-2xl mb-3 font-bold">
                                                   {module.title}
