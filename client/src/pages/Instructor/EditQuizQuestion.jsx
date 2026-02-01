@@ -92,11 +92,11 @@ function CreateQuizQuestion() {
             }}
         >
             <div
-                className="create-course max-h-fit max-w-[350px]"
+                className="create-course small-fit max-h-fit max-w-[350px]"
                 onClick={(e) => e.stopPropagation()}
             >
                 <p className="popup-form-title flex justify-between">
-                    Create Quiz Question
+                    Edit Quiz Question
                 </p>
                 <div className="flex-1 text-left flex flex-col">
                     <form

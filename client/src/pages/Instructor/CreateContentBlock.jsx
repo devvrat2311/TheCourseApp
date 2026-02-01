@@ -245,11 +245,11 @@ function CreateContentBlock() {
             }}
         >
             <div
-                className={`create-course ${maximize ? "maximize" : ""} relative`}
+                className={`create-course small-fit ${maximize ? "maximize" : ""} relative`}
                 onClick={(e) => e.stopPropagation()}
             >
                 <div className="popup-form-title flex justify-between">
-                    <p>Create Module</p>
+                    <p>Create Content Block</p>
                     <button
                         onClick={toggleMaximize}
                         className="text-[var(--fg)] p-2 hover:bg-[var(--bg)] rounded-[10px] cursor-pointer"

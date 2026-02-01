@@ -39,7 +39,7 @@ function CreateCourse() {
             }}
         >
             <div
-                className="create-course max-h-fit max-w-[350px]"
+                className="create-course small-fit"
                 onClick={(e) => e.stopPropagation()}
             >
                 <h2 className="popup-form-title">Create Course</h2>

@@ -49,7 +49,7 @@ function CreateSection() {
             }}
         >
             <div
-                className="create-course max-h-fit max-w-[400px]"
+                className="create-course small-fit max-h-fit max-w-[400px]"
                 onClick={(e) => e.stopPropagation()}
             >
                 <div className="flex-1">
