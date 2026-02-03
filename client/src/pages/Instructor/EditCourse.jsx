@@ -4,13 +4,15 @@ import {
     Link,
     Outlet,
     useOutletContext,
+    useLocation,
 } from "react-router-dom";
 import { useEffect, useState } from "react";
 import api from "../../utils/api";
 import ClickyBtn from "../../components/ClickyBtn";
-import { DiamondPlus, Pencil } from "lucide-react";
+import { DiamondPlus, Pencil, ArrowRight } from "lucide-react";
 
 function EditCourse() {
+    const location = useLocation();
     const { courseId } = useParams();
     // const [courseTitle, setCourseTitle] = useState("");
     const { setCourseTitle, setModuleTitle, setSectionTitle, setLocationURL } =
@@ -39,13 +41,7 @@ function EditCourse() {
             }
         };
         fetchModules();
-    }, [
-        courseId,
-        setCourseTitle,
-        setModuleTitle,
-        setSectionTitle,
-        setLocationURL,
-    ]);
+    }, [location]);
 
     if (loading) return <p>Loading Modules...</p>;
     if (error) return <p>ERROR: {error}</p>;
@@ -61,6 +57,26 @@ function EditCourse() {
         navigate(`/instructor/courses/${courseId}/modules/${moduleId}/edit`, {
             state: { from: location.pathname },
         });
+    };
+
+    const navigateToPatchModuleInfoPage = (
+        moduleId,
+        moduleTitle,
+        moduleDescription,
+        moduleLearningObjective,
+    ) => {
+        navigate(
+            `/instructor/courses/${courseId}/edit/modules/${moduleId}/edit-info`,
+            {
+                state: {
+                    info: {
+                        moduleTitle,
+                        moduleDescription,
+                        moduleLearningObjective,
+                    },
+                },
+            },
+        );
     };
 
     const returnDoubleDigit = (number) => {
@@ -107,7 +123,25 @@ function EditCourse() {
                                               {module.description}
                                           </p>
                                           <div className="flex items-baseline w-full justify-between">
-                                              <p> </p>
+                                              <ClickyBtn
+                                                  clickFunction={() =>
+                                                      navigateToPatchModuleInfoPage(
+                                                          module._id,
+                                                          module.title,
+                                                          module.description,
+                                                          module.learningObjective,
+                                                      )
+                                                  }
+                                                  stylingClass={
+                                                      "back-btn gap-2 px-[1rem] py-[0.4rem] items-center mt-5 text-xs"
+                                                  }
+                                              >
+                                                  <Pencil
+                                                      className="text-[var(--accent)]"
+                                                      size={22}
+                                                  />
+                                                  Edit Module Info
+                                              </ClickyBtn>
                                               <ClickyBtn
                                                   clickFunction={() =>
                                                       navigateToEditModulePage(
@@ -118,9 +152,10 @@ function EditCourse() {
                                                       "back-btn text-xs gap-2 px-[1rem] py-[0.4rem] items-center ml-1 mt-5"
                                                   }
                                               >
-                                                  <Pencil
+                                                  <ArrowRight
                                                       className="text-[var(--accent)]"
                                                       size={22}
+                                                      strokeWidth={3}
                                                   />
                                               </ClickyBtn>
                                           </div>

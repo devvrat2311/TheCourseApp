@@ -1,14 +1,15 @@
-import { Link, Outlet, useNavigate } from "react-router-dom";
+import { Link, Outlet, useNavigate, useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
 import api from "../../utils/api";
 import ClickyBtn from "../../components/ClickyBtn";
-import { DiamondPlus, House, Pencil } from "lucide-react";
+import { DiamondPlus, House, Pencil, ArrowRight } from "lucide-react";
 
 function InstructorDashboard() {
     const [error, setError] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
     const [myCourses, setMyCourses] = useState(null);
     const navigate = useNavigate();
+    const location = useLocation();
 
     useEffect(() => {
         const fetchMyCourses = async () => {
@@ -24,7 +25,7 @@ function InstructorDashboard() {
             }
         };
         fetchMyCourses();
-    }, []);
+    }, [location]);
 
     const navigateToNewCoursePage = () => {
         navigate(`/instructor/courses/new`, {
@@ -35,6 +36,21 @@ function InstructorDashboard() {
     const navigateToEditCoursePage = (courseId) => {
         navigate(`/instructor/courses/${courseId}/edit`, {
             state: { from: location.pathname },
+        });
+    };
+
+    const navigateToPatchCourseInfoPage = (
+        courseId,
+        courseTitle,
+        courseDescription,
+    ) => {
+        navigate(`/instructor/courses/${courseId}/edit-info`, {
+            state: {
+                info: {
+                    courseTitle,
+                    courseDescription,
+                },
+            },
         });
     };
 
@@ -77,20 +93,40 @@ function InstructorDashboard() {
                                 <p id="courseStatus">
                                     status: {course.courseStatus}
                                 </p>
-                                <ClickyBtn
-                                    clickFunction={() =>
-                                        navigateToEditCoursePage(course._id)
-                                    }
-                                    stylingClass={
-                                        "text-[0.9rem] back-btn gap-2 px-[1rem] py-[0.4rem] items-center ml-5 mt-3 absolute bottom-1 right-1"
-                                    }
-                                >
-                                    <Pencil
-                                        className="text-[var(--accent)]"
-                                        size={22}
-                                    />
-                                    {/* Edit Course*/}
-                                </ClickyBtn>
+                                <div className="flex justify-between">
+                                    <ClickyBtn
+                                        clickFunction={() =>
+                                            navigateToPatchCourseInfoPage(
+                                                course._id,
+                                                course.title,
+                                                course.description,
+                                            )
+                                        }
+                                        stylingClass={
+                                            "back-btn gap-2 px-[1rem] py-[0.4rem] items-center mt-5 text-xs"
+                                        }
+                                    >
+                                        <Pencil
+                                            className="text-[var(--accent)]"
+                                            size={22}
+                                        />
+                                        Edit Course Info
+                                    </ClickyBtn>
+                                    <ClickyBtn
+                                        clickFunction={() =>
+                                            navigateToEditCoursePage(course._id)
+                                        }
+                                        stylingClass={
+                                            "text-xs font-bold back-btn p-[0.8rem] items-center ml-5 mt-3"
+                                        }
+                                    >
+                                        <ArrowRight
+                                            className="text-[var(--accent)]"
+                                            size={18}
+                                            strokeWidth={3}
+                                        />
+                                    </ClickyBtn>
+                                </div>
                             </div>
                         ))}
                     </div>

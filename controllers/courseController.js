@@ -2,6 +2,100 @@ const Course = require("../models/Course");
 const User = require("../models/User");
 const mongoose = require("mongoose");
 
+const editCourseInfo = async (req, res) => {
+    const { courseId } = req.params;
+    const { newTitle, newDescription } = req.body;
+
+    try {
+        const course = await Course.findById(courseId);
+
+        if (!course) {
+            return res.status(404).json({ message: "Course not found" });
+        }
+
+        course.title = newTitle;
+        course.description = newDescription;
+
+        await course.save();
+        return res.status(201).json({
+            message: "Module Updated Successfully",
+            courseId,
+        });
+    } catch (err) {
+        console.error(err);
+        return res
+            .status(500)
+            .json({ message: "Server error", error: err.message });
+    }
+};
+
+const editModuleInfo = async (req, res) => {
+    const { courseId, moduleId } = req.params;
+    const { newTitle, newDescription, newLearningObjective } = req.body;
+
+    try {
+        const course = await Course.findById(courseId);
+
+        if (!course) {
+            return res.status(404).json({ message: "Course not found" });
+        }
+
+        const module = course.modules.id(moduleId);
+
+        if (!module) {
+            return res.status(404).json({ message: "Module not found" });
+        }
+
+        module.title = newTitle;
+        module.description = newDescription;
+        module.learningObjective = newLearningObjective;
+
+        await course.save();
+        return res.status(201).json({
+            message: "Module Updated Successfully",
+            moduleId,
+        });
+    } catch (err) {
+        console.error(err);
+        return res
+            .status(500)
+            .json({ message: "Server error", error: err.message });
+    }
+};
+
+const editSectionTitle = async (req, res) => {
+    const { courseId, moduleId, sectionId } = req.params;
+    const { newTitle } = req.body;
+
+    try {
+        const course = await Course.findById(courseId);
+
+        if (!course) {
+            return res.status(404).json({ message: "Course not found" });
+        }
+
+        const module = course.modules.id(moduleId);
+
+        if (!module) {
+            return res.status(404).json({ message: "Module not found" });
+        }
+
+        const section = module.sections.id(sectionId);
+        section.title = newTitle;
+
+        await course.save();
+        return res.status(201).json({
+            message: "Section Updated Successfully",
+            sectionId,
+        });
+    } catch (err) {
+        console.error(err);
+        return res
+            .status(500)
+            .json({ message: "Server error", error: err.message });
+    }
+};
+
 const editContentBlock = async (req, res) => {
     const { courseId, moduleId, sectionId } = req.params;
     const { index, type, text, src, code, alt, language } = req.body;
@@ -1122,4 +1216,7 @@ module.exports = {
     createQuizQuestion,
     editContentBlock,
     editQuizQuestion,
+    editSectionTitle,
+    editModuleInfo,
+    editCourseInfo,
 };

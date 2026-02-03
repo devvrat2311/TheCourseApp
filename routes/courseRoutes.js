@@ -27,6 +27,11 @@ const {
     createQuizQuestion,
     editContentBlock,
     editQuizQuestion,
+
+    editSectionTitle,
+    editModuleInfo,
+    editCourseInfo,
+
     reorderModules,
     reorderSections,
     reorderContentBlocks,
@@ -36,9 +41,20 @@ const {
 router.use(verifyToken);
 
 //instructor endpoints
+//Endpoints which follow RESTful conventions
+router.get("/:id/modules", verifyInstructor, getModulesForCreatedCourse);
+
+//patch
+router.patch("/:courseId/", verifyInstructor, editCourseInfo);
+router.patch("/:courseId/modules/:moduleId/", verifyInstructor, editModuleInfo);
+router.patch(
+    "/:courseId/modules/:moduleId/sections/:sectionId",
+    verifyInstructor,
+    editSectionTitle,
+);
+
 router.post("/create", verifyInstructor, createCourse);
 router.get("/my-created-courses", verifyInstructor, getMyCreatedCourses);
-router.get("/:id/modules", verifyInstructor, getModulesForCreatedCourse);
 router.post("/:id/modules/create", verifyInstructor, createModule);
 router.get(
     "/:courseId/modules/:moduleId/sections",
@@ -65,6 +81,7 @@ router.post(
     verifyInstructor,
     createQuizQuestion,
 );
+
 router.patch(
     "/:courseId/modules/:moduleId/sections/:sectionId/content",
     verifyInstructor,

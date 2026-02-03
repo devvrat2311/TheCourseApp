@@ -1,4 +1,5 @@
 import {
+    useLocation,
     useParams,
     useNavigate,
     Link,
@@ -8,9 +9,10 @@ import {
 import { useState, useEffect } from "react";
 import api from "../../utils/api";
 import ClickyBtn from "../../components/ClickyBtn";
-import { DiamondPlus, Pencil } from "lucide-react";
+import { DiamondPlus, Pencil, ArrowRight } from "lucide-react";
 
 function EditModule() {
+    const location = useLocation();
     const { courseId, moduleId } = useParams();
     const [loading, setLoading] = useState(true);
     const [sections, setSections] = useState(null);
@@ -40,14 +42,7 @@ function EditModule() {
             }
         };
         fetchModules();
-    }, [
-        courseId,
-        moduleId,
-        setCourseTitle,
-        setModuleTitle,
-        setSectionTitle,
-        setLocationURL,
-    ]);
+    }, [location]);
 
     if (loading) return <p>Loading Sections...</p>;
     if (error) return <p>ERROR: {error}</p>;
@@ -67,6 +62,19 @@ function EditModule() {
             `/instructor/courses/${courseId}/modules/${moduleId}/sections/${sectionId}/edit`,
             {
                 state: { from: location.pathname },
+            },
+        );
+    };
+
+    const navigateToPatchSectionTitlePage = (sectionId, sectionTitle) => {
+        navigate(
+            `/instructor/courses/${courseId}/modules/${moduleId}/edit/sections/${sectionId}/edit-info`,
+            {
+                state: {
+                    info: {
+                        sectionTitle,
+                    },
+                },
             },
         );
     };
@@ -102,16 +110,29 @@ function EditModule() {
                             ? "No sections found"
                             : sections.map((section, index) => (
                                   <div key={index}>
-                                      <div className="flex items-baseline justify-between border-2 mt-2 p-1 rounded-xl border-[var(--border)]">
-                                          <div className="flex items-baseline w-full gap-2 h-fit">
+                                      <div className="flex items-center justify-between border-2 mt-2 p-2 gap-2 rounded-xl border-[var(--border)]">
+                                          <div className="flex items-center gap-2">
+                                              <button
+                                                  onClick={() => {
+                                                      navigateToPatchSectionTitlePage(
+                                                          section._id,
+                                                          section.title,
+                                                      );
+                                                  }}
+                                              >
+                                                  <Pencil
+                                                      className="text-[var(--accent)]"
+                                                      size={22}
+                                                  />
+                                              </button>
                                               <p className="text-[18px] font-bold text-[var(--border)]">
                                                   {returnDoubleDigit(index + 1)}
                                               </p>
-                                              <p className="text-[18px] mb-3 font-bold">
+                                              <p className="text-[18px] font-bold">
                                                   {section.title}
                                               </p>
                                           </div>
-                                          <div className="flex-1 w-full justify-between">
+                                          <div className="flex items-center gap-2">
                                               <ClickyBtn
                                                   clickFunction={() =>
                                                       navigateToEditSectionPage(
@@ -119,12 +140,13 @@ function EditModule() {
                                                       )
                                                   }
                                                   stylingClass={
-                                                      "back-btn text-xs gap-2 px-[1rem] py-[0.4rem] items-center ml-1 mt-5"
+                                                      "back-btn text-xs gap-2 px-[1rem] py-[0.4rem] items-center"
                                                   }
                                               >
-                                                  <Pencil
+                                                  <ArrowRight
                                                       className="text-[var(--accent)]"
-                                                      size={14}
+                                                      size={18}
+                                                      strokeWidth={4}
                                                   />
                                               </ClickyBtn>
                                           </div>

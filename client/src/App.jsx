@@ -39,6 +39,9 @@ import CreateQuizQuestion from "./pages/Instructor/CreateQuizQuestion";
 import EditCourseLayout from "./pages/Instructor/EditCourseLayout";
 import EditContentBlock from "./pages/Instructor/EditContentBlock";
 import EditQuizQuestion from "./pages/Instructor/EditQuizQuestion";
+import PatchCourseInfo from "./pages/Instructor/PatchCourseInfo";
+import PatchModuleInfo from "./pages/Instructor/PatchModuleInfo";
+import PatchSectionTitle from "./pages/Instructor/PatchSectionTitle";
 
 function App() {
     return (
@@ -49,7 +52,6 @@ function App() {
                     <Router>
                         <Routes>
                             <Route path="/" element={<RootRedirect />} />
-
                             <Route path="/login" element={<Login />} />
                             <Route path="/signup" element={<SignUp />} />
                             <Route
@@ -68,6 +70,7 @@ function App() {
                                 path="/reset-password"
                                 element={<ResetPasswordPage />}
                             />
+                            //INSTRUCTOR ROUTES
                             <Route
                                 path="/instructor"
                                 element={
@@ -89,6 +92,10 @@ function App() {
                                         path="new"
                                         element={<CreateCourse />}
                                     />
+                                    <Route
+                                        path=":courseId/edit-info"
+                                        element={<PatchCourseInfo />}
+                                    />
                                 </Route>
                                 <Route
                                     path="courses/:courseId/"
@@ -100,6 +107,10 @@ function App() {
                                             path="new"
                                             element={<CreateModule />}
                                         />
+                                        <Route
+                                            path="modules/:moduleId/edit-info"
+                                            element={<PatchModuleInfo />}
+                                        />
                                     </Route>
                                     <Route
                                         path="modules/:moduleId/edit"
@@ -108,6 +119,10 @@ function App() {
                                         <Route
                                             path="new"
                                             element={<CreateSection />}
+                                        />
+                                        <Route
+                                            path="sections/:sectionId/edit-info"
+                                            element={<PatchSectionTitle />}
                                         />
                                     </Route>
                                     <Route
