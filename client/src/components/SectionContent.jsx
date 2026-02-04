@@ -62,7 +62,9 @@ export default function SectionContent({ sectionData }) {
                                 className="section-code  ml-6 mt-5 mr-6"
                             >
                                 <pre className="rounded-2xl border-2 border-[var(--fg-faded)] p-4">
-                                    <code className="language-python">
+                                    <code
+                                        className={`language-${contentBlock.language}`}
+                                    >
                                         {contentBlock.code}
                                     </code>
                                 </pre>
