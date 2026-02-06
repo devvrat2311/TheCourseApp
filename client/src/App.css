@@ -686,6 +686,10 @@ textarea.input-class {
     width: 200px;
     background-color: var(--bg);
 }
+
+.latex-code {
+    max-width: 100%;
+}
 /*@media (hover: none) and (pointer: coarse) {
     .user-menu {
         transition:
@@ -780,6 +784,7 @@ textarea.input-class {
     animation: fadeIn 0.2s ease;
 }
 .create-course {
+    overflow: scroll;
     display: flex;
     flex-direction: column;
     border-radius: 14px;
@@ -793,6 +798,8 @@ textarea.input-class {
     position: relative;
     height: auto;
     width: auto;
+    margin-top: 100px;
+    max-height: 80vh;
     /*max-height: 90%;*/
     /*min-width: 90%;*/
     transition:

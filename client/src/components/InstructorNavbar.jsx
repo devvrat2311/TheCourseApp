@@ -8,7 +8,7 @@ import { User } from "lucide-react";
 export default function InstructorNavbar() {
     return (
         <nav className="flex justify-center items-center">
-            <div className="nav-content flex justify-between items-center w-full">
+            <div className="nav-content flex justify-between items-center ">
                 <div className="nav-logo-links">
                     <Logo stylingClass={"logo-navbar"} />
                     {/* <Navlinks />*/}

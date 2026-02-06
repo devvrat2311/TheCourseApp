@@ -98,10 +98,10 @@ function CreateQuizQuestion() {
                 <p className="popup-form-title flex justify-between">
                     Edit Quiz Question
                 </p>
-                <div className="flex-1 text-left flex flex-col">
+                <div className="flex-1 text-left flex flex-col items-center">
                     <form
                         onSubmit={handleSubmit}
-                        className="flex-1 form-block flex flex-col gap-2 w-fit justify-center p-2"
+                        className="flex-1 form-block flex flex-col gap-2 w-full justify-center p-2"
                         autoComplete="off"
                     >
                         <label
@@ -134,13 +134,24 @@ function CreateQuizQuestion() {
                         <label htmlFor="options" className="text-xs">
                             Add/Remove Options
                         </label>
-                        <input
+                        <textarea
                             ref={optionRef}
                             type="text"
                             name="option"
                             placeholder="Enter Option"
                             id="option"
-                            className="input-class p-2"
+                            className="input-class p-2 max-h-[200px]"
+                            onInput={(e) => {
+                                e.target.style.height = "auto";
+                                e.target.style.height =
+                                    e.target.scrollHeight + "px";
+                            }}
+                            onFocus={(e) => {
+                                e.target.style.height = "auto";
+                                e.target.style.height =
+                                    e.target.scrollHeight + "px";
+                            }}
+                            rows={1}
                         />
                         <div className="flex gap-2">
                             <button
@@ -177,12 +188,15 @@ function CreateQuizQuestion() {
                                         setCorrectOption(q);
                                     }}
                                 >
-                                    {q}
-                                    {q === correctOption ? (
-                                        <CheckCircle2 />
-                                    ) : (
-                                        <CircleDashed />
-                                    )}
+                                    <p className="flex-1 break-words">{q}</p>
+                                    {/* {q}*/}
+                                    <div className="">
+                                        {q === correctOption ? (
+                                            <CheckCircle2 />
+                                        ) : (
+                                            <CircleDashed />
+                                        )}
+                                    </div>
                                 </div>
                             );
                         })}

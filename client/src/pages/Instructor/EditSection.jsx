@@ -125,9 +125,9 @@ function EditSection() {
         location.pathname,
     ]);
 
-    if (loading) return <p>Loading Sections...</p>;
+    if (loading) return <p>Loading Section...</p>;
     if (error) return <p>ERROR: {error}</p>;
-    if (!content) return <p>No sections found for this module</p>;
+    if (!content) return <p>No content found for this Section</p>;
     const navigateToCreateQuestion = () => {
         navigate(
             `/instructor/courses/${courseId}/modules/${moduleId}/sections/${sectionId}/edit/new-quiz`,
@@ -333,7 +333,7 @@ function EditSection() {
                                                 >
                                                     <div
                                                         key={index}
-                                                        className="latex-code ml-6 mt-5 mr-6"
+                                                        className="latex-code ml-6 mt-5 mr-6 overflow-x-auto bg-[var(--bg)] p-2"
                                                     >
                                                         <TeX>
                                                             {contentBlock.text}
@@ -399,7 +399,9 @@ function EditSection() {
                                                                     size={14}
                                                                 />
                                                             )}
-                                                            <p>{option}</p>
+                                                            <p className="flex-1">
+                                                                {option}
+                                                            </p>
                                                         </div>
                                                     );
                                                 },

@@ -9,7 +9,7 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     scrollbar-width: thin;
-    scrollbar-color: var(--fg) var(--bg-secondary);
+    scrollbar-color: var(--fg) var(--accent);
 }
 
 :root[data-theme="light"] {
