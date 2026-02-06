@@ -105,12 +105,12 @@ function EditCourse() {
                         Create Module
                     </ClickyBtn>
                     <p className="text-2xl font-bold mt-[20px]">Modules</p>
-                    <div className="scrollable-list">
+                    <div className="">
                         {modules.length === 0
                             ? "No modules found"
                             : modules.map((module, index) => (
                                   <div key={index}>
-                                      <div className="module-card flex flex-col items-baseline justify-between border-2 mt-2 p-3 rounded-xl border-[var(--border)] w-full">
+                                      <div className="module-card bg-[var(--bg)] flex flex-col items-baseline justify-between border-2 mt-2 p-3 rounded-xl border-[var(--border)] w-full">
                                           <div className="flex items-start w-full justify-between">
                                               <p className="text-2xl mb-3 font-bold">
                                                   {module.title}

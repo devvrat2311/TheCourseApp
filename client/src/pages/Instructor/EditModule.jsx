@@ -105,12 +105,12 @@ function EditModule() {
                         Create Section
                     </ClickyBtn>
                     <p className="text-2xl font-bold mt-[20px]">Sections</p>
-                    <div className="scrollable-list">
+                    <div className="">
                         {sections.length === 0
                             ? "No sections found"
                             : sections.map((section, index) => (
                                   <div key={index}>
-                                      <div className="flex items-center justify-between border-2 mt-2 p-2 gap-2 rounded-xl border-[var(--border)]">
+                                      <div className="flex items-center justify-between border-2 mt-2 p-2 gap-2 bg-[var(--bg)] rounded-xl border-[var(--border)]">
                                           <div className="flex items-center gap-2">
                                               <button
                                                   onClick={() => {

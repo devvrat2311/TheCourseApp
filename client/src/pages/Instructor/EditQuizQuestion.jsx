@@ -110,7 +110,7 @@ function CreateQuizQuestion() {
                         >
                             Question
                         </label>
-                        <input
+                        <textarea
                             type="text"
                             name="question"
                             id="question"
@@ -118,6 +118,17 @@ function CreateQuizQuestion() {
                             className="input-class p-2"
                             value={quizQuestion}
                             onChange={(e) => setQuizQuestion(e.target.value)}
+                            onInput={(e) => {
+                                e.target.style.height = "auto";
+                                e.target.style.height =
+                                    e.target.scrollHeight + "px";
+                            }}
+                            onFocus={(e) => {
+                                e.target.style.height = "auto";
+                                e.target.style.height =
+                                    e.target.scrollHeight + "px";
+                            }}
+                            rows={2}
                             required
                         />
                         <label htmlFor="options" className="text-xs">
