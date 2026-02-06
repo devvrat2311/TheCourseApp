@@ -305,9 +305,9 @@ function EditSection() {
                                                 >
                                                     <div
                                                         key={index}
-                                                        className="section-code ml-6 mt-5 mr-6"
+                                                        className="section-code ml-6 mt-5 mr-6 overflow-hidden"
                                                     >
-                                                        <pre>
+                                                        <pre className="">
                                                             <code
                                                                 className={`language-${contentBlock.language}`}
                                                             >

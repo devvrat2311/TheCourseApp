@@ -526,11 +526,16 @@ textarea.input-class {
     display: list-item;
     list-style-type: disc;
 }
+.section-code {
+    overflow: hidden;
+}
 .section-code pre {
-    border: 2px solid var(--border);
+    padding: 10px;
+    border: 2px 0 solid var(--border);
     border-radius: 10px;
     background-color: var(--bg);
     /*max-width: 80%;*/
+    overflow: auto;
 }
 .section-paragraph,
 .section-heading,
