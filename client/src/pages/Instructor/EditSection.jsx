@@ -283,7 +283,7 @@ function EditSection() {
                                                         key={index}
                                                         src={contentBlock.src}
                                                         alt={contentBlock.alt}
-                                                        className="section-image ml-5"
+                                                        className="section-image"
                                                     />
                                                 </ContentBlockWrapper>
                                             );
@@ -298,14 +298,14 @@ function EditSection() {
                                                         language:
                                                             contentBlock.language,
                                                     }}
-                                                    className="section-code mt-5"
+                                                    className="mt-5"
                                                     navigateFunction={
                                                         navigateToEditContentBlock
                                                     }
                                                 >
                                                     <div
                                                         key={index}
-                                                        className="ml-6 mt-5 mr-6"
+                                                        className="section-code ml-6 mt-5 mr-6"
                                                     >
                                                         <pre>
                                                             <code

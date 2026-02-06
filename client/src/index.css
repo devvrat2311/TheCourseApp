@@ -8,8 +8,9 @@
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    scrollbar-width: thin;
-    scrollbar-color: var(--fg) var(--accent);
+    scrollbar-width: var(30px);
+    scrollbar-color: var(--border) var(--bg);
+    scrollbar-arrow-color: var(--border);
 }
 
 :root[data-theme="light"] {
