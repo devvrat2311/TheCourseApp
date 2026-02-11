@@ -189,7 +189,6 @@ function CreateQuizQuestion() {
                                     }}
                                 >
                                     <p className="flex-1 break-words">{q}</p>
-                                    {/* {q}*/}
                                     <div className="">
                                         {q === correctOption ? (
                                             <CheckCircle2 />
@@ -200,34 +199,6 @@ function CreateQuizQuestion() {
                                 </div>
                             );
                         })}
-                        {/* <label htmlFor="correctAnswer">Correct Answer</label>
-                        <select
-                            name="correctAnswer"
-                            id="correctAnswer"
-                            className="border-2 bg-[var(--accent)] rounded decoration-0"
-                            value={correctOption}
-                            onChange={(e) => setCorrectOption(e.target.value)}
-                            required
-                        >
-                            <option value="" className="bg-[var(--border)]">
-                                Select correct answer
-                            </option>
-                            {quesOptions.map((option, i) => (
-                                <option
-                                    key={i}
-                                    value={option}
-                                    className="bg-[var(--border)]"
-                                >
-                                    {option}
-                                </option>
-                            ))}
-                        </select>*/}
-                        {/* <button
-                            type="submit"
-                            className="border-2 mt-2 cursor-pointer"
-                        >
-                            Create Quiz Question +
-                        </button>*/}
                         <ClickyBtn
                             buttonType={"submit"}
                             stylingClass={"back-btn center-btn mb-2 login-btn"}

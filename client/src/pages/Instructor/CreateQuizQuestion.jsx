@@ -124,13 +124,24 @@ function CreateQuizQuestion() {
                         <label htmlFor="options" className="text-xs">
                             Add/Remove Options
                         </label>
-                        <input
+                        <textarea
                             ref={optionRef}
                             type="text"
                             name="option"
                             placeholder="Enter Option"
                             id="option"
                             className="input-class p-2"
+                            onInput={(e) => {
+                                e.target.style.height = "auto";
+                                e.target.style.height =
+                                    e.target.scrollHeight + "px";
+                            }}
+                            onFocus={(e) => {
+                                e.target.style.height = "auto";
+                                e.target.style.height =
+                                    e.target.scrollHeight + "px";
+                            }}
+                            rows={1}
                         />
                         <div className="flex gap-2">
                             <button
@@ -167,12 +178,14 @@ function CreateQuizQuestion() {
                                         setCorrectOption(q);
                                     }}
                                 >
-                                    {q}
-                                    {q === correctOption ? (
-                                        <CheckCircle2 />
-                                    ) : (
-                                        <CircleDashed />
-                                    )}
+                                    <p className="flex-1 break-words">{q}</p>
+                                    <div className="">
+                                        {q === correctOption ? (
+                                            <CheckCircle2 />
+                                        ) : (
+                                            <CircleDashed />
+                                        )}
+                                    </div>
                                 </div>
                             );
                         })}
