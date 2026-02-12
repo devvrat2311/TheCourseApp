@@ -18,7 +18,9 @@ nav {
     margin: 0;
     width: 100%;
     /*min-height: 60px;*/
-    height: fit-content;
+    /*height: fit-content;*/
+    height: 100px;
+    max-height: 120px;
     /*border: 2px solid #1c398e;*/
     /*border-bottom: 2px solid var(--border);*/
     /*border-radius: 0 0 10px;*/
@@ -240,6 +242,9 @@ textarea.input-class {
 .mobile-dropdown {
     width: 100%;
     /*border: 2px solid var(--border);*/
+    z-index: 1001;
+    position: sticky;
+    top: 100px;
     padding: 10px;
     margin-bottom: 3rem;
     background-color: var(--bg-secondary);
@@ -275,7 +280,6 @@ textarea.input-class {
     top: 100%;
     left: 0;
     right: 0;
-    z-index: 10;
     transform: translateY(10px);
     overflow: hidden;
     transition:
