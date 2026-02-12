@@ -31,7 +31,7 @@ export default function SectionContent({ sectionData }) {
                         return (
                             <h2
                                 key={index}
-                                className="section-subheading  ml-6 mt-5"
+                                className="section-subheading text-xl text-[var(--accent)] font-bold ml-6 mt-5"
                             >
                                 {contentBlock.text}
                             </h2>
