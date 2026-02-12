@@ -297,7 +297,7 @@ function CourseSectionPage() {
                                         );
                                     }}
                                 >
-                                    <div className="flex gap-2 items-baseline-last">
+                                    <div className="flex flex-1 gap-2 items-baseline-last">
                                         <p className="text-[0.8rem]">
                                             {index + 1}.
                                         </p>
@@ -305,11 +305,13 @@ function CourseSectionPage() {
                                             {section.title}
                                         </p>
                                     </div>
-                                    {isSectionComplete(section._id) ? (
-                                        <CheckCircle2 className="text-green-500" />
-                                    ) : (
-                                        <CircleDashed className="text-gray-400" />
-                                    )}
+                                    <p className="">
+                                        {isSectionComplete(section._id) ? (
+                                            <CheckCircle2 className="text-green-500" />
+                                        ) : (
+                                            <CircleDashed className="text-gray-400" />
+                                        )}
+                                    </p>
                                 </li>
                             ))}
                         </ul>

@@ -242,6 +242,7 @@ textarea.input-class {
     /*border: 2px solid var(--border);*/
     padding: 10px;
     margin-bottom: 3rem;
+    background-color: var(--bg-secondary);
 }
 .mobile-dropdown-topsection {
     display: flex;
@@ -310,6 +311,8 @@ textarea.input-class {
     scrollbar-width: thin;
     scrollbar-color: var(--border) var(--bg); /* thumb color, track color */
     scroll-behavior: smooth;
+    z-index: 101;
+    background-color: var(--bg-secondary);
 }
 
 .selected-index {
