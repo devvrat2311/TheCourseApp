@@ -181,6 +181,9 @@ function CourseSectionPage() {
 
     const [dropdown, setDropdown] = useState(false);
     const toggleDropDown = () => {
+        // if (dropdown) {
+        //     document.html.classList.add("no-scroll");
+        // }
         setDropdown(!dropdown);
     };
 
@@ -212,13 +215,13 @@ function CourseSectionPage() {
         <>
             <div className="main-content">
                 {isMobile ? (
-                    <div ref={ddRef} className="mobile-dropdown">
+                    <div className="mobile-dropdown">
                         <div className="mobile-dropdown-topsection ">
                             {/* flex gap-[1rem] items-center px-6*/}
                             <BackButton2
                                 locationURL={`/student/courses/${courseId}`}
                             />
-                            <div className="mobile-dd-dd">
+                            <div ref={ddRef} className="mobile-dd-dd">
                                 <div
                                     onClick={toggleDropDown}
                                     className="mobile-dd-display cursor-pointer flex justify-between rounded p-[10px] text-xs items-center"
