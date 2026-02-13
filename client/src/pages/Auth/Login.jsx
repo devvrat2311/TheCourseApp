@@ -115,7 +115,7 @@ function Login() {
 
     return (
         <div className="hero-background">
-            <p className="blurred-bg text-xs fixed bottom-[2px] left-[2px] text-[var(--border)] p-2">
+            <p className="blurred-bg backdrop-blur-sm text-xs fixed bottom-[2px] left-[2px] text-[var(--border)] p-2">
                 Background image from the game Cairn by Red Thread Games.
             </p>
             <div className="">
