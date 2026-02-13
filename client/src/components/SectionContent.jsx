@@ -39,12 +39,12 @@ export default function SectionContent({ sectionData }) {
 
                     case "paragraph":
                         return (
-                            <h2
+                            <p
                                 key={index}
                                 className="section-paragraph ml-6 mt-5"
                             >
                                 {contentBlock.text}
-                            </h2>
+                            </p>
                         );
                     case "bullet":
                         return (
