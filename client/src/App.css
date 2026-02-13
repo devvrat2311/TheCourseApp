@@ -51,7 +51,7 @@ nav {
     /*min-height: 60px;*/
     height: fit-content;
     /*height: 100px;*/
-    max-height: 120px;
+    max-height: 90px;
     /*border: 2px solid #1c398e;*/
     /*border-bottom: 2px solid var(--border);*/
     /*border-radius: 0 0 10px;*/
@@ -289,7 +289,7 @@ textarea.input-class {
     border: 2px solid var(--border);
     z-index: 1001;
     position: sticky;
-    top: 110px;
+    top: 90px;
     padding: 10px;
     margin-bottom: 3rem;
     background-color: var(--bg-secondary);
