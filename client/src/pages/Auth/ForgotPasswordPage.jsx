@@ -50,8 +50,11 @@ function ForgotPasswordPage() {
         );
     }
     return (
-        <>
-            <Logo stylingClass={"logo-navbar"} />
+        <div className="hero-background">
+            <p className="blurred-bg text-xs fixed bottom-[2px] left-[2px] text-[var(--border)] p-2">
+                Background image from the game Cairn by Red Thread Games.
+            </p>
+            <Logo stylingClass={"logo-login"} logoType={"login"} />
             <div className="login-container-wrapper">
                 <div className="login-container flex gap-2 flex-col">
                     <p className="text-left text-xl">Forgot password?</p>
@@ -96,7 +99,7 @@ function ForgotPasswordPage() {
                 </div>
             </div>
             <ThemeToggle />
-        </>
+        </div>
     );
 }
 

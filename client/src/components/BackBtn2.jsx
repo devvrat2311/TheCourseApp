@@ -13,7 +13,8 @@ function BackButton2({ locationURL }) {
             clickFunction={clickFunction}
             stylingClass={"back-btn px-[1em] py-[0.2em] gap-2 font-bold"}
         >
-            &#8592;<span className="text-xs">back</span>
+            <ChevronLeft size={20} strokeWidth={3} />
+            <span className="text-xs font-firacode">back</span>
         </ClickyBtn>
     );
 }

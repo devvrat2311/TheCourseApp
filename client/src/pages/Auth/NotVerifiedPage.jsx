@@ -48,7 +48,10 @@ function NotVerifiedPage() {
         return <Loader />;
     }
     return (
-        <>
+        <div className="hero-background">
+            <p className="blurred-bg text-xs fixed bottom-[2px] left-[2px] text-[var(--border)] p-2">
+                Background image from the game Cairn by Red Thread Games.
+            </p>
             <Logo stylingClass={"logo-navbar"} />
             <div className="login-container-wrapper min-w-screen ">
                 <div className="flex gap-2 items-center flex-col login-container">
@@ -74,7 +77,7 @@ function NotVerifiedPage() {
                 </div>
             </div>
             <ThemeToggle />
-        </>
+        </div>
     );
 }
 

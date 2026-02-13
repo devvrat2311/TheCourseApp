@@ -114,8 +114,16 @@ function Login() {
     }
 
     return (
-        <>
-            <Logo stylingClass={"logo-navbar"} />
+        <div className="hero-background">
+            <p className="blurred-bg text-xs fixed bottom-[2px] left-[2px] text-[var(--border)] p-2">
+                Background image from the game Cairn by Red Thread Games.
+            </p>
+            <div className="">
+                <Logo stylingClass={"logo-login"} logoType={"login"} />
+                <p id="hero-heading" className="blurred-div">
+                    You can Always learn more.
+                </p>
+            </div>
             <div className="login-container-wrapper">
                 <div className="login-container bg-[var(--bg-dark)] border-[var(--shadow-dark)] flex flex-col">
                     <h2 className="text-3xl font-bold text-left mb-2">Login</h2>
@@ -192,7 +200,7 @@ function Login() {
                 </div>
             </div>
             <ThemeToggle />
-        </>
+        </div>
     );
 }
 

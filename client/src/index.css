@@ -1,6 +1,6 @@
 :root {
-    /*font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;*/
-    font-family: "Fira Code", monospace;
+    font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+    /*font-family: "Hanken Grotesk", sans-serif;*/
     line-height: 1.5;
     font-weight: 400;
 
@@ -9,19 +9,50 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     scrollbar-width: var(30px);
-    scrollbar-color: var(--border) var(--bg);
+    scrollbar-color: var(--border) var(--bg-secondary);
     scrollbar-arrow-color: var(--border);
 }
-
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-family: "Hanken Grotesk", sans-serif;
+}
+body,
+p {
+    font-family: "Inter", sans-serif;
+}
 :root[data-theme="light"] {
+    --bg: #f0f7fd; /* very light blue-tinted background */
+    --bg-secondary: #d4e8f7; /* soft blue secondary background */
+    --fg: #0a2540; /* deep blue-black for text */
+    --fg-secondary: #2d5a7b; /* muted blue for secondary text */
+    --bg-highlighted: #e3f2fd; /* light blue highlight */
+    --highlighted: #bbdefb; /* brighter blue highlight */
+    /*--border: #90caf9; /* soft blue border */
+    --border: #cbd5e1;
+    --shadow: #0463ca; /* your main blue - kept as is */
+    --accent: #42a5f5; /* bright blue accent */
+    --accent-deeper: #1976d2; /* deeper blue accent */
+    --success-green: #00bc7d; /* kept as is */
+    --success-green-lighter: #00bc7d30; /* kept as is */
+    --error-red: #ec003f; /* kept as is */
+    --error-red-lighter: #ec003f30; /* kept as is */
+    --color-blue: #2196f3; /* vibrant blue */
+    --login-bg-url: url("https://w.wallhaven.cc/full/yq/wallhaven-yqemx7.jpg");
+    color-scheme: light;
+}
+/*:root[data-theme="light"] {
     --bg: #f8fafc;
-    --bg-secondary: #e2f3f4;
+    --bg-secondary: #b0d6f5;
     --fg: #0f172a;
     --fg-secondary: #475569;
     --bg-highlighted: #f1f5f9;
     --highlighted: #e0f2fe;
     --border: #cbd5e1;
-    --shadow: #6dc7d1;
+    --shadow: #0463ca;
     --accent: #6dc7d1ac;
     --accent-deeper: #33a8b5;
     --success-green: #00bc7d;
@@ -30,8 +61,28 @@
     --error-red-lighter: #ec003f30;
     --color-blue: #0ea5e9;
     color-scheme: light;
-}
+}*/
 :root[data-theme="dark"] {
+    --bg: #1a1f2e; /* darker than Nord's base */
+    --bg-secondary: #242933; /* darker polar night */
+    --fg: #eceff4; /* Nord snow storm */
+    --fg-secondary: #d8dee9; /* lighter snow storm */
+    --bg-highlighted: #2e3440; /* standard Nord polar night */
+    --highlighted: #3b4252; /* Nord highlight */
+    --border: #4c566a; /* Nord border */
+    --shadow: #88c0d0; /* Nord frost cyan */
+    --accent: #88c0d0; /* Nord frost cyan */
+    --accent-deeper: #5e81ac; /* Nord frost blue */
+    --success-green: #00bc7d;
+    --success-green-lighter: #00bc7d30;
+    --error-red: #ec003f;
+    --error-red-lighter: #ec003f30;
+    --color-blue: #81a1c1; /* Nord frost light blue */
+    --login-bg-url: url("https://w.wallhaven.cc/full/5y/wallhaven-5y5w71.jpg");
+    color-scheme: dark;
+}
+
+/*:root[data-theme="dark"] {
     --bg: #1f2530;
     --bg-secondary: #2b313f;
     --fg: #f8f9fa;
@@ -47,8 +98,9 @@
     --error-red: #ec003f;
     --error-red-lighter: #ec003f30;
     --color-blue: #1fb6ff;
+    --login-bg-url: url("https://w.wallhaven.cc/full/5y/wallhaven-5y5w71.jpg");
     color-scheme: dark;
-}
+}*/
 /*:root[data-theme="dark"] {
     --bg: #051824;
     --fg: #f8f8f8;
@@ -64,6 +116,7 @@
 }*/
 html {
     scrollbar-gutter: stable;
+    background-color: var(--bg);
 }
 /*html.no-scroll {
     overflow: hidden;
@@ -71,7 +124,7 @@ html {
 body {
     margin: 0;
     min-height: 100vh;
-    background-color: var(--bg);
+    /*background-color: blue;*/
 }
 body.no-scroll {
     overflow: hidden;

@@ -1,5 +1,8 @@
 @import "tailwindcss";
 
+.font-firacode {
+    font-family: "Fira Code", monospace;
+}
 #root {
     margin: 0 auto;
     text-align: center;
@@ -11,6 +14,33 @@
     min-height: 100vh;
 }
 
+.hero-background {
+    background: var(--login-bg-url);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    width: 100%;
+    flex: 1;
+    display: flex;
+    /*flex-direction: column;*/
+    justify-content: center;
+    place-items: center;
+    gap: 200px;
+}
+#hero-heading {
+    font-size: 1.4rem;
+    font-weight: 200;
+}
+@media (max-width: 1200px) {
+    .hero-background {
+        flex-direction: column;
+        gap: 0;
+    }
+    .hero-background #hero-heading {
+        display: none;
+    }
+}
+
 nav {
     /*this lives inside the #root*/
     z-index: 2000;
@@ -19,8 +49,8 @@ nav {
     margin: 0;
     width: 100%;
     /*min-height: 60px;*/
-    /*height: fit-content;*/
-    height: 100px;
+    height: fit-content;
+    /*height: 100px;*/
     max-height: 120px;
     /*border: 2px solid #1c398e;*/
     /*border-bottom: 2px solid var(--border);*/
@@ -98,6 +128,18 @@ main {
     /*margin-block: 6px;*/
     border-radius: 10px;
 }
+
+.blurred-div {
+    background-color: rgba(255, 255, 255, 0.2);
+    /*background-color: blanchedalmond;*/
+    backdrop-filter: blur(10px) saturate(180%);
+    -webkit-backdrop-filter: blur(10px) saturate(180%);
+    /*border: 1px solid rgba(255, 255, 255, 0.3);*/
+    padding: 10px;
+    border-radius: 10px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    margin-bottom: 10px;
+}
 @media (max-width: 800px) {
     .logo-navbar {
         /*margin-left: 10px;*/
@@ -121,18 +163,20 @@ main {
 } */
 .login-container-wrapper {
     background: linear-gradient(-45deg, var(--accent), var(--border));
-    padding: 2px;
+    padding: 4px;
     border-radius: 20px;
     transition: 0.2s all ease;
     /*margin-inline: 10rem;*/
     margin-inline: 10px;
     min-width: 400px;
     max-width: 600px;
+    z-index: 100;
 }
 
 .login-container {
     /*box-shadow: 6px 6px var(--shadow);*/
     background-color: var(--bg);
+    /*background-color: transparent;*/
     padding: 2rem;
     /*border: 4px solid var(--accent);*/
     /*width: 30rem;*/
@@ -545,6 +589,7 @@ textarea.input-class {
     background-color: var(--bg);
     /*max-width: 80%;*/
     overflow: auto;
+    font-family: "Fira Code", monospace;
 }
 .section-paragraph,
 .section-heading,
