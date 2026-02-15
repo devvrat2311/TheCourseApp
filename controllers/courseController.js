@@ -677,6 +677,9 @@ const markSectionComplete = async (req, res) => {
                 user.studentProfile.enrolledCourses.filter(
                     (course) => !course.courseId.equals(courseId),
                 );
+            user.studentProfile.enrolledCourses.map((course, index) => {
+                console.log(course.title);
+            });
             user.studentProfile.completedCourses.push(courseId);
             await user.save();
         }
