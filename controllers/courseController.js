@@ -631,9 +631,11 @@ const markSectionComplete = async (req, res) => {
                 return res
                     .status(200)
                     .json({ message: "Section already completed" });
+            } else {
+                moduleEntry.sectionIds.push(sectionId);
             }
-            moduleEntry.sectionIds.push(sectionId);
         } else {
+            //create a entry in the array, a module's first section is pushed
             enrolledCourse.completedSections.push({
                 moduleId,
                 sectionIds: [sectionId],
@@ -644,7 +646,6 @@ const markSectionComplete = async (req, res) => {
                     enrolledCourse.completedSections.length - 1
                 ];
         }
-        // console.log("from markSectionComplete, moduleEntry is", moduleEntry);
 
         const module = course.modules.find(
             (module) => module._id.toString() === moduleId,
@@ -672,6 +673,10 @@ const markSectionComplete = async (req, res) => {
             !user.studentProfile.completedCourses.includes(courseId)
         ) {
             // console.log("all modules is completed now from markSection");
+            user.studentProfile.enrolledCourses =
+                user.studentProfile.enrolledCourses.filter(
+                    (course) => !course.courseId.equals(courseId),
+                );
             user.studentProfile.completedCourses.push(courseId);
             await user.save();
         }
@@ -1122,6 +1127,7 @@ const getCourseById = async (req, res) => {
             return res.status(404).json({ message: "Course Not Found" });
 
         const user = await User.findById(userId);
+        const userFullName = user.fullName;
         const enrolledCourseEntry = user.studentProfile.enrolledCourses.find(
             (c) => c.courseId.toString() === courseId,
         );
@@ -1152,7 +1158,8 @@ const getCourseById = async (req, res) => {
                 view: "completed",
                 title: course.title,
                 description: course.description,
-                certificate: `Congratulations, you completed the course ${course.title}`,
+                certificate: `Congratulations ${userFullName}! You have completed the course ${course.title} from thecourseapp.in`,
+                userName: userFullName,
             });
         } else {
             const completedModuleIds = enrolledCourseEntry.completedSections

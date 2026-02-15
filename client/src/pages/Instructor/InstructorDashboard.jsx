@@ -84,15 +84,21 @@ function InstructorDashboard() {
                     </p>
                     <div className="courses-grid">
                         {myCourses.map((course, index) => (
-                            <div key={index} className="courses-grid-item">
-                                <p id="courseTitle">{course.title}</p>
-                                <p id="courseDesc">{course.description}</p>
-                                <p id="courseStudents">
-                                    students: {course.enrolledStudents.length}
-                                </p>
-                                <p id="courseStatus">
-                                    status: {course.courseStatus}
-                                </p>
+                            <div
+                                key={index}
+                                className="courses-grid-item flex flex-col"
+                            >
+                                <div className="flex-1">
+                                    <p id="courseTitle">{course.title}</p>
+                                    <p id="courseDesc">{course.description}</p>
+                                    <p id="courseStudents">
+                                        students:{" "}
+                                        {course.enrolledStudents.length}
+                                    </p>
+                                    <p id="courseStatus">
+                                        status: {course.courseStatus}
+                                    </p>
+                                </div>
                                 <div className="flex justify-between">
                                     <ClickyBtn
                                         clickFunction={() =>

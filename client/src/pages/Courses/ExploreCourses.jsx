@@ -48,9 +48,6 @@ function ExploreCourses() {
                                 <p className="text-sm text-shadow-white">
                                     {course.description}
                                 </p>
-                                {/* <p className="text-sm text-shadow-white">
-                                Author: {course.author}
-                            </p>*/}
                             </div>
                             <div className="justify-items-end">
                                 <ClickyBtn
@@ -61,7 +58,9 @@ function ExploreCourses() {
                                         "back-btn text-xs gap-2 px-[1rem] py-[0.4rem] items-center"
                                     }
                                 >
-                                    Go to Course &#8594;
+                                    <p className="font-firacode">
+                                        Go to Course
+                                    </p>
                                 </ClickyBtn>
                             </div>
                         </li>

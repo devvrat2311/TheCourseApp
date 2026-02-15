@@ -57,17 +57,21 @@ function StudentDashboard() {
                                     key={item.courseId._id}
                                     className="explore-courses-card"
                                 >
-                                    <h3 className="text-lg font-semibold mb-2">
-                                        {item.courseId.title}
-                                    </h3>
-                                    <p className="text-sm mb-2">
-                                        {item.courseId.description}
-                                    </p>
-                                    <p className="text-sm text-gray-600 mb-2">
-                                        Progress:{" "}
-                                        {item.completedSections?.length || 0} /{" "}
-                                        {item.courseId.modules.length || 0}
-                                    </p>
+                                    <div className="flex-1">
+                                        <h3 className="text-lg font-semibold mb-2">
+                                            {item.courseId.title}
+                                        </h3>
+                                        <p className="text-sm mb-2">
+                                            {item.courseId.description}
+                                        </p>
+                                        <p className="text-sm text-gray-600 mb-2">
+                                            Progress:{" "}
+                                            {item.completedSections?.length ||
+                                                0}{" "}
+                                            /{" "}
+                                            {item.courseId.modules.length || 0}
+                                        </p>
+                                    </div>
                                     <ClickyBtn
                                         clickFunction={() => {
                                             navigate(
@@ -78,7 +82,9 @@ function StudentDashboard() {
                                             "back-btn text-xs px-[1rem] py-[0.4rem]"
                                         }
                                     >
-                                        Continue Course &#8594;
+                                        <p className="font-firacode">
+                                            Continue Course
+                                        </p>
                                     </ClickyBtn>
                                 </li>
                             ))}
@@ -118,7 +124,9 @@ function StudentDashboard() {
                                             "back-btn text-xs px-[1rem] py-[0.4rem]"
                                         }
                                     >
-                                        View Certificate &#8594;
+                                        <p className="font-firacode">
+                                            View Certificate
+                                        </p>
                                     </ClickyBtn>
                                 </li>
                             ))}

@@ -115,13 +115,14 @@ function Login() {
 
     return (
         <div className="hero-background">
-            <p className="backdrop-blur-sm text-xs fixed bottom-[2px] left-[2px] text-[var(--border)] p-2">
+            <p className="rounded-full backdrop-blur-sm text-xs fixed bottom-[2px] left-[2px] text-[var(--border)] p-2">
                 Background image from the game Cairn by Red Thread Games.
             </p>
             <div className="">
                 <Logo stylingClass={"logo-login"} logoType={"login"} />
-                <p id="hero-heading" className="blurred-div backdrop-blur-sm">
-                    You can Always learn more.
+                <p id="hero-heading" className="backdrop-blur-sm text-[white]">
+                    There's <span className="italic">always </span>more to
+                    learn.
                 </p>
             </div>
             <div className="login-container-wrapper">

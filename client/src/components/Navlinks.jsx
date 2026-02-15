@@ -29,7 +29,7 @@ export default function Navlinks() {
         <>
             <div className="relative nav-links flex space-x-8 p-1 h-fit font-bold">
                 <div
-                    className="absolute bottom-0 bg-[var(--bg)] border-2 border-[var(--border)] hover:bg-[var(--bg)] rounded-full transition-all duration-300 ease-in-out z-0"
+                    className="absolute bottom-0 bg-[var(--bg)] hover:bg-[var(--bg)] rounded-full transition-all duration-300 ease-in-out z-0"
                     style={indicatorStyle}
                 />
                 {links.map(({ to, label }) => (

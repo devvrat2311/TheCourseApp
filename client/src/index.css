@@ -63,8 +63,8 @@ p {
     color-scheme: light;
 }*/
 :root[data-theme="dark"] {
-    --bg: #1a1f2e; /* darker than Nord's base */
-    --bg-secondary: #242933; /* darker polar night */
+    --bg: #242933; /* darker than Nord's base */
+    --bg-secondary: #1a1f2e; /* darker polar night */
     --fg: #eceff4; /* Nord snow storm */
     --fg-secondary: #d8dee9; /* lighter snow storm */
     --bg-highlighted: #2e3440; /* standard Nord polar night */

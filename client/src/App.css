@@ -1,7 +1,16 @@
 @import "tailwindcss";
 
+.font-hanken-grotesk {
+    font-family: "Hanken Grotesk", monospace;
+}
 .font-firacode {
     font-family: "Fira Code", monospace;
+}
+.font-playfair {
+    font-family: "Playfair Display", serif;
+}
+.font-homemade-apple {
+    font-family: "Homemade Apple", cursive;
 }
 #root {
     margin: 0 auto;
@@ -29,7 +38,8 @@
 }
 #hero-heading {
     font-size: 1.4rem;
-    font-weight: 200;
+    font-weight: 100;
+    font-family: "Homemade Apple", cursive;
 }
 @media (max-width: 1200px) {
     .hero-background {
@@ -51,7 +61,7 @@ nav {
     /*min-height: 60px;*/
     height: fit-content;
     /*height: 100px;*/
-    max-height: 90px;
+    max-height: 80px;
     /*border: 2px solid #1c398e;*/
     /*border-bottom: 2px solid var(--border);*/
     /*border-radius: 0 0 10px;*/
@@ -80,7 +90,7 @@ nav {
 main {
     /*margin: 20px 50px;*/
     /*margin: 80px 10px;*/
-    margin-top: 100px;
+    margin-top: 60px;
     display: flex;
     /*flex-direction: column;*/
     justify-content: center;
@@ -94,7 +104,18 @@ main {
     width: 100%;
     max-width: 1350px;
     margin-inline: 30px;
-    margin-top: 20px;
+    margin-top: 10px;
+    display: flex;
+    flex: 1;
+    /*height: 100vh;*/
+    /*border: 2px solid var(--border);*/
+    padding: 6px;
+}
+.main-content-too {
+    width: 100%;
+    max-width: 1350px;
+    margin-inline: 30px;
+    margin-top: 10px;
     display: flex;
     flex: 1;
     /*height: 100vh;*/
@@ -118,6 +139,9 @@ main {
     min-width: 400px;
 }
 
+.logo-constant {
+    width: 20rem;
+}
 .logo-login {
     width: 30rem;
 }
@@ -129,15 +153,19 @@ main {
     border-radius: 10px;
 }
 
+.box-shadow {
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+
 .blurred-div {
     background-color: rgba(255, 255, 255, 0.2) !important;
     /*background-color: blanchedalmond;*/
     backdrop-filter: blur(10px) !important;
     -webkit-backdrop-filter: blur(10px) !important;
     /*border: 1px solid rgba(255, 255, 255, 0.3);*/
-    padding: 10px;
-    border-radius: 10px;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    /*padding: 5px;*/
+    border-radius: 30px;
+    /*box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);*/
     margin-bottom: 10px;
 }
 @media (max-width: 800px) {
@@ -162,8 +190,8 @@ main {
     width: 30rem;
 } */
 .login-container-wrapper {
-    background: linear-gradient(-45deg, var(--accent), var(--border));
-    padding: 4px;
+    /*background: linear-gradient(-45deg, var(--accent), var(--border));*/
+    padding: 2px;
     border-radius: 20px;
     transition: 0.2s all ease;
     /*margin-inline: 10rem;*/
@@ -180,7 +208,7 @@ main {
     padding: 2rem;
     /*border: 4px solid var(--accent);*/
     /*width: 30rem;*/
-    border-radius: 18px;
+    border-radius: 14px;
 }
 
 /*.certificate-container-wrapper {
@@ -191,9 +219,22 @@ main {
     display: flex;
     justify-content: center;
 }*/
+.certificate {
+    background: url("https://w.wallhaven.cc/full/3q/wallhaven-3qw9zd.jpg");
+    background-size: cover;
+    background-position: top;
+    background-repeat: no-repeat;
+    min-height: 300px;
+    min-width: 600px;
+}
+@media (max-width: 1000px) {
+    .certificate #congratulatory-text {
+        font-size: 2rem;
+    }
+}
 .animated-gradient {
-    border-radius: 40px;
-    padding: 10px;
+    border-radius: 10px;
+    padding: 5px;
     /* border: 2px solid var(--border); */
     background: linear-gradient(
         90deg,
@@ -206,8 +247,10 @@ main {
     animation: gradientShift 8s ease infinite;
     display: flex;
     justify-content: center;
-    max-height: 400px;
-    max-width: 600px;
+    /*height: 100%;*/
+    /*width: 100%;*/
+    /*max-height: 400px;
+    max-width: 600px;*/
 }
 
 .animated-gradient-overlay {
@@ -222,7 +265,11 @@ main {
     );*/
     /*background-size: 65px 65px;*/
     background-color: var(--bg-secondary);
-    border-radius: 30px;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 20px;
 }
 
 @keyframes gradientShift {
@@ -411,11 +458,11 @@ textarea.input-class {
 @keyframes buttonPress {
     0% {
         transform: translate(-0px, -0px);
-        box-shadow: 0px 0px var(--accent);
+        box-shadow: 0px 0px var(--shadow);
     }
     100% {
         transform: translate(-4px, -4px);
-        box-shadow: 4px 4px var(--accent);
+        box-shadow: 4px 4px var(--shadow);
     }
 }
 @keyframes buttonPressRed {
@@ -432,12 +479,12 @@ textarea.input-class {
 .back-btn {
     /*font-weight: bold;*/
     color: var(--fg);
-    background-color: var(--bg);
+    background-color: var(--bg-secondary);
     border: 1px solid var(--border);
     border-radius: 10px;
     cursor: pointer;
     transform: translate(-4px, -4px);
-    box-shadow: 4px 4px var(--accent);
+    box-shadow: 4px 4px var(--shadow);
     transition: 0.2s all ease-in;
 }
 
@@ -447,7 +494,7 @@ textarea.input-class {
 }
 
 .login-btn {
-    box-shadow: 4px 6px var(--accent);
+    box-shadow: 4px 6px var(--shadow);
 }
 
 .logout-btn {
@@ -598,19 +645,20 @@ textarea.input-class {
 }
 .section-image {
     max-height: 500px;
+    max-width: 500px;
     /*width: inherit;*/
     /*width: 70%;*/
 
     margin-right: 10px;
     margin-left: 20px;
-    width: auto;
+    width: 90%;
     /*margin-block: 30px;*/
     /*align-self: center;*/
-    padding: 14px;
+    padding: 4px;
     object-fit: contain;
     border-radius: 10px;
-    border: 2px solid var(--border);
-    background-color: var(--bg);
+    /*border: 2px solid var(--border);*/
+    background-color: lightcyan;
 }
 @media (max-width: 600px) {
     .section-image {
@@ -649,7 +697,7 @@ textarea.input-class {
     border-radius: 10px;
     font-size: 14px;
     font-weight: bold;
-    z-index: 1001;
+    z-index: 2001;
 }
 
 @media (min-width: 500px) {
