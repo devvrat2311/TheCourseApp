@@ -26,4 +26,5 @@ A full stack e-learning platform where students can en-roll in courses, track pr
 
 #### Login/Sign Up Page
 
-![Login](./assets/login.png)
+![Login Light Mode](./assets/login_light.png)
+![Login Dark Mode](./assets/login_dark.png)
