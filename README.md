@@ -24,16 +24,13 @@ A full stack e-learning platform where students can en-roll in courses, track pr
 
 ### Screenshots
 
-#### Login/Sign Up Page
+#### Login Page
 
-![Login Light Mode](./assets/login_light.png)
 ![Login Dark Mode](./assets/login_dark.png)
 
 #### Student Account
 
 ![Student Dashboard](./assets/student_dashboard.png)
-![Student Enroll in Course](./assets/enroll_course.png)
-![Student Course Page](./assets/course_page.png)
 ![Student Course Section](./assets/course_section.png)
 ![Student Course Quiz](./assets/course_quiz.png)
 
@@ -41,8 +38,6 @@ A full stack e-learning platform where students can en-roll in courses, track pr
 
 ![Instructor Dashboard](./assets/instructor_dashboard.png)
 ![Instructor Course Page](./assets/instructor_course.png)
-![Instructor Module Page](./assets/instructor_sections.png)
 ![Instructor Edit Section Page](./assets/instructor_edit_section.png)
-![Instructor Edit Quiz](./assets/instructor_edit_quiz.png)
 ![Instructor Create Content](./assets/instructor_create_content_block.png)
 ![Instructor Edit Quiz Question](./assets/instructor_edit_quiz_question.png)
