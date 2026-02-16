@@ -7,6 +7,7 @@ import ThemeToggle from "../../components/ThemeToggle";
 import ClickyBtn from "../../components/ClickyBtn";
 import { jwtDecode } from "jwt-decode";
 import LogoutBtn from "../../components/LogoutBtn";
+import HeroHeading from "../../components/HeroHeading";
 import { CircleUser } from "lucide-react";
 
 function Login() {
@@ -120,10 +121,7 @@ function Login() {
             </p>
             <div className="">
                 <Logo stylingClass={"logo-login"} logoType={"login"} />
-                <p id="hero-heading" className="backdrop-blur-sm text-[white]">
-                    There's <span className="italic">always </span>more to
-                    learn.
-                </p>
+                <HeroHeading />
             </div>
             <div className="login-container-wrapper">
                 <div className="login-container bg-[var(--bg-dark)] border-[var(--shadow-dark)] flex flex-col">

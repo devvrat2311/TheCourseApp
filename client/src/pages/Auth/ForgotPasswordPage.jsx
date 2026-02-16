@@ -6,6 +6,7 @@ import { useFlash } from "../../contexts/FlashContext";
 import { useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import Loader from "../../components/Loader";
+import HeroHeading from "../../components/HeroHeading";
 
 function ForgotPasswordPage() {
     const { showFlash } = useFlash();
@@ -54,7 +55,10 @@ function ForgotPasswordPage() {
             <p className="blurred-bg text-xs fixed bottom-[2px] left-[2px] text-[var(--border)] p-2">
                 Background image from the game Cairn by Red Thread Games.
             </p>
-            <Logo stylingClass={"logo-login"} logoType={"login"} />
+            <div>
+                <Logo stylingClass={"logo-login"} logoType={"login"} />
+                <HeroHeading />
+            </div>
             <div className="login-container-wrapper">
                 <div className="login-container flex gap-2 flex-col">
                     <p className="text-left text-xl">Forgot password?</p>

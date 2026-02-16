@@ -5,6 +5,7 @@ import ThemeToggle from "../../components/ThemeToggle";
 import ClickyBtn from "../../components/ClickyBtn";
 import Logo from "../../components/Logo";
 import Loader from "../../components/Loader";
+import HeroHeading from "../../components/HeroHeading";
 
 function SignUp() {
     const navigate = useNavigate();
@@ -76,9 +77,7 @@ function SignUp() {
             </p>
             <div className="">
                 <Logo stylingClass={"logo-login"} logoType={"login"} />
-                <p id="hero-heading" className="blurred-div">
-                    You can Always learn more.
-                </p>
+                <HeroHeading />
             </div>
             <div className="login-container-wrapper">
                 <div className="login-container bg-[var(--bg-dark)] flex flex-col">
