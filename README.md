@@ -63,6 +63,56 @@ A full stack e-learning platform where students can en-roll in courses, track pr
 - Responsive and clean UI design
 - Dockerized deployment with Nginx proxy on DigitalOcean VPS
 
+## Technical Decisions
+
+### Authentication Strategy
+
+**Choice:** JWT with access & refresh token pattern
+**Why:** Short-lived access tokens (15 min) authenticate API requests, while refresh tokens enable automatic token renewal without re-login. Provides stateless authentication with no server-side session storage needed, improving scalability.
+
+### Role Based Access Control
+
+**Choice:** Token based and Middleware based RBAC with role checks at route level.
+**Why:** Frontend uses React Router with role information from JWT to control UI route access. Backend implements verifyToken middleware to validate tokens, plus role-specific middleware (verifyStudent, verifyInstructor) to protect endpoints based on user roles. Centralizes authorization logic and prevents unauthorized access.
+
+### Database Security
+
+**Choice:** MongoDB with authentication enabled, deployed as a docker container, no public ports exposed
+**Why:** After a security incident where an exposed MongoDB port (no auth) led to a ransom attempt, implemented proper security measures: network isolation (only frontend container exposed to web), MongoDB authentication with credentials in .env (excluded from Git), and firewall rules. Database now only accessible from the application server container.
+
+### Email Service
+
+**Choice:** Mailgun for transactional emails
+**Why:** Reliable delivery for verification and password reset emails. DigitalOcean blocks SMTP ports (25, 587) on VPS instances to prevent spam, so direct SMTP via Nodemailer wasn't viable. Mailgun API provides guaranteed delivery without port restrictions.
+
+### Deployment Architecture
+
+**Choice:** Docker + Nginx reverse proxy on DigitalOcean VPS
+**Why:** Docker ensures consistent environments across dev/prod. Nginx handles SSL termination, static file serving, and request routing to backend container.
+
+### Frontend API Client with Auto Token Refresh
+
+**Choice:** Centralized API client class handling all HTTP requests with automatic token refresh
+**Why:** Eliminates code duplication across components - every API call automatically includes authorization headers and handles token expiration transparently. Implements request queuing during token refresh to prevent race conditions when multiple simultaneous requests encounter expired tokens. Centralizes error handling and retry logic in one place rather than scattered across dozens of components.
+
+### Course Data Structure
+
+**Choice:** Nested schema with embedded modules and sections (Course -> Modules[ -> Sections[contentBlock/quizQuestion]])
+**Why:** Initially chose embedded documents for simpler queries - fetching a course returns all related content in one query. Trade-off: Updates to individual sections require updating the entire course document, and payloads can be large for courses with many modules.
+**Reflection:** In a larger-scale system, separating into referenced collections (Course → Module → Section) would enable more granular updates, leaner API responses, and better caching strategies. Good learning experience in understanding the embedded vs referenced documents trade-off in MongoDB.
+
+### Separation of User and Auth Models
+
+**Choice:** Separate collections for User profile data and Auth/security data
+**Why:** Keeps security-sensitive data (password hash, tokens, failed login attempts) isolated from general user profile information. Enables:
+
+- Querying user profiles without loading security credentials
+- Different access patterns - auth data accessed on login/token refresh, user data accessed frequently for UI
+- Easier security auditing - all auth events in one collection
+- Cleaner schema organization - User model focuses on profile/role data, Auth model handles authentication/security
+
+**Trade-off:** Requires joining on userId for some operations, but the security and architectural benefits outweigh the minor query complexity.
+
 ### More Screenshots
 
 #### Student Account
