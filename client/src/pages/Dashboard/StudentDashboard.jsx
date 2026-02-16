@@ -22,7 +22,7 @@ function StudentDashboard() {
                 const data = await response.json();
                 if (response.ok) {
                     setOngoingCourses(data.enrolledCourses || []);
-                    setCompletedCourses(data.completedCourses || []);
+                    setCompletedCourses(data.completedCoursesData || []);
                 } else {
                     console.error("Failed to fetch courses:", data.message);
                 }
@@ -103,21 +103,21 @@ function StudentDashboard() {
                         </p>
                     ) : (
                         <ul className="explore-courses-grid">
-                            {completedCourses.map((item) => (
+                            {completedCourses.map((item, index) => (
                                 <li
-                                    key={item.courseId._id}
+                                    key={index}
                                     className="explore-courses-card p-4 rounded shadow"
                                 >
                                     <h3 className="text-lg font-semibold mb-2">
-                                        {item.courseId.title}
+                                        {item.title}
                                     </h3>
                                     <p className="text-sm mb-2">
-                                        {item.courseId.description}
+                                        {item.description}
                                     </p>
                                     <ClickyBtn
                                         clickFunction={() => {
                                             navigate(
-                                                `/student/courses/${item.courseId._id}`,
+                                                `/student/courses/${item._id}`,
                                             );
                                         }}
                                         stylingClass={

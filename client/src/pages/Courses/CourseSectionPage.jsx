@@ -112,7 +112,7 @@ function CourseSectionPage() {
     };
     useEffect(() => {
         //get current Section
-        console.log("Rendering fetchcoursesection effect");
+        // console.log("Rendering fetchcoursesection effect");
         const fetchCourseSection = async () => {
             try {
                 const response = await api.get(
@@ -120,10 +120,14 @@ function CourseSectionPage() {
                 );
 
                 const data = await response.json();
+                console.log("from get section data", data);
                 if (!response.ok) {
                     throw new Error(
                         data.message || "Failed to fetch section data",
                     );
+                }
+                if (data.courseCompleted) {
+                    navigate(`/student/courses/${courseId}/`);
                 }
                 console.log(`Single Section data for ${selectedSectionId}`);
                 console.log(data);
@@ -142,7 +146,7 @@ function CourseSectionPage() {
             }
         };
         fetchCourseSection();
-    }, [courseId, moduleId, selectedSectionId]);
+    }, [courseId, moduleId, selectedSectionId, isSelectedSectionComplete]);
 
     useEffect(() => {
         console.log("Rendering setSelectedSectionId effect");
@@ -150,7 +154,6 @@ function CourseSectionPage() {
     }, [sectionId]);
 
     useEffect(() => {
-        console.log("Rendering fetchAllSections effect");
         const fetchAllSections = async () => {
             try {
                 const response = await api.get(
@@ -163,9 +166,6 @@ function CourseSectionPage() {
                         data.message || "Failed to fetch section data",
                     );
                 }
-                console.log("All Sections array");
-                console.log(data);
-                console.log(data.sectionsCompleted);
                 setAllSections(data.allSections.sections);
                 setSectionsCompleted(data.sectionsCompleted);
             } catch (err) {

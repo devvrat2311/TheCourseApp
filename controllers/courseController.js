@@ -480,31 +480,33 @@ const getMyCourses = async (req, res) => {
         const enrolledCourses = user.studentProfile.enrolledCourses;
 
         // Now manually fetch full course details for completedCourses
-        const completedIds = user.studentProfile.completedCourses.map(
-            (c) => c._id || c.courseId || c,
+        const completedIds = user.studentProfile.completedCourses.map((c) =>
+            c.courseId.toString(),
         );
+        console.log("completed IDS", completedIds);
         const completedCoursesData = await Course.find({
             _id: { $in: completedIds },
         }).lean();
+        console.log("completed Courses Data", completedCoursesData);
 
         // Attach course details to each completed entry
-        const completedCourses = user.studentProfile.completedCourses.map(
-            (entry) => {
-                const fullCourse = completedCoursesData.find(
-                    (course) =>
-                        course._id.toString() ===
-                        (entry._id?.toString() || entry.courseId?.toString()),
-                );
-                return {
-                    ...entry,
-                    courseId: fullCourse || null, // attach full course
-                };
-            },
-        );
+        // const completedCourses = user.studentProfile.completedCourses.map(
+        //     (entry) => {
+        //         const fullCourse = completedCoursesData.find(
+        //             (course) =>
+        //                 course._id.toString() ===
+        //                 (entry._id?.toString() || entry.courseId?.toString()),
+        //         );
+        //         return {
+        //             ...entry,
+        //             courseId: fullCourse || null, // attach full course
+        //         };
+        //     },
+        // );
 
         return res.status(200).json({
             enrolledCourses, // populated already
-            completedCourses, // now contains full course info
+            completedCoursesData, // now contains full course info
         });
     } catch (err) {
         console.error(err);
@@ -677,10 +679,12 @@ const markSectionComplete = async (req, res) => {
                 user.studentProfile.enrolledCourses.filter(
                     (course) => !course.courseId.equals(courseId),
                 );
-            user.studentProfile.enrolledCourses.map((course, index) => {
-                console.log(course.title);
+            user.studentProfile.completedCourses.push({
+                courseId: courseId,
+                completedAt: new Date(),
+                certificationUrl: null,
+                grade: null,
             });
-            user.studentProfile.completedCourses.push(courseId);
             await user.save();
         }
 
@@ -848,7 +852,16 @@ const submitQuiz = async (req, res) => {
             !user.studentProfile.completedCourses.includes(courseId)
         ) {
             // console.log("all modules completed from quizzes");
-            user.studentProfile.completedCourses.push(courseId);
+            user.studentProfile.enrolledCourses =
+                user.studentProfile.enrolledCourses.filter(
+                    (course) => !course.courseId.equals(courseId),
+                );
+            user.studentProfile.completedCourses.push({
+                courseId: courseId,
+                completedAt: new Date(),
+                certificationUrl: null,
+                grade: null,
+            });
             await user.save();
         }
 
@@ -990,9 +1003,21 @@ const getSectionById = async (req, res) => {
     // console.log("sectionId from getSectionById", sectionId);
     const userId = req.user.userId;
     let isSectionCompleted;
+    let isCourseCompleted;
 
     try {
         const userInfo = await User.findById(userId);
+        console.log(userInfo.studentProfile);
+        isCourseCompleted = userInfo.studentProfile.completedCourses.find(
+            (course) => course.courseId.toString() === courseId,
+        );
+        if (isCourseCompleted) {
+            let courseCompleted = true;
+            isSectionCompleted = true;
+            return res
+                .status(200)
+                .json({ courseCompleted, isSectionCompleted });
+        }
         // console.log(userInfo.studentProfile);
         const userCourseInfo = userInfo.studentProfile.enrolledCourses.find(
             (course) => course.courseId.toString() === courseId,
@@ -1015,7 +1040,7 @@ const getSectionById = async (req, res) => {
         }
         // console.log("section is complete", isSectionCompleted);
 
-        const section = await Course.findById(courseId, {
+        const course = await Course.findById(courseId, {
             modules: {
                 $elemMatch: {
                     _id: moduleId,
@@ -1023,23 +1048,21 @@ const getSectionById = async (req, res) => {
             },
         });
 
-        const module = section.modules;
+        const module = course.modules[0];
         // console.log("In da backend");
         // console.log(module[0]);
         var sectionIndex = 0;
-        module[0].sections.map((section, index) => {
+        module.sections.map((section, index) => {
             if (section._id == sectionId) {
                 sectionIndex = index;
             }
             // console.log(section._id == sectionId);
         });
 
-        if (!section)
+        if (!course)
             return res.status(404).json({ message: "Section Not Found" });
 
-        const sectionData = section.modules[0].sections[sectionIndex];
-        // console.log("sectiondata from getSectionById", sectionData);
-        // console.log(typeof sectionData);
+        const sectionData = module.sections[sectionIndex];
 
         if (sectionData.sectionType === "quiz") {
             const sanitizedSection = {
@@ -1136,7 +1159,7 @@ const getCourseById = async (req, res) => {
         );
         const isEnrolled = Boolean(enrolledCourseEntry);
         const isCompleted = user.studentProfile.completedCourses.some(
-            (entry) => entry._id.toString() === courseId,
+            (entry) => entry.courseId.toString() === courseId,
         );
 
         if (!isEnrolled && !isCompleted) {
