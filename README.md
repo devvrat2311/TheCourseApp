@@ -28,3 +28,11 @@ A full stack e-learning platform where students can en-roll in courses, track pr
 
 ![Login Light Mode](./assets/login_light.png)
 ![Login Dark Mode](./assets/login_dark.png)
+
+#### Student Account
+
+![Student Dashboard](./assets/student_dashboard.png)
+![Student Enroll in Course](./assets/enroll_course.png)
+![Student Course Page](./assets/course_page.png)
+![Student Course Section](./assets/course_section.png)
+![Student Course Quiz](./assets/course_quiz.png)
