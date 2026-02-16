@@ -44,5 +44,5 @@ A full stack e-learning platform where students can en-roll in courses, track pr
 ![Instructor Module Page](./assets/instructor_sections.png)
 ![Instructor Edit Section Page](./assets/instructor_edit_section.png)
 ![Instructor Edit Quiz](./assets/instructor_edit_quiz.png)
-![Instructor Edit Content](./assets/instructor_edit_content_block.png)
+![Instructor Create Content](./assets/instructor_create_content_block.png)
 ![Instructor Edit Quiz Question](./assets/instructor_edit_quiz_question.png)
