@@ -68,6 +68,7 @@ A full stack e-learning platform where students can en-roll in courses, track pr
 ### Authentication Strategy
 
 **Choice:** JWT with access & refresh token pattern
+
 **Why:** Short-lived access tokens (15 min) authenticate API requests, while refresh tokens enable automatic token renewal without re-login. Provides stateless authentication with no server-side session storage needed, improving scalability.
 
 ### Role Based Access Control
