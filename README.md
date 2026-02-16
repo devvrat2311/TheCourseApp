@@ -30,14 +30,24 @@ A full stack e-learning platform where students can en-roll in courses, track pr
 
 #### Student Account
 
-![Student Dashboard](./assets/student_dashboard.png)
 ![Student Course Section](./assets/course_section.png)
-![Student Course Quiz](./assets/course_quiz.png)
 
 #### Instructor Account
 
 ![Instructor Dashboard](./assets/instructor_dashboard.png)
+![Instructor Edit Quiz Question](./assets/instructor_edit_quiz_question.png)
+
+[More Screenshots](#more-screenshots)
+
+### More Screenshots
+
+#### Student Account
+
+![Student Dashboard](./assets/student_dashboard.png)
+![Student Course Quiz](./assets/course_quiz.png)
+
+#### Instructor Account
+
 ![Instructor Course Page](./assets/instructor_course.png)
 ![Instructor Edit Section Page](./assets/instructor_edit_section.png)
 ![Instructor Create Content](./assets/instructor_create_content_block.png)
-![Instructor Edit Quiz Question](./assets/instructor_edit_quiz_question.png)
