@@ -142,7 +142,6 @@ function CourseSectionPage() {
                 setError(err.message);
             } finally {
                 setSectionDataLoading(false);
-                scrollToTop();
             }
         };
         fetchCourseSection();
@@ -151,6 +150,7 @@ function CourseSectionPage() {
     useEffect(() => {
         console.log("Rendering setSelectedSectionId effect");
         setSelectedSectionId(sectionId);
+        scrollToTop();
     }, [sectionId]);
 
     useEffect(() => {
