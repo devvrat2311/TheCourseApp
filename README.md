@@ -23,3 +23,7 @@
 A full stack e-learning platform where students can en-roll in courses, track progress throughout the text and quiz-based content, while instructors can manage course creation with a dedicated dashboard. Built this project to understand multi-role authentication and complex state management.
 
 ### Screenshots
+
+#### Login/Sign Up Page
+
+![Login](./assets/login.png)
