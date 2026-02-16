@@ -39,6 +39,30 @@ A full stack e-learning platform where students can en-roll in courses, track pr
 
 [More Screenshots](#more-screenshots)
 
+## Features
+
+### For Students
+
+- Browse Course catalog and view course details
+- Enroll in Courses and track completion progress
+- Learn at your own pace by completing text-based lessons with quiz assessments
+- Secure signup with email verification
+
+### For Instructors
+
+- Full CRUD operations for course management
+- Create Modules with rich text content (formatted text, Code Snippets, Latex for Scientific Expressions, Images(url))
+- Design quizzes with multiple choice questions to test understanding
+- View Enrolled students per course
+
+### System Features
+
+- JWT-based authentication with access and refresh tokens
+- Role based access control middleware
+- Email verification and password reset workflows
+- Responsive and clean UI design
+- Dockerized deployment with Nginx proxy on DigitalOcean VPS
+
 ### More Screenshots
 
 #### Student Account
