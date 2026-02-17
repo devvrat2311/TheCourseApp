@@ -1,5 +1,3 @@
-# Project Documentation
-
 # theCourseApp - [thecourseapp.in](https://thecourseapp.in)
 
 #### An e-learning platform, where students can learn and teachers can create. To connect those who love learning with those with a passion for teaching.
