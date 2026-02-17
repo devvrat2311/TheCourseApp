@@ -139,7 +139,7 @@ cd course_app_directory
 
 ### 2. Local Development (Non Docker)
 
-### 2a. Set up Node Modules for the application and the client
+### a. Set up Node Modules for the application and the client
 
 ```
 npm install
@@ -147,7 +147,36 @@ cd client/
 npm install
 ```
 
-### 2b.
+### b. Set up the `.env` file
+
+Inside the app directory, you will find the `.env.example.local` file which looks like this:
+
+```
+MONGO_URI=mongodb://YOUR_DB_USERNAME:YOUR_DB_PASSWORD@mongodb:27017/courses-platform?authSource=admin
+FRONTEND_URL=http://localhost:5173
+MAILGUN_API_KEY=your_mailgun_api_key
+EMAIL_FROM=noreply@yourdomain.com
+PORT=5000
+JWT_SECRET=your_strong_jwt_secret
+JWT_REFRESH_SECRET=your_strong_refresh_secret
+```
+
+You have to set 6 variables here:
+`MONGO_URI` along with `YOUR_DB_USERNAME` and`YOUR_DB_PASSWORD`
+`MAILGUN_API_KEY` which you will obtain after creating a mailgun free tier account
+`JWT_SECRET` and `JWT_REFRESH_SECRET`, set these as super strong secrets
+
+### c. Spin up the servers
+
+Spin up the Backend server with `nodemon app.js`
+
+- Check the backend `nodemon app.js` console for a message like "connected to mongodb"
+
+Spin up the frontend server with `cd client/` followed by `npm run dev`
+
+- This will start the client side of you application on `localhost:5173`
+
+Now you can access the frontend on your browser and start hacking away at the application!
 
 ### More Screenshots
 
