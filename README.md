@@ -119,6 +119,36 @@ A full stack e-learning platform where students can en-roll in courses, track pr
 
 **Trade-off:** Requires joining on userId for some operations, but the security and architectural benefits outweigh the minor query complexity.
 
+## How to build and develop this application
+
+### Prerequisites
+
+- Node.js v24+
+- NPM v11+
+- Docker & Docker Compose (Recommended) v29+
+- MongoDB (only if running without docker) v8+
+- A Mailgun Account (For email functionality)
+- A DigitalOcean Account (For Deployment, Optional)
+
+### 1. Clone the Repository and navigate to it
+
+```
+git clone git@github.com:devvrat2311/TheCourseApp.git course_app_directory
+cd course_app_directory
+```
+
+### 2. Local Development (Non Docker)
+
+### 2a. Set up Node Modules for the application and the client
+
+```
+npm install
+cd client/
+npm install
+```
+
+### 2b.
+
 ### More Screenshots
 
 #### Student Account
