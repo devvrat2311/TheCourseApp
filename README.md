@@ -62,43 +62,43 @@ A full stack e-learning platform where students can en-roll in courses, track pr
 
 ## Technical Decisions
 
-### Authentication Strategy
+### 1. Authentication Strategy
 
 **Choice:** JWT with access & refresh token pattern
 
 **Why:** Short-lived access tokens (15 min) authenticate API requests, while refresh tokens enable automatic token renewal without re-login. Provides stateless authentication with no server-side session storage needed, improving scalability.
 
-### Role Based Access Control
+### 2. Role Based Access Control
 
 **Choice:** Token based and Middleware based RBAC with role checks at route level.
 
 **Why:** Frontend uses React Router with role information from JWT to control UI route access. Backend implements verifyToken middleware to validate tokens, plus role-specific middleware (verifyStudent, verifyInstructor) to protect endpoints based on user roles. Centralizes authorization logic and prevents unauthorized access.
 
-### Database Security
+### 3. Database Security
 
 **Choice:** MongoDB with authentication enabled, deployed as a docker container, no public ports exposed
 
 **Why:** After a security incident where an exposed MongoDB port (no auth) led to a ransom attempt, implemented proper security measures: network isolation (only frontend container exposed to web), MongoDB authentication with credentials in .env (excluded from Git), and firewall rules. Database now only accessible from the application server container.
 
-### Email Service
+### 4. Email Service
 
 **Choice:** Mailgun for transactional emails
 
 **Why:** Reliable delivery for verification and password reset emails. DigitalOcean blocks SMTP ports (25, 587) on VPS instances to prevent spam, so direct SMTP via Nodemailer wasn't viable. Mailgun API provides guaranteed delivery without port restrictions.
 
-### Deployment Architecture
+### 5. Deployment Architecture
 
 **Choice:** Docker + Nginx reverse proxy on DigitalOcean VPS
 
 **Why:** Docker ensures consistent environments across dev/prod. Nginx handles SSL termination, static file serving, and request routing to backend container.
 
-### Frontend API Client with Auto Token Refresh
+### 6. Frontend API Client with Auto Token Refresh
 
 **Choice:** Centralized API client class handling all HTTP requests with automatic token refresh
 
 **Why:** Eliminates code duplication across components - every API call automatically includes authorization headers and handles token expiration transparently. Implements request queuing during token refresh to prevent race conditions when multiple simultaneous requests encounter expired tokens. Centralizes error handling and retry logic in one place rather than scattered across dozens of components.
 
-### Course Data Structure
+### 7. Course Data Structure
 
 **Choice:** Nested schema with embedded modules and sections (Course -> Modules[ -> Sections[contentBlock/quizQuestion]])
 
@@ -106,7 +106,7 @@ A full stack e-learning platform where students can en-roll in courses, track pr
 
 **Reflection:** In a larger-scale system, separating into referenced collections (Course → Module → Section) would enable more granular updates, leaner API responses, and better caching strategies. Good learning experience in understanding the embedded vs referenced documents trade-off in MongoDB.
 
-### Separation of User and Auth Models
+### 8. Separation of User and Auth Models
 
 **Choice:** Separate collections for User profile data and Auth/security data
 
