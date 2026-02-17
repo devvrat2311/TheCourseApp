@@ -3,6 +3,7 @@
 #### An e-learning platform, where students can learn and teachers can create. To connect those who love learning with those with a passion for teaching.
 
 [devvrat2311/TheCourseApp](https://github.com/devvrat2311/TheCourseApp) **_(Github)_**
+
 [thecourseapp.in](https://thecourseapp.in) **_(Live Demo)_**
 
 ## Tech Stack
@@ -126,7 +127,7 @@ A full stack e-learning platform where students can en-roll in courses, track pr
 - Node.js v24+
 - NPM v11+
 - Docker & Docker Compose (Recommended) v29+
-- MongoDB (only if running without docker) v8+
+- MongoDB installed and running locally (only if running without docker) v8+
 - A Mailgun Account (For email functionality)
 - A DigitalOcean Account (For Deployment, Optional)
 
@@ -152,7 +153,7 @@ npm install
 Inside the app directory, you will find the `.env.example.local` file which looks like this:
 
 ```
-MONGO_URI=mongodb://YOUR_DB_USERNAME:YOUR_DB_PASSWORD@mongodb:27017/courses-platform?authSource=admin
+MONGO_URI=mongodb://YOUR_DB_USERNAME:YOUR_DB_PASSWORD@localhost:27017/courses-platform?authSource=admin
 FRONTEND_URL=http://localhost:5173
 MAILGUN_API_KEY=your_mailgun_api_key
 EMAIL_FROM=noreply@yourdomain.com
@@ -171,13 +172,15 @@ You have to set 6 variables here:
 
 ### c. Spin up the servers
 
+**Note:** Make sure your mongodb instance is running before starting up the backend server.
+
 Spin up the Backend server with `nodemon app.js`
 
-- Check the backend `nodemon app.js` console for a message like "connected to mongodb"
+- Check the backend `npx nodemon app.js` console for a message like "connected to mongodb"
 
 Spin up the frontend server with `cd client/` followed by `npm run dev`
 
-- This will start the client side of you application on `localhost:5173`
+- This will start the client side of your application on `localhost:5173`
 
 Now you can access the frontend on your browser and start hacking away at the application!
 
