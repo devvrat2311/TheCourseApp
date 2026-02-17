@@ -162,8 +162,11 @@ JWT_REFRESH_SECRET=your_strong_refresh_secret
 ```
 
 You have to set 6 variables here:
+
 `MONGO_URI` along with `YOUR_DB_USERNAME` and`YOUR_DB_PASSWORD`
+
 `MAILGUN_API_KEY` which you will obtain after creating a mailgun free tier account
+
 `JWT_SECRET` and `JWT_REFRESH_SECRET`, set these as super strong secrets
 
 ### c. Spin up the servers
