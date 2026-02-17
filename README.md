@@ -34,7 +34,6 @@ A full stack e-learning platform where students can en-roll in courses, track pr
 
 #### Instructor Account
 
-![Instructor Dashboard](./assets/instructor_dashboard.png)
 ![Instructor Edit Quiz Question](./assets/instructor_edit_quiz_question.png)
 
 [More Screenshots](#more-screenshots)
@@ -127,10 +126,15 @@ A full stack e-learning platform where students can en-roll in courses, track pr
 #### Student Account
 
 ![Student Dashboard](./assets/student_dashboard.png)
+![Student Enroll in Course](./assets/enroll_course.png)
+![Student Course Page](./assets/course_page.png)
 ![Student Course Quiz](./assets/course_quiz.png)
 
 #### Instructor Account
 
+![Instructor Dashboard](./assets/instructor_dashboard.png)
 ![Instructor Course Page](./assets/instructor_course.png)
+![Instructor Sections Page](./assets/instructor_sections.png)
 ![Instructor Edit Section Page](./assets/instructor_edit_section.png)
+![Instructor Edit Quiz Page](./assets/instructor_edit_quiz.png)
 ![Instructor Create Content](./assets/instructor_create_content_block.png)
