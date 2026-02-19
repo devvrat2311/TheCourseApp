@@ -126,10 +126,8 @@ A full stack e-learning platform where students can en-roll in courses, track pr
 
 - Node.js v24+
 - NPM v11+
-- Docker & Docker Compose (Recommended) v29+
 - MongoDB installed and running locally (only if running without docker) v8+
 - A Mailgun Account (For email functionality)
-- A DigitalOcean Account (For Deployment, Optional)
 
 ### 1. Clone the Repository and navigate to it
 
