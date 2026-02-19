@@ -120,7 +120,7 @@ A full stack e-learning platform where students can en-roll in courses, track pr
 
 **Trade-off:** Requires joining on userId for some operations, but the security and architectural benefits outweigh the minor query complexity.
 
-## How to build and develop this application
+## How to develop this application
 
 ### Prerequisites
 
@@ -138,9 +138,9 @@ git clone git@github.com:devvrat2311/TheCourseApp.git course_app_directory
 cd course_app_directory
 ```
 
-### 2. Local Development (Non Docker)
+Local Development
 
-### a. Set up Node Modules for the application and the client
+### 2. Set up Node Modules for the application and the client
 
 ```
 npm install
@@ -148,7 +148,7 @@ cd client/
 npm install
 ```
 
-### b. Set up the `.env` file
+### 3. Set up the `.env` file
 
 Inside the app directory, you will find the `.env.example.local` file which looks like this:
 
@@ -170,7 +170,7 @@ You have to set 6 variables here:
 
 `JWT_SECRET` and `JWT_REFRESH_SECRET`, set these as super strong secrets
 
-### c. Spin up the servers
+### 4. Spin up the servers
 
 **Note:** Make sure your mongodb instance is running before starting up the backend server.
 
