@@ -59,7 +59,7 @@ nav {
     margin: 0;
     width: 100%;
     /*min-height: 60px;*/
-    height: fit-content;
+    height: 80px;
     /*height: 100px;*/
     max-height: 80px;
     /*border: 2px solid #1c398e;*/
@@ -320,7 +320,7 @@ textarea.input-class {
     display: flex;
     flex-direction: column;
     position: sticky;
-    top: 110px;
+    top: 100px;
     height: fit-content;
     border: 2px solid var(--border);
     border-radius: 10px;
@@ -333,13 +333,13 @@ textarea.input-class {
 }
 .mobile-dropdown {
     width: 100%;
-    border: 2px solid var(--border);
+    /*border: 2px solid var(--accent);*/
     z-index: 1001;
     position: sticky;
     top: 90px;
-    padding: 10px;
-    margin-bottom: 3rem;
-    background-color: var(--bg-secondary);
+    /*margin-top: 10px;*/
+    margin-bottom: 1rem;
+    /*background-color: var(--bg-secondary);*/
     border-radius: 15px;
 }
 .mobile-dropdown-topsection {
@@ -364,9 +364,10 @@ textarea.input-class {
 }
 .mobile-dd-display {
     border-radius: 10px;
-    border: 2px solid var(--border);
+    border: 2px solid var(--shadow);
     background-color: var(--bg-highlighted);
     transition: 0.2s all ease-in;
+    padding: 6px;
 }
 .dropdown {
     position: absolute;
@@ -444,13 +445,15 @@ textarea.input-class {
     /*background-color: var(--bg-highlighted);*/
     margin-left: 10px;
     border-radius: 10px;
+    padding: 40px;
     /*border: 2px solid var(--border);*/
 }
 
 .section-content {
     background-color: var(--bg-secondary);
     margin-left: 10px;
-    border-radius: 18px;
+    margin-top: 20px;
+    border-radius: 10px;
     height: fit-content;
     border: 2px solid var(--border);
 }
@@ -649,6 +652,7 @@ textarea.input-class {
     /*width: inherit;*/
     /*width: 70%;*/
 
+    margin-top: 10px;
     margin-right: 10px;
     margin-left: 20px;
     width: 90%;
