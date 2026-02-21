@@ -182,6 +182,10 @@ Spin up the frontend server with `cd client/` followed by `npm run dev`
 
 Now you can access the frontend on your browser and start hacking away at the application!
 
+### System Architecture
+
+![system architecture diagram](./assets/system_architecture_final.png)
+
 ### More Screenshots
 
 #### Student Account
